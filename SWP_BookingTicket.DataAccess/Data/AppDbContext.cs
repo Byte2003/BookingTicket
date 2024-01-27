@@ -22,7 +22,6 @@ namespace SWP_BookingTicket.DataAccess.Data
 		public DbSet<Ticket> Tickets { get; set; }
 		public DbSet<Room> Rooms { get; set; }
 		public DbSet<Seat> Seats { get; set; }
-		public DbSet<AppUser> AppUsers { get; set; }
 		public DbSet<Comment> Comments { get; set; }
 		public DbSet<Voucher> Vouchers { get; set; }
 		protected override void OnModelCreating(ModelBuilder builder)
