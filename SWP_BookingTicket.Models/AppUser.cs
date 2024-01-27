@@ -13,6 +13,7 @@ namespace SWP_BookingTicket.Models
 		public string FirstName { get; set; } = string.Empty;
 		public string LastName { get; set; } = string.Empty;
 		public string? Avatar { get; set; } = string.Empty;
+		public decimal Spending {  get; set; }
 		public decimal Point { get; set; }
     }
 }
