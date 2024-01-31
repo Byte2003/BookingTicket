@@ -23,6 +23,5 @@ namespace SWP_BookingTicket.Models
         [ForeignKey(nameof(RoomID))]
         [ValidateNever]
         public Room Room { get; set; }
-
     }
 }
