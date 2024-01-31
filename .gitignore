@@ -361,11 +361,3 @@ MigrationBackup/
 
 # Fody - auto-generated XML schema
 FodyWeavers.xsd
-/SWP_BookingTicket.Models/Seat.cs
-/SWP_BookingTicket.DataAccess/Migrations/20240112154348_initDb.cs
-/SWP_BookingTicket.DataAccess/Migrations/20240113032011_addVoucherToDb.cs
-/SWP_BookingTicket.DataAccess/Migrations/20240113042027_removeFKFromPromotionToMovie.cs
-/SWP_BookingTicket.DataAccess/Migrations/20240114052736_updateFKForVoucherTicket.cs
-/SWP_BookingTicket.DataAccess/Migrations/20240114055521_updateAvatarFieldForUser.cs
-/SWP_BookingTicket.DataAccess/Migrations/20240117072249_updateFKMovieShowtime.cs
-/SWP_BookingTicket.DataAccess/Migrations/AppDbContextModelSnapshot.cs
