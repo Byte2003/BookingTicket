@@ -24,6 +24,5 @@ namespace SWP_BookingTicket.Models
         [ValidateNever]
         public Room Room { get; set; }
 
-        public virtual Ticket Ticket { get; set; }
     }
 }
