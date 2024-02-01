@@ -7,10 +7,10 @@
         <table class="table">
             <tbody>
                 <tr>
-                    <th scope="row"><label asp-for="RoomID" class="form-label"></label></th>
+                    <th scope="row"><label class="form-label">Room Name</label></th>
                     <td>
                         <input asp-for="RoomID" class="form-text" value="@ViewData["room_id"]" hidden readonly />
-                        <span>@ViewData["room_id"]</span>
+                        <span>@ViewData["room_name"]</span>
                     </td>
                 </tr>
                 <tr>
@@ -20,7 +20,6 @@
                         <span asp-validation-for="SeatName" class="text-danger"></span>
                     </td>
                 </tr>
-
                 <tr>
                     <th scope="row"><label asp-for="SeatStatus" class="form-label"></label></th>
                     <td>

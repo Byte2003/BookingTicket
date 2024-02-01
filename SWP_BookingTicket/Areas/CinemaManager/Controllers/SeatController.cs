@@ -28,9 +28,11 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create(Guid room_id)
+        public async Task<IActionResult> Create(Guid room_id)
         {
+            Room r = await _unitOfWork.Room.GetFirstOrDefaultAsync(u => u.RoomID == room_id);
             ViewData["room_id"] = room_id;
+            ViewData["room_name"] = r.RoomName;
             return View();
         }
 
