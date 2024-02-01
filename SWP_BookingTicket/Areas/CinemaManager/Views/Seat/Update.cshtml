@@ -4,20 +4,14 @@
     <h3 class="text-primary">Update Seat</h3>
     <hr />
     <form method="post" asp-action="Update" asp-controller="Seat">
+        <input asp-for="SeatID" class="form-text" value="@Model.SeatID" hidden readonly />
         <table class="table">
             <tbody>
                 <tr>
-                    <th scope="row"><label asp-for="RoomID" class="form-label"></label></th>
+                    <th scope="row"><label class="form-label">Room Name</label></th>
                     <td>
                         <input asp-for="RoomID" class="form-text" value="@Model.RoomID" hidden readonly />
-                        <span>@Model.RoomID</span>
-                    </td>
-                </tr>
-                <tr>
-                    <th scope="row"><label asp-for="SeatID" class="form-label"></label></th>
-                    <td>
-                        <input asp-for="SeatID" class="form-text" value="@Model.SeatID" hidden readonly />
-                        <span>@Model.SeatID</span>
+                        <span>@Model.Room.RoomName</span>
                     </td>
                 </tr>
                 <tr>
