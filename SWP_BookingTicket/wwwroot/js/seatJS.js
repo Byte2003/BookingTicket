@@ -1,38 +1,45 @@
 ﻿// Loading DataTable with Ajax
 var dataTable;
-
 var selectElement = document.getElementById("roomSelected");
+var addSeatBtn = document.getElementById('addSeatBtn');
+
 selectElement.addEventListener("change", function () {
     var selectedValue = selectElement.value;
     loadDataTable(selectedValue);
 });
 
 $(document).ready(function () {
-    room_id = document.getElementById("room_id").innerHTML;
-    console.log("haha" + room_id);
-
-    if (room_id.length !== 0) {
-        console.log("haha" + room_id);
-        selectElement.value = room_id;
-    }
-    //loadDataTable();
+    loadDataTable("");
 })
-
 function loadDataTable(room_id) {
-
-    var addSeatBtn = document.getElementById('addSeatBtn');
-    addSeatBtn.href = 'Seat/Create?room_id=' + encodeURIComponent(room_id);
-
+    if (room_id.length != "") {
+        addSeatBtn.href = 'Seat/Create?room_id=' + encodeURIComponent(room_id);
+        addSeatBtn.removeAttribute('hidden');
+    }
+    else {
+        addSeatBtn.setAttribute('hidden', '');
+    }
     var url = "/CinemaManager/Seat/GetSeatList?room_id=" + room_id;
+
+    if (dataTable) {
+        dataTable.destroy();
+    }
     dataTable = $('#seatTable').DataTable({
         "ajax": {
             "url": url,
         },
         "columns": [
-            { "data": "roomID", "width": "25%" },
+            { "data": "room.roomName", "width": "10%" },
             { "data": "seatID", "width": "25%" },
             { "data": "seatName", "width": "10%" },
-            { "data": "seatStatus", "width": "10%" },
+            {
+                "data": "seatStatus",
+                "render": function (data) {
+                    var statusText = data ? "Available" : "Locked";
+                    return statusText;
+                },
+                "width": "10%"
+            },
             {
                 "data": "seatID",
                 "render": function (data) {

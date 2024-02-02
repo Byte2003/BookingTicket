@@ -4,40 +4,37 @@
     <h3 class="text-primary">Update Seat</h3>
     <hr />
     <form method="post" asp-action="Update" asp-controller="Seat">
-        <div class="row">
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="RoomID" class="form-label"></label>
-                    <input asp-for="RoomID" class="form-control" value="@Model.RoomID" readonly />
-                    <span asp-validation-for="RoomID" class="text-danger"></span>
-                </div>
-            </div>
+        <input asp-for="SeatID" class="form-text" value="@Model.SeatID" hidden readonly />
+        <table class="table">
+            <tbody>
+                <tr>
+                    <th scope="row"><label class="form-label">Room Name</label></th>
+                    <td>
+                        <input asp-for="RoomID" class="form-text" value="@Model.RoomID" hidden readonly />
+                        <span>@Model.Room.RoomName</span>
+                    </td>
+                </tr>
+                <tr>
+                    <th scope="row"><label asp-for="SeatName" class="form-label"></label></th>
+                    <td>
+                        <input asp-for="SeatName" class="form-control w-25" value="@Model.SeatName" />
+                        <span asp-validation-for="SeatName" class="text-danger"></span>
+                    </td>
+                </tr>
 
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="SeatID" class="form-label"></label>
-                    <input asp-for="SeatID" class="form-control" value="@Model.SeatID" readonly />
-                    <span asp-validation-for="SeatID" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="SeatName" class="form-label"></label>
-                    <input asp-for="SeatName" class="form-control" />
-                    <span asp-validation-for="SeatName" class="text-danger"></span>
-                </div>
-            </div>
-
-            <div class="col-md-6">
-                <div class="form-group">
-                    <label asp-for="SeatStatus" class="form-label"></label>
-                    <input type="checkbox" asp-for="SeatStatus" class="form-check-input form-control" />
-                    <span asp-validation-for="SeatStatus" class="text-danger"></span>
-                </div>
-            </div>
-
-        </div>
+                <tr>
+                    <th scope="row"><label asp-for="SeatStatus" class="form-label"></label></th>
+                    <td>
+                        <select asp-for="SeatStatus" class="form-control w-25">
+                            @* <option disabled selected value="disable_select">---Set Status---</option> *@
+                            <option value="true" style="color: green;">Available</option>
+                            <option value="false" style="color: red;">Locked</option>
+                        </select>
+                        <span asp-validation-for="SeatStatus" class="text-danger"></span>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Update</button>
             <a asp-controller="Seat" asp-action="Index" class="btn btn-secondary">Back to Seat list</a>
