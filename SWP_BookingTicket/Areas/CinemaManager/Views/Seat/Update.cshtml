@@ -27,8 +27,8 @@
                     <td>
                         <select asp-for="SeatStatus" class="form-control w-25">
                             @* <option disabled selected value="disable_select">---Set Status---</option> *@
-                            <option value="true" style="color: green;">Available</option>
-                            <option value="false" style="color: red;">Locked</option>
+                            <option value="false" style="color: green;">Available</option>
+                            <option value="true" style="color: red;">Locked</option>
                         </select>
                         <span asp-validation-for="SeatStatus" class="text-danger"></span>
                     </td>
@@ -37,7 +37,7 @@
         </table>
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Update</button>
-            <a asp-controller="Seat" asp-action="Index" class="btn btn-secondary">Back to Seat list</a>
+            <a asp-controller="Seat" asp-action="RoomSeats" asp-route-room_id="@Model.RoomID"class="btn btn-secondary">View Room's Seats</a>
         </div>
     </form>
 </div>
