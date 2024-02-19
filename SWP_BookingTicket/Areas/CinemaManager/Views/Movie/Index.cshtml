@@ -1,0 +1,35 @@
+﻿@model IEnumerable<Movie>
+<div class="container my-5">
+    <h3 class="text-primary">Manage Movie</h3>
+    <hr />
+    <div class="d-flex w-100 my-5 justify-content-end">
+        <a class="btn btn-success mx-2" asp-controller="Movie" asp-action="Create">
+            <i class="bi bi-plus-circle"></i>
+            Add new Movie
+        </a>
+    </div>
+
+    <table id="movieTable" class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>ReleaseDate</th>
+                <th>EndDate</th>
+                <th>Manage</th>
+            </tr>
+
+        </thead>
+        
+    </table>
+    <div class="d-flex w-100 my-5 justify-content-start error-actions">
+        <a class="btn btn-outline-success mx-2" asp-area="Customer" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-plus-circle-dotted"></i> Back to Home
+        </a>
+    </div>
+</div>
+@section Scripts {
+    <script type="text/javascript" src="~/js/movie.js"></script>       
+    
+}
+
