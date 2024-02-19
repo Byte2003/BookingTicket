@@ -8,6 +8,7 @@
             <label class="mb-2"><strong>Select a room to manage its Seats</strong></label>
             <select id="roomSelected" asp-items="@ViewData["RoomList"] as IEnumerable<SelectListItem>" class="form-control">
                 <option disabled selected value="disable_select">---Select Room---</option>
+                <option value="">All Seats</option>
             </select>
         </div>
         <div>
