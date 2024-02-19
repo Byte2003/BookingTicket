@@ -76,11 +76,20 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 		}
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Update(Movie movie, IFormFile? file)
+		public async Task<IActionResult> Update(Movie movie, IFormFile? file)
 		{
+			// Get the old image of movie
+			var _movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movie.MovieID);
+			var oldMovieImg = _movie.ImageUrl;
 			if (ModelState.IsValid)
 			{
-				movie.ImageUrl = _uploadImageService.UploadImage(file, @"images\movie", movie.ImageUrl);
+				if(file is not null)
+				{
+					movie.ImageUrl = _uploadImageService.UploadImage(file, @"images\movie", oldMovieImg);
+				} else
+				{
+					movie.ImageUrl = oldMovieImg;
+				}				
 				_unitOfWork.Movie.Update(movie);
 				_unitOfWork.Save();
 			}

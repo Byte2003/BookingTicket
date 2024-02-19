@@ -11,6 +11,17 @@ function loadDataTable() {
         "columns": [
             { "data": "movieID", "width": "20%" },
             { "data": "movieName", "width": "20%" },
+            {
+                "data": "imageUrl",
+                "render": function (data) {
+                    return `                      
+                            <td style="width:15%">
+                        <img src="${data}" alt="Alternate Text" class="img-fluid" />
+                    </td>					   
+                        `
+                },
+                "width": "15%"
+            },
             { "data": "releaseDate", "width": "15%" },
             { "data": "endDate", "width": "15%" },
             {
