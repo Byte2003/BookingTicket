@@ -18,16 +18,16 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 		public MovieController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, UploadImageService uploadImageService)
 		{
 			_unitOfWork = unitOfWork;
-            _webHostEnvironment = webHostEnvironment;
+			_webHostEnvironment = webHostEnvironment;
 			_uploadImageService = uploadImageService;
 
-        }
+		}
 		[HttpGet]
 		public async Task<IActionResult> Index()
 		{
 			IEnumerable<Movie> movies = await _unitOfWork.Movie.GetAllAsync();
-            //return View(cinemas);
-            return View(movies);
+			//return View(cinemas);
+			return View(movies);
 		}
 
 		[HttpGet]
@@ -37,7 +37,7 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 		}
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public IActionResult Create(Movie movie, IFormFile? fileImage)
+		public IActionResult Create(Movie movie, IFormFile? fileImage, IFormFile? fileVideo)
 		{
 			if (ModelState.IsValid)
 			{
@@ -55,10 +55,11 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 
 				//}
 				movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie");
+				movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie");
 				_unitOfWork.Movie.Add(movie);
 				_unitOfWork.Save();
 				TempData["success"] = "Procduct created succesfully";
-			}			
+			}
 			return RedirectToAction("Index");
 		}
 		[HttpGet]
@@ -76,20 +77,29 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 		}
 		[HttpPost]
 		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Update(Movie movie, IFormFile? file)
+		public async Task<IActionResult> Update(Movie movie, IFormFile? fileImage, IFormFile? fileVideo)
 		{
 			// Get the old image of movie
 			var _movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movie.MovieID);
 			var oldMovieImg = _movie.ImageUrl;
+			var oldMovieVideo = _movie.VideoUrl;
 			if (ModelState.IsValid)
 			{
-				if(file is not null)
+				if (fileImage is not null)
 				{
-					movie.ImageUrl = _uploadImageService.UploadImage(file, @"images\movie", oldMovieImg);
+					movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie", oldMovieImg);
+
 				} else
 				{
 					movie.ImageUrl = oldMovieImg;
-				}				
+				}
+				if (fileVideo is not null)
+				{
+					movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie", oldMovieVideo);
+				} else
+				{
+					movie.VideoUrl = oldMovieVideo;
+				}
 				_unitOfWork.Movie.Update(movie);
 				_unitOfWork.Save();
 			}
@@ -105,7 +115,7 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 		[HttpDelete]
 		public async Task<IActionResult> Delete(Guid movie_id)
 		{
-			var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync( u=> u.MovieID == movie_id);
+			var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movie_id);
 			if (movie == null)
 			{
 				return Json(new { success = false, message = "Error while deleting" });

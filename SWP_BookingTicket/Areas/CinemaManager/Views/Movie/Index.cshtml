@@ -1,4 +1,24 @@
 ﻿@model IEnumerable<Movie>
+    <style>
+        /* Custom CSS for DataTable */
+        #movieTable .image-column,
+        #movieTable .video-column {
+            width: 15%; /* Set the width for image and video columns */
+            height: 150px; /* Set the height for image and video columns */
+            vertical-align: middle; /* Center content vertically */
+            text-align: center; /* Center content horizontally */
+        }
+
+        #movieTable .image-element,
+        #movieTable .video-element {
+            max-width: 100%; /* Ensure image and video fit within their containers */
+            max-height: 100%; /* Ensure image and video fit within their containers */
+        }
+
+        #movieTable .button-column {
+            width: 15%; /* Set the width for button column */
+        }
+    </style>
 <div class="container my-5">
     <h3 class="text-primary">Manage Movie</h3>
     <hr />
@@ -12,9 +32,9 @@
     <table id="movieTable" class="table table-striped table-bordered">
         <thead>
             <tr>
-                <th>ID</th>
                 <th>Name</th>
                 <th>Image</th>
+                <th>Trailer</th>
                 <th>ReleaseDate</th>
                 <th>EndDate</th>
                 <th>Manage</th>

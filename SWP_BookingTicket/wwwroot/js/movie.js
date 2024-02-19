@@ -9,34 +9,40 @@ function loadDataTable() {
             "url": "/CinemaManager/Movie/GetAllMovies"
         },
         "columns": [
-            { "data": "movieID", "width": "20%" },
-            { "data": "movieName", "width": "20%" },
+            { "data": "movieName", "width": "10%" },
             {
                 "data": "imageUrl",
                 "render": function (data) {
-                    return `                      
-                            <td style="width:15%">
-                        <img src="${data}" alt="Alternate Text" class="img-fluid" />
-                    </td>					   
-                        `
+                    return `<td class="image-column" style="height:150px">
+                                <img src="${data}" alt="Alternate Text" class=" img-fluid image-element" />
+                            </td>`;
                 },
                 "width": "15%"
             },
-            { "data": "releaseDate", "width": "15%" },
-            { "data": "endDate", "width": "15%" },
+            {
+                "data": "videoUrl",
+                "render": function (data) {
+                    return `<td class="video-column" style="height:150px">
+                                <video src="${data}" type="video/mp4" class="video-element" controls style="width:100%; height:100%"></video>
+                            </td>`;
+                },
+                "width": "15%"
+            },
+            { "data": "releaseDate", "width": "10%" },
+            { "data": "endDate", "width": "10%" },
             {
                 "data": "movieID",
                 "render": function (data) {
-                    return `
-                       
-                            <a href="/CinemaManager/Movie/Update?movie_id=${data}"
-                            class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
-                            <a onClick=Delete('/CinemaManager/Movie/Delete?movie_id=${data}')
-                            class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
-					   
-                        `
+                    return `<td class="button-column">
+                                <a href="/CinemaManager/Movie/Update?movie_id=${data}" class="btn btn-primary mx-1">
+                                    <i class="bi bi-pencil-square"></i> Edit
+                                </a>
+                                <a onClick=Delete('/CinemaManager/Movie/Delete?movie_id=${data}') class="btn btn-danger mx-1">
+                                    <i class="bi bi-trash-fill"></i> Delete
+                                </a>
+                            </td>`;
                 },
-                "width": "25%"
+                "width": "15%"
             }
         ]
     });
@@ -65,9 +71,8 @@ function Delete(url) {
                             'This movie has been deleted.',
                             'success'
                         )
-                        //toastr.success(data.message);
                     } else {
-                        //toastr.error(data.message);
+                        // Handle error case
                     }
                 }
             })
