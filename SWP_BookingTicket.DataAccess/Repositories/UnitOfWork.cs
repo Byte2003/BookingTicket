@@ -24,7 +24,6 @@ namespace SWP_BookingTicket.DataAccess.Repositories
 			Comment = new CommentRepository(_db);
 			Showtime = new ShowtimeRepository(_db);
 			Promotion = new PromotionRepository(_db);	
-
 		}
         public IRepository<Cinema> Cinema { get; private set; }
 		public IRepository<Movie> Movie { get; private set; }

@@ -41,12 +41,29 @@
         <a href="#" class="nav-item nav-link">Packages</a>
         <a href="#" class="nav-item nav-link">Blog</a>*@
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Manage</a>
-                        <div class="dropdown-menu m-0" style="background-color:#33186B">
-                            <a asp-area="CinemaManager" asp-action="Index" asp-controller="Cinema" class="dropdown-item text-white">Cinema</a>
-                            <a asp-area="CinemaManager" asp-action="Index" asp-controller="Movie" class="dropdown-item text-white">Movie</a>
-                        </div>
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Manage</a>                     
+
+                        <ul class="dropdown-menu m-0" aria-labelledby="navbarDropdown" style="background-color:#33186B">
+                            <li>
+                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Cinema" class="dropdown-item text-white">Cinema</a>
+                            </li>
+                            <li>
+                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Movie" class="dropdown-item text-white">Movie</a>
+                            </li>
+                             <li>
+                                <a asp-area="Admin" asp-action="Index" asp-controller="UserAccount" class="dropdown-item text-white">Account</a>
+                            </li>
+                            <li>
+                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Room" class="dropdown-item text-white">Room</a>  
+                            </li>
+                            <li>
+                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Seat" class="dropdown-item text-white">Seat</a>
+                            </li>
+                            <li><hr class="dropdown-divider"></li>
+                        </ul>                     
                     </div>
+
+
                     <partial name="_LoginPartial" />
                     @*<a href="contact.html" class="nav-item nav-link">Contact</a>*@
                 </div>
