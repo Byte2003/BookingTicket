@@ -1,7 +1,7 @@
 ﻿// Loading DataTable with Ajax
 var dataTable;
 var selectElement = document.getElementById("roomSelected");
-var addSeatBtn = document.getElementById('addSeatBtn');
+var viewLayoutBtn = document.getElementById('viewLayoutBtn');
 
 selectElement.addEventListener("change", function () {
     var selectedValue = selectElement.value;
@@ -12,12 +12,12 @@ $(document).ready(function () {
     loadDataTable("");
 })
 function loadDataTable(room_id) {
-    if (room_id.length != "") {
-        addSeatBtn.href = 'Seat/Create?room_id=' + encodeURIComponent(room_id);
-        addSeatBtn.removeAttribute('hidden');
+    if (room_id != "") {
+        viewLayoutBtn.href = 'Seat/RoomSeats?room_id=' + (room_id);
+        viewLayoutBtn.removeAttribute('hidden');
     }
     else {
-        addSeatBtn.setAttribute('hidden', '');
+        viewLayoutBtn.setAttribute('hidden', '');
     }
     var url = "/CinemaManager/Seat/GetSeatList?room_id=" + room_id;
 
@@ -30,30 +30,30 @@ function loadDataTable(room_id) {
         },
         "columns": [
             { "data": "room.roomName", "width": "10%" },
-            { "data": "seatID", "width": "25%" },
-            { "data": "seatName", "width": "10%" },
+            { "data": "seatID", "width": "40%" },
+            { "data": "seatName", "width": "25%" },
             {
                 "data": "seatStatus",
                 "render": function (data) {
                     var statusText = data ? "Available" : "Locked";
                     return statusText;
                 },
-                "width": "10%"
-            },
-            {
-                "data": "seatID",
-                "render": function (data) {
-                    return `
-
-                            <a href="/CinemaManager/Seat/Update?seat_id=${data}"
-                            class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
-                            <a onClick=Delete('/CinemaManager/Seat/Delete?seat_id=${data}')
-                            class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
-
-                        `
-                },
                 "width": "25%"
-            }
+            },
+            //{
+            //    "data": "seatID",
+            //    "render": function (data) {
+            //        return `
+
+            //                <a href="/CinemaManager/Seat/Update?seat_id=${data}"
+            //                class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
+            //                <a onClick=Delete('/CinemaManager/Seat/Delete?seat_id=${data}')
+            //                class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
+
+            //            `
+            //    },
+            //    "width": "25%"
+            //}
         ]
     });
 }
