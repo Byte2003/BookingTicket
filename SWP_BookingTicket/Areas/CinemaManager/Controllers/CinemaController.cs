@@ -70,7 +70,12 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 			var cinemas = await _unitOfWork.Cinema.GetAllAsync();
 			return Json(new { data = cinemas });
 		}
-		[HttpDelete]
+        public async Task<IActionResult> GetCinemaById(Guid cinema_id)
+        {
+            var cinema = await _unitOfWork.Cinema.GetFirstOrDefaultAsync(u => u.CinemaID == cinema_id);
+            return Json(new { data = cinema });
+        }
+        [HttpDelete]
 		public async Task<IActionResult> Delete(Guid cinema_id)
 		{
 			var cinema = await _unitOfWork.Cinema.GetFirstOrDefaultAsync( u=> u.CinemaID ==cinema_id);
