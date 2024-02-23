@@ -16,10 +16,8 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 			_unitOfWork = unitOfWork;
 		}
 		[HttpGet]
-		public async Task<IActionResult> Index()
-		{
-			//IEnumerable<Cinema> cinemas = await _unitOfWork.Cinema.GetAllAsync();
-			//return View(cinemas);
+		public IActionResult Index()
+		{			
 			return View();
 		}
 

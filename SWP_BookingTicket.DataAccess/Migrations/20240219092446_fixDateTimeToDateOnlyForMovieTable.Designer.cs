@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SWP_BookingTicket.DataAccess.Data;
 
@@ -11,9 +12,11 @@ using SWP_BookingTicket.DataAccess.Data;
 namespace SWP_BookingTicket.DataAccess.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240219092446_fixDateTimeToDateOnlyForMovieTable")]
+    partial class fixDateTimeToDateOnlyForMovieTable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -216,9 +219,6 @@ namespace SWP_BookingTicket.DataAccess.Migrations
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<decimal>("Spending")
-                        .HasColumnType("decimal(18,2)");
 
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
@@ -472,7 +472,8 @@ namespace SWP_BookingTicket.DataAccess.Migrations
 
                     b.HasIndex("AppUserID");
 
-                    b.HasIndex("SeatID");
+                    b.HasIndex("SeatID")
+                        .IsUnique();
 
                     b.HasIndex("ShowtimeID");
 
@@ -621,8 +622,8 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("SWP_BookingTicket.Models.Seat", "Seat")
-                        .WithMany()
-                        .HasForeignKey("SeatID")
+                        .WithOne("Ticket")
+                        .HasForeignKey("SWP_BookingTicket.Models.Ticket", "SeatID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -643,6 +644,12 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                     b.Navigation("Showtime");
 
                     b.Navigation("Voucher");
+                });
+
+            modelBuilder.Entity("SWP_BookingTicket.Models.Seat", b =>
+                {
+                    b.Navigation("Ticket")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

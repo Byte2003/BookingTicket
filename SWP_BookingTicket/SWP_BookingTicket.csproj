@@ -39,6 +39,7 @@
   <ItemGroup>
     <Folder Include="Logs\" />
     <Folder Include="wwwroot\images\avatar\" />
+    <Folder Include="wwwroot\images\movie\" />
   </ItemGroup>
 
 </Project>

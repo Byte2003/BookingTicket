@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using SWP_BookingTicket.DataAccess.Repositories;
 using SWP_BookingTicket.Models;
+using System.Linq;
 
 namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 {
@@ -28,23 +29,26 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
         }
 
         [HttpGet]
-        public IActionResult Create(Guid room_id)
+        public async Task<IActionResult> Create(Guid room_id)
         {
+            Room r = await _unitOfWork.Room.GetFirstOrDefaultAsync(u => u.RoomID == room_id);
             ViewData["room_id"] = room_id;
+            ViewData["room_name"] = r.RoomName;
             return View();
         }
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create(Seat seat)
+        public async Task<IActionResult> Create(Seat seat)
         {
             if (ModelState.IsValid)
             {
                 _unitOfWork.Seat.Add(seat);
                 _unitOfWork.Save();
+                //ViewData["msg"] = "Seat created successfully.";
+                return RedirectToAction("RoomSeats", new { room_id = seat.RoomID });
             }
-            ViewData["room_id"] = seat.RoomID;
-            return RedirectToAction("Index");
+            return View(seat.RoomID);
         }
         [HttpGet]
         public async Task<IActionResult> Update(Guid seat_id)
@@ -61,22 +65,33 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
         }
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Update(Seat seat)
+        public async Task<IActionResult> Update(Seat seat)
         {
             if (ModelState.IsValid)
             {
                 _unitOfWork.Seat.Update(seat);
                 _unitOfWork.Save();
+                // ViewData["msg"] = "Seat updated successfully.";
+                return RedirectToAction("RoomSeats", new { room_id = seat.RoomID});
             }
-            return RedirectToAction("Index");
+            return View(seat);
         }
+
+
+        public async Task<IActionResult> RoomSeats(Guid room_id)
+        {
+            ViewData["room_id"] = room_id;
+            IEnumerable<Seat> seats = await _unitOfWork.Seat.GetAllAsync(u => u.RoomID == room_id);
+            return View(seats.OrderBy(u => u.SeatName));
+        }
+
 
         #region API Calls
         [HttpGet]
         public async Task<IActionResult> GetSeatList(Guid? room_id)
         {
             IEnumerable<Seat> seatList;
-            if (room_id is null)
+            if (string.IsNullOrEmpty(room_id.ToString()))
             {
                 seatList = await _unitOfWork.Seat.GetAllAsync(includeProperties: nameof(Room));
             }
