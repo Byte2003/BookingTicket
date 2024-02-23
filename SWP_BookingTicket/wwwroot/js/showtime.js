@@ -42,36 +42,32 @@ var selectRoom = document.getElementById("roomSelectList");
 
 selectCinema.addEventListener("change", function () {
     var cinema_id = selectCinema.value;
-    console.log("change");
     loadroomlist(cinema_id);
 });
 
 function loadroomlist(cinemaid) {
     var url = "/CinemaManager/Showtime/GetRoomList?cinema_id=" + cinemaid;
-    console.log(url);
 
-    fetch(url)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error("Network response was not ok");
-            }
-            return response.json();
-        })
-        .then(data => {
-            var selectelement = selectRoom;
+    $.ajax({
+        url: url,
+        method: 'GET',
+        success: function (data) {
+            var selectelement = document.getElementById('roomSelectList');
             selectelement.innerHTML = ""; // Clear previous options
-            var roomList = data.data; // Access the 'data' property from the JSON response
+            var roomList = data.data;
             roomList.forEach(item => {
                 var option = document.createElement("option");
-                option.text = item.room.roomName; // Truy cập vào thuộc tính roomName của đối tượng room
-                option.value = item.room.roomID; // Truy cập vào thuộc tính roomID của đối tượng room
+                option.text = item.roomName;
+                option.value = item.roomID;
                 selectelement.appendChild(option);
             });
-        })
-        .catch(error => {
+        },
+        error: function (xhr, status, error) {
             console.error("Error: ", error);
-        });
+        }
+    });
 }
+
 
 
 // SweetAlert library
