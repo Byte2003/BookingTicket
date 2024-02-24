@@ -101,6 +101,8 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
                     return RedirectToAction("RoomSeats", new { room_id = seat.RoomID });
                 }
             }
+            ViewData["room_id"] = seat.Room.RoomID;
+            ViewData["room_name"] = seat.Room.RoomName;
             return View(seat);
         }
 
