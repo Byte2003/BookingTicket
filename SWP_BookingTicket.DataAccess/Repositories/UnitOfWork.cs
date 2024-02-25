@@ -34,9 +34,9 @@ namespace SWP_BookingTicket.DataAccess.Repositories
 		public IRepository<Showtime> Showtime { get; private set; }
 		public IRepository<Promotion> Promotion { get; private set; }
 
-		public void Save()
-		{
-			_db.SaveChanges();
+		public void Save() { 
+
+			 _db.SaveChanges();
 		}
 	}
 }

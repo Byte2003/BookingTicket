@@ -14,7 +14,7 @@ namespace SWP_BookingTicket.Models
         [Key]
         public Guid ShowtimeID { get; set; }
 
-        public DateTime Date { get; set; }
+        public DateOnly Date { get; set; }
 
         public int Time { get; set; }
 

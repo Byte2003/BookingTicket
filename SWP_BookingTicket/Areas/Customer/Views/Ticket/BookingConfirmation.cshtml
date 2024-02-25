@@ -1,0 +1,61 @@
+﻿
+@{
+    var time = ViewData["Time"] as string;
+    var movie = ViewData["Movie"] as string;
+    var duration = ViewData["Duration"] as string;
+    var room = ViewData["Room"] as string;
+    var seats = ViewData["Seats"] as List<string>;
+    var cinema = ViewData["Cinema"] as string;
+    var price = ViewData["Price"] as string;
+}
+<style>
+    .ticket-container {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+    }
+
+        .ticket-container p {
+            margin: 5px 0;
+        }
+
+    .tickets-containers {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+</style>
+
+<div class="container mt-5" style="min-height: 840px">
+    <h3 class="text-primary">Your Order</h3>
+    <hr />
+    <h5>Ticket preview</h5>
+    <div class="tickets-containers">
+        @foreach (var item in seats)
+        {
+            <div class="ticket-container">
+                <div>
+                    <p>Cinema: @cinema</p>
+                </div>
+                <div>
+                    <p>Movie: @movie</p>
+                </div>
+                <div>
+                    <p>@time</p>
+                </div>
+                <div>
+                    <p>Duration: @duration</p>
+                </div>
+                <div>
+                    <p>Room: @room</p>
+                </div>
+                <div>
+                    <p>Seat: @item</p>
+                </div>
+            </div>
+        }
+    </div>
+    <hr />
+    <div class="btn btn-outline-primary mt-3">Purchase</div>
+</div>

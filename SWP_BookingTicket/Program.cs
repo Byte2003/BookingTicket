@@ -15,6 +15,8 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
 //DbContext Configuration
+builder.Services.AddDbContextFactory<AppDbContext>(
+	   options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 builder.Services.AddDbContext<AppDbContext>(option => {
 	option.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
 	option.UseQueryTrackingBehavior(QueryTrackingBehavior.NoTracking);
