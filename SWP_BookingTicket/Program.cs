@@ -60,6 +60,11 @@ builder.Services.ConfigureApplicationCookie(option =>
 	option.LogoutPath = $"/Identity/Account/Logout";
 	option.AccessDeniedPath = $"/Identity/Account/AccessDenied";
 });
+
+builder.Services.AddSession(option =>
+{
+    option.IOTimeout = TimeSpan.FromMinutes(20);
+});
 //Logger Configuration
 var logger = new LoggerConfiguration()
 			.WriteTo.Console()
@@ -94,6 +99,7 @@ app.MapRazorPages();
 app.UseHttpsRedirection();
 app.UseStaticFiles();
 app.UseRouting();
+app.UseSession();	
 app.UseAuthentication();
 app.UseAuthorization();
 SeedData();

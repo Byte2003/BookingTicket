@@ -7,9 +7,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-	 <FrameworkReference Include="Microsoft.AspNetCore.App"/>
+	 <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="PayPal" Version="1.9.1" />
   </ItemGroup>
 
   <ItemGroup>

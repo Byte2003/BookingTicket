@@ -27,7 +27,5 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         {
             return View();
         }
-
-
     }
 }
