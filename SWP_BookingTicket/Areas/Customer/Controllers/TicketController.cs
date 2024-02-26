@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +10,6 @@ using SWP_BookingTicket.Models;
 using SWP_BookingTicket.Models.ViewModels;
 using SWP_BookingTicket.Services;
 using System.Security.Claims;
-using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace SWP_BookingTicket.Areas.Customer.Controllers
 {
@@ -22,15 +22,19 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 		public TicketVM TicketVM;
 		private readonly object _lockObject = new object();
 		private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+		private readonly IUnlockASeatService _unlockASeatService;
+		private readonly IBackgroundJobClient _backgroundJobClient;
 		private enum PaymentStatus
 		{
 			Pending,
 			Success
 		}
-		public TicketController(IUnitOfWork unitOfWork, IDbContextFactory<AppDbContext> dbContextFactory)
+		public TicketController(IUnitOfWork unitOfWork, IDbContextFactory<AppDbContext> dbContextFactory, IUnlockASeatService unlockASeatService, IBackgroundJobClient backgroundJobClient)
 		{
+			_unlockASeatService = unlockASeatService;
 			_unitOfWork = unitOfWork;
 			_dbContextFactory = dbContextFactory;
+			_backgroundJobClient = backgroundJobClient;
 		}
 		public async Task<IActionResult> Index(Guid? movie_id = null)
 		{
@@ -70,11 +74,8 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 						if (seat != null)
 						{
 							LockASeat(seat, showtime_id);
-							await Task.Run(async () =>
-							{
-								await Task.Delay(_pendingLockDuration);
-								UnlockASeat(seat, showtime_id);
-							});
+							_backgroundJobClient.Schedule(() =>
+								_unlockASeatService.UnlockASeat(seatID, showtime_id), TimeSpan.FromSeconds(15));
 						}
 
 					}
@@ -82,37 +83,25 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 				if (payment_status == PaymentStatus.Success)
 				{
 
-					foreach (var seatID in seats)
+					if (payment_status == PaymentStatus.Success)
 					{
-						var seat = await uow.Seat.GetFirstOrDefaultAsync(u => u.SeatID == seatID);
-						seatList.Add(seat);
-					}
-					foreach (var seat in seatList)
-					{
-						LockASeat(seat, showtime_id);
-					}
-					var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(x => x.ShowtimeID == showtime_id);
-					//GetTime for unlock
-					await Task.Delay(15 * 1000);
-					await Task.Run(async () =>
-					{
-						foreach (var seat in seatList)
+
+						foreach (var seatID in seats)
 						{
-							
-							var currentSeat = seat;
-							await UnlockASeat(currentSeat, showtime_id);
-
+							var seat = await uow.Seat.GetFirstOrDefaultAsync(u => u.SeatID == seatID);
+							LockASeat(seat, showtime_id);
+							_backgroundJobClient.Schedule(() => _unlockASeatService.UnlockASeat(seatID, showtime_id), TimeSpan.FromSeconds(15));
 						}
+					}
 
-					});
 				}
-				
 			}
 			catch (Exception ex)
 			{
 				Console.WriteLine(ex.Message);
 				throw;
 			}
+
 		}
 		private void LockASeat(Seat seat, Guid showtime_id)
 		{
@@ -125,36 +114,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 			seat.SeatStatus += showtime_id;
 			uow.Seat.Update(seat);
 			uow.Save();
-		}
-		private async Task UnlockASeat(Seat seat, Guid showtime_id)
-		{
-			lock (_lockObject)
-			{
-				try
-				{
-					using var dbContext = _dbContextFactory.CreateDbContext();
-					IUnitOfWork uow = new UnitOfWork(dbContext);
-					if (seat.SeatStatus.ToLower().Contains(showtime_id.ToString().ToLower()))
-					{
-						seat.SeatStatus = seat.SeatStatus.Replace(showtime_id.ToString(), "");
-					}
-					if (seat.SeatStatus.ToLower() == "locked_")
-					{
-						seat.SeatStatus = "AVAILABLE";
-					}
-					uow.Seat.Update(seat);
-					//dbContext.Update(seat);
-					uow.Save();
-
-				}
-				catch (Exception ex)
-				{
-					Console.WriteLine(ex.Message);
-					throw;
-				};
-
-			}
-			
+			Console.WriteLine($"Lock : {showtime_id.ToString().ToUpper()}");
 		}
 		[HttpGet]
 		public async Task<IActionResult> BookingConfirmation(Guid[] seatIDList, Guid showtime_id)
@@ -216,7 +176,8 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 			ViewData["Room"] = room.RoomName;
 			var cinema = await uow.Cinema.GetFirstOrDefaultAsync(u => u.CinemaID == room.CinemaID);
 			ViewData["Cinema"] = cinema.CinemaName;
-			ViewData["Price"] = TicketVM.Ticket.FirstOrDefault().Total.ToString();
+			//ViewData["Price"] = TicketVM.Ticket.FirstOrDefault().Total.ToString();
+			return Json(new { success = true });
 			return View();
 		}
 		#region API Call

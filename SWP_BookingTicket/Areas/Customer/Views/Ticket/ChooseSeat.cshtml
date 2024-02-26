@@ -79,7 +79,7 @@
                                 @if (seat != null)
                                 {
                                     var showtimeID = ViewData["ShowtimeID"] as string;
-                                    <div class="seat-block w-100  @(!seat.SeatStatus.ToLower().Contains(showtimeID.ToLower()) || seat.SeatStatus.ToUpper() == "available"  ? "available" : "unavailable")" id="@(seatId)">
+                                    <div class="seat-block w-100  @(!seat.SeatStatus.ToLower().Contains(showtimeID.ToLower()) || seat.SeatStatus.ToLower() == "available"  ? "available" : "unavailable")" id="@(seatId)">
                                         <span>@(rowLetter + col)</span>
                                     </div>
                                 }
@@ -129,15 +129,10 @@
                         seatIDList: selectedSeats,
                         showtime_id : showtime_id
                     },
-                    success: function (response) {
-                       if (data.success) {
-                            window.location.href = "/Customer/Home";
-                        } else {
-                    //        console.log("Error");
+                    success: function (data) {
+                        if (data.success) {
+                            window.location.href = '/Customer/Home'
                         }
-                    },
-                    error: function (xhr, status, error) {
-                        // Handle error
                     }
                 });
             })

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authentication.Google;
+﻿using Hangfire;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
@@ -14,6 +15,15 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 builder.Services.AddControllersWithViews();
 builder.Services.AddRazorPages();
+//Hangfire
+builder.Services.AddHangfire(x =>
+{
+	x.UseSqlServerStorage(builder.Configuration.GetConnectionString("HangfireConnection"));
+});
+builder.Services.AddHangfireServer(options =>
+{
+	options.WorkerCount = 1;
+});
 //DbContext Configuration
 builder.Services.AddDbContextFactory<AppDbContext>(
 	   options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -74,14 +84,13 @@ builder.Logging.AddSerilog(logger);
 var mailsetttings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailsetttings);
 builder.Services.AddTransient<IEmailSender, SendMailService>();
-
+builder.Services.AddScoped<IUnlockASeatService, UnlockASeatService>();
 // Initialize database
 builder.Services.AddScoped<DbInitialize>();
 // UnitOfWork 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Upload image
 builder.Services.AddScoped<UploadImageService>();
-
 var app = builder.Build();
 
 
@@ -98,6 +107,7 @@ app.UseStaticFiles();
 app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
+app.UseHangfireDashboard();
 SeedData();
 app.MapControllerRoute(
 	name: "default",
