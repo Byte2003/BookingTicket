@@ -1,43 +1,86 @@
 ﻿@model SWP_BookingTicket.Models.ViewModels.ShowtimeVM
 <div class="container my-5">
-    <h3 class="text-primary">New Showtime</h3>
-    <hr />
-    <form method="post" asp-action="Create" asp-controller="Showtime">
-        <div class="row">
-            <div class="my-3">
-                <label asp-for="@Model.Showtime.Date" class="form-label">Date</label>
-                <input asp-for="@Model.Showtime.Date" class="form-control">
-                <span asp-validation-for="@Model.Showtime.Date" class="text-danger"></span>
+	<h3 class="text-primary">New Showtime</h3>
+	<hr />
+	<form method="post" asp-action="Create" asp-controller="Showtime">
+		<div class="row">
+			<div class="my-3">
+				<label asp-for="@Model.Showtime.Date" class="form-label">Date</label>
+				<input asp-for="@Model.Showtime.Date" type="date" class="form-control">
+				<span asp-validation-for="@Model.Showtime.Date" class="text-danger"></span>
 
-            </div>
-            <div class="col-12 mt-5">
-                <label asp-for="@Model.Showtime.Movie">Movie</label>
-                <select asp-for="@Model.Showtime.Movie.MovieName" asp-items="@Model.MovieList"></select>
+			</div>
+			<div class="col-12 mt-5">
+				<label>Movie</label>
+				<select asp-for="@Model.Showtime.MovieID" asp-items="@Model.MovieList"></select>
 
-            </div>
-            <div class="my-3">
-                <label asp-for="@Model.Showtime.Room.CinemaID" class="ms-2">Cinema:</label>            
-                <select id="cinemaSelectList" asp-for="@Model.Showtime.Room.CinemaID" asp-items="@Model.CinemaList"></select>
-            </div>
-            <div class="my-3">
-                <label asp-for="@Model.Showtime.Room.RoomID" class="ms-2">Room:</label>
-                <select id="roomSelectList" asp-for="@Model.Showtime.Room.RoomID" asp-items="@Model.RoomList"></select>
-            </div>
+			</div>
+			<div class="my-3">
+				<label class="ms-2">Cinema:</label>
+				<select id="cinemaSelectList" asp-items="@Model.CinemaList"></select>
+			</div>
+
+			<div class="my-3">
+				<label class="ms-2">Room:</label>
+				<select id="roomSelectList" asp-for="@Model.Showtime.RoomID" asp-items="@Model.RoomList"></select>
+			</div>
 
 
-        </div>
-        <button type="submit" class="btn btn-primary my-3">Create</button>
-        <a asp-controller="Showtime" asp-action="Create" class="btn btn-secondary my-3" style="width:200px">
-            Back to Showtime list
-        </a>
-    </form>
+		</div>
+		<button type="submit" class="btn btn-primary my-3">Create</button>
+		<a asp-controller="Showtime" asp-action="Create" class="btn btn-secondary my-3" style="width:200px">
+			Back to Showtime list
+		</a>
+	</form>
 </div>
 
 
 @*Validate on client side*@
 @section Scripts {
-    @{
-        <script type="text/javascript" src="~/js/showtime.js"></script>
-    }
+	@{
+		// <script type="text/javascript" src="~/js/showtime.js"></script>
+
+		<script>
+			var selectCinema = document.getElementById("cinemaSelectList");
+			var selectRoom = document.getElementById("roomSelectList");
+
+			$(document).ready(function () {
+				loadroomlist(selectCinema.value);
+			})
+
+			selectCinema.addEventListener("change", function () {
+				var cinema_id = selectCinema.value;
+				console.log("change");
+				loadroomlist(cinema_id);
+			});
+
+
+			function loadroomlist(cinemaid) {
+				var url = "/CinemaManager/Showtime/GetRoomList?cinema_id=" + cinemaid;
+				console.log(url);
+
+				fetch(url)
+					.then(response => {
+						if (!response.ok) {
+							throw new Error("Network response was not ok");
+						}
+						return response.json();
+					})
+					.then(data => {
+						var selectelement = selectRoom;
+						selectelement.innerHTML = ""; // Clear previous options
+						var roomList = data.data; // Access the 'data' property from the JSON response
+						roomList.forEach(item => {
+							var option = document.createElement("option");
+							option.text = item.roomName;
+							option.value = item.roomID;
+							selectelement.appendChild(option);
+						});
+					})
+					.catch(error => {
+						console.error("Error: ", error);
+					});
+			}</script>
+	}
 }
 

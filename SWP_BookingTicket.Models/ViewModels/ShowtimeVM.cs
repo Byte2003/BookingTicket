@@ -10,6 +10,7 @@ namespace SWP_BookingTicket.Models.ViewModels
 {
     public class ShowtimeVM
     {
+
         public Showtime Showtime { get; set; }
         [ValidateNever]
         public IEnumerable<SelectListItem> MovieList { get; set; }
@@ -19,5 +20,6 @@ namespace SWP_BookingTicket.Models.ViewModels
         public IEnumerable<SelectListItem> CinemaList { get; set; }
 
 
-    }
+
+	}
 }
