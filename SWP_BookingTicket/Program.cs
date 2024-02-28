@@ -91,6 +91,12 @@ builder.Services.AddScoped<DbInitialize>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Upload image
 builder.Services.AddScoped<UploadImageService>();
+
+
+builder.Services.AddSession(option =>
+{
+    option.IOTimeout = TimeSpan.FromMinutes(20);
+});
 var app = builder.Build();
 
 
@@ -113,6 +119,8 @@ app.MapControllerRoute(
 	name: "default",
 	pattern: "{area=Customer}/{controller=Home}/{action=Index}/{id?}");
 
+
+app.UseSession();
 app.Run();
 async void SeedData()
 {

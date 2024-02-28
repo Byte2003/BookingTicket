@@ -1,5 +1,4 @@
-﻿
-@{
+﻿@{
     var time = ViewData["Time"] as string;
     var movie = ViewData["Movie"] as string;
     var duration = ViewData["Duration"] as string;
@@ -7,6 +6,7 @@
     var seats = ViewData["Seats"] as List<string>;
     var cinema = ViewData["Cinema"] as string;
     var price = ViewData["Price"] as string;
+    var total = ViewData["Total"] as string;
 }
 <style>
     .ticket-container {
@@ -53,9 +53,18 @@
                 <div>
                     <p>Seat: @item</p>
                 </div>
+                <div>
+                    <p>Price: @price</p>
+                </div>
             </div>
         }
     </div>
+    <div>
+        <p>Total Amount: @total</p>
+    </div>
     <hr />
-    <div class="btn btn-outline-primary mt-3">Purchase</div>
+    <a asp-area="Customer" asp-controller="Ticket" asp-action="BookingProcess"
+       asp-route-seatIDs="@ViewData["seatIDs"]"
+       asp-route-showtime_id="@ViewData["showtime_id"]"
+       class="btn btn-outline-primary mt-3">Purchase</a>
 </div>
