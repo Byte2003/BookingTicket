@@ -1,7 +1,9 @@
 ﻿using Hangfire;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.CodeAnalysis.Elfie.Extensions;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Internal;
 using SWP_BookingTicket.DataAccess.Data;
@@ -20,23 +22,27 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
     public class TicketController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<AppUser> _userManager;
         private readonly int _pendingLockDuration = 15 * 1000; // 3 minutes
         public TicketVM TicketVM;
         private readonly object _lockObject = new object();
         private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
         private readonly IUnlockASeatService _unlockASeatService;
         private readonly IBackgroundJobClient _backgroundJobClient;
-        // private static List<string> scheduledJobIds;
         private enum PaymentStatus
         {
             Pending,
             Success
         }
-        public TicketController(IUnitOfWork unitOfWork, IDbContextFactory<AppDbContext> dbContextFactory, IUnlockASeatService unlockASeatService, IBackgroundJobClient backgroundJobClient)
+        public TicketController(IUnitOfWork unitOfWork,
+                                IDbContextFactory<AppDbContext> dbContextFactory,
+                                IUnlockASeatService unlockASeatService,
+                                IBackgroundJobClient backgroundJobClient,
+                                UserManager<AppUser> userManager)
         {
-            // scheduledJobIds = new List<string>();
             _unlockASeatService = unlockASeatService;
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
             _dbContextFactory = dbContextFactory;
             _backgroundJobClient = backgroundJobClient;
         }
@@ -46,6 +52,47 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             ViewData["MovieList"] = movieList;
             return View();
         }
+
+        public async Task<IActionResult> BookedTickets()
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(claim.Value);
+
+            var currentTime = DateTime.Now; // Get the current time
+
+            var allTickets = await _unitOfWork.Ticket.GetAllAsync(u => u.AppUserID == claim.Value, includeProperties: "Showtime,Seat");
+
+            var futureTickets = new List<Ticket>();
+
+            foreach (var ticket in allTickets)
+            {
+                var showtimeDateTime = new DateTime(ticket.Showtime.Date.Year, ticket.Showtime.Date.Month, ticket.Showtime.Date.Day, ticket.Showtime.Time, ticket.Showtime.Minute, 0);
+
+                // Compare the showtime with the current time
+                if (showtimeDateTime >= currentTime)
+                {
+                    futureTickets.Add(ticket);
+                }
+            }
+
+            foreach(var ticket in futureTickets)
+            {
+                var showtime = ticket.Showtime;
+                var movieID = showtime.MovieID;
+                var roomID = showtime.RoomID;
+                var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movieID);
+                var room = await _unitOfWork.Room.GetFirstOrDefaultAsync(u => u.RoomID == roomID, includeProperties:"Cinema");
+
+                showtime.Movie = movie;
+                showtime.Room = room; 
+                ticket.Showtime = showtime;
+            }
+
+            return View(futureTickets);
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> ChooseSeat(Guid showtime_id)
         {
@@ -61,13 +108,12 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         }
         public async Task HandleLockAndUnlock(List<Guid> seats, Guid showtime_id, string? status)
         {
-            
+
 
             try
             {
                 using var dbContext = _dbContextFactory.CreateDbContext();
                 IUnitOfWork uow = new UnitOfWork(dbContext);
-                List<Seat> seatList = new List<Seat>();
                 // Handle payment settings -- On developing
 
                 double timeSpan = 0;
@@ -98,11 +144,9 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 {
                     var seat = await uow.Seat.GetFirstOrDefaultAsync(u => u.SeatID == seatID);
                     LockASeat(seat, showtime_id, status);
-                    string jobId = _backgroundJobClient.Schedule(() =>
+                    _ = _backgroundJobClient.Schedule(() =>
                         _unlockASeatService.UnlockASeat(seatID, showtime_id, status), TimeSpan.FromSeconds(timeSpan));
 
-                    //jobId = jobId + "_seatID=" + seatID.ToString() + "_showtimeID=" + showtime_id.ToString();
-                    //scheduledJobIds.Add(jobId);
                 }
 
             }
@@ -139,7 +183,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 
         public async Task<IActionResult> BookingProcess(string seatIDs, Guid showtime_id, string? status = null)
         {
-            Console.WriteLine(TicketVM);
             string[] seatIDListString = seatIDs.Split(',');
             List<Guid> seatIDList = new List<Guid>(); // Use List<Guid> instead of Guid[]
 
@@ -153,9 +196,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             {
                 case null:
                     {
-
-                        HandleLockAndUnlock(seatIDList, showtime_id, "pending"); // pending in 3 min
-
                         return RedirectToAction("AuthorizePayment", "Payment", new
                         {
                             seatIDs = seatIDs,
@@ -166,11 +206,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                     }
                 case "success":
                     {
-                        // Stop the current HandleLockAndUnlock function
-                        // TODO: 
-
                         // Set another HandleLockAndUnlock
-
                         HandleLockAndUnlock(seatIDList, showtime_id, "success");
 
                         // Add Ticket to db
@@ -178,6 +214,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                         var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == showtime.MovieID);
                         var claimsIdentity = (ClaimsIdentity)User.Identity;
                         var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                        var user = await _userManager.FindByIdAsync(claim.Value);
 
 
                         List<Seat> seatList = new List<Seat>();
@@ -191,11 +228,12 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                             ticket.Total = movie.Price;
                             ticket.AppUserID = claim.Value;
 
-                            //_unitOfWork.Ticket.Add(ticket);
+                            user.Point += (decimal)(0.8 * movie.Price);
 
+                            _unitOfWork.Ticket.Add(ticket);
                         }
 
-                        //_unitOfWork.Save();
+                        _unitOfWork.Save();
                         // redirect to the sucess payment page  
                         break;
                     }
@@ -221,12 +259,12 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         public async Task<IActionResult> BookingConfirmation(string seatIDs, Guid showtime_id)
         {
 
-            // TODO: handle 2 user choose seats at the same time before purchase
-            // TODO: Create View Booked Tickets page
+            // TODO: handle 2 user choose seats at the same time before purchase: done
+            // TODO: Create View Booked Tickets page: done
             // CRUD Voucher Apply voucher for the total amount 
             // Increase User Point after booking ticket
             // Using point for payment option
-            
+
             ViewData["seatIDs"] = seatIDs;
             ViewData["showtime_id"] = showtime_id;
 
@@ -237,6 +275,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 Guid sID = Guid.Parse(s);
                 seatIDList.Add(sID); // Use Add method to append to the list
             }
+            HandleLockAndUnlock(seatIDList, showtime_id, "pending"); // pending in 3 min
 
             var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(x => x.ShowtimeID == showtime_id, includeProperties: "Room");
             var room = showtime.Room;
@@ -269,6 +308,40 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 
 
         #region API Call
+
+        [HttpGet]
+        public async Task<IActionResult> GetSeatStatuses(string showtime_id)
+        {
+            try
+            {
+                var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == Guid.Parse(showtime_id), includeProperties: "Room");
+                IEnumerable<Seat> seats = null;
+                if (showtime is not null)
+                {
+                    var room = showtime.Room;
+                    seats = await _unitOfWork.Seat.GetAllAsync(u => u.RoomID == room.RoomID);
+                }
+
+                foreach (var seat in seats)
+                {
+                    if (!seat.SeatStatus.ToLower().Contains(showtime_id.ToLower()))
+                    {
+                        seat.SeatStatus = "AVAILABLE";
+                    }
+                }
+
+                // Construct data to be sent as JSON response
+                var seatStatuses = seats.Select(seat => new { seatID = seat.SeatID, seatStatus = seat.SeatStatus, seatName = seat.SeatName });
+
+                return Json(seatStatuses);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+
         [HttpGet]
         public async Task<IActionResult> GetShowtimeForAMovieWithinADay(Guid movie_id, string? date, string? address)
         {

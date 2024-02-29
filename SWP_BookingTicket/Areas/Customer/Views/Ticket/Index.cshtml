@@ -101,6 +101,7 @@
                     var address_text = $(this).text();
                     $.get(`/Customer/Ticket/GetShowtimeForAMovieWithinADay?movie_id=${movieID}&date=${days}&address=${address_text}`, (data, status) => {
                         var showtimeInfo = data.showtimesForAllCondition;
+                        console.log(data.showtimesForAllCondition);
                         renderShowtimes(showtimeInfo);
                     }, "json");
                 })

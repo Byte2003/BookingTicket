@@ -99,10 +99,13 @@
 </div>
 @section Scripts {
     <script type="text/javascript">
+
+
         var selectedSeats = [];
 
         $(document).ready(function () {
             $('.seat-block.available').click(function () {
+
                 $(this).toggleClass('selected');
                 var seatId = $(this).attr('id');
 
@@ -115,57 +118,75 @@
                     }
                 }
 
-                console.log(selectedSeats); // Display selected seats in the console (optional)
-            });
-            // $(".btn-process").click(function () {
-            //     var urlParams = new URLSearchParams(window.location.search);
-            //     var showtime_id = urlParams.get('showtime_id');
-            //     $.ajax({
-            //         url: '/Customer/Ticket/BookingConfirmation',
-            //         traditional: true,
-            //         type: 'GET',
-            //         contextType: 'application/json',
-            //         data: {
-            //             seatIDList: selectedSeats,
-            //             showtime_id : showtime_id
-            //         },
-            //         success: function (data) {
-            //             if (data.success) {
-            //                 window.location.href = '/Customer/Home'
-            //             }
-            //         }
-            //     });
-            // })
-
-            $(".btn-process").click(function () {
-                var urlParams = new URLSearchParams(window.location.search);
-                var showtime_id = urlParams.get('showtime_id');
-
-                // Create a form element
-                var form = document.createElement('form');
-                form.setAttribute('method', 'POST');
-                form.setAttribute('action', '/Customer/Ticket/BookingConfirmation');
-
-                // Create hidden input fields for seatIDList and showtime_id
-                var seatIDListInput = document.createElement('input');
-                seatIDListInput.setAttribute('type', 'hidden');
-                seatIDListInput.setAttribute('name', 'seatIDs');
-                seatIDListInput.setAttribute('value', selectedSeats.toString());
-                form.appendChild(seatIDListInput);
-
-                var showtimeIDInput = document.createElement('input');
-                showtimeIDInput.setAttribute('type', 'hidden');
-                showtimeIDInput.setAttribute('name', 'showtime_id');
-                showtimeIDInput.setAttribute('value', showtime_id);
-                form.appendChild(showtimeIDInput);
-
-                // Append the form to the body and submit it
-                document.body.appendChild(form);
-                form.submit();
+                CallAjax(this);
             });
 
 
         });
+
+        function CallAjax(seatSelected) {
+            var urlParams = new URLSearchParams(window.location.search);
+            var showtime_id = urlParams.get('showtime_id');
+            url = '/Customer/Ticket/GetSeatStatuses?showtime_id=' + showtime_id;
+            console.log(url);
+            // Make an AJAX request to fetch updated seat statuses
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function (data) {
+                    // Update seat statuses based on the response
+                    data.forEach(function (seat) {
+                        var seatElement = $('#' + seat.seatID);
+                        if (seatElement.length && seat.seatStatus.toLowerCase() === "available") {
+                            seatElement.removeClass('unavailable').addClass(seat.seatStatus.toLowerCase());
+
+                        } else if (seat.seatID == $(seatSelected).attr('id')) {
+                            var index = selectedSeats.indexOf(seat.seatID);
+                            if (index !== -1) {
+                                selectedSeats.splice(index, 1); // Remove deselected seat from the array
+                            }
+                            alert("Seat " + seat.seatName + " is choosen by another people. Please choose another seat.");
+                            // reload the page to update the layout
+                            window.location.reload();
+                        }
+                    });
+                }
+            });
+        }
+
+        $(".btn-process").click(function () {
+
+            selectedSeats.forEach(function (seatId) {
+                var seat = $('#' + seatId);
+                CallAjax(seat);
+            });
+
+            var urlParams = new URLSearchParams(window.location.search);
+            var showtime_id = urlParams.get('showtime_id');
+
+            // Create a form element
+            var form = document.createElement('form');
+            form.setAttribute('method', 'POST');
+            form.setAttribute('action', '/Customer/Ticket/BookingConfirmation');
+
+            // Create hidden input fields for seatIDList and showtime_id
+            var seatIDListInput = document.createElement('input');
+            seatIDListInput.setAttribute('type', 'hidden');
+            seatIDListInput.setAttribute('name', 'seatIDs');
+            seatIDListInput.setAttribute('value', selectedSeats.toString());
+            form.appendChild(seatIDListInput);
+
+            var showtimeIDInput = document.createElement('input');
+            showtimeIDInput.setAttribute('type', 'hidden');
+            showtimeIDInput.setAttribute('name', 'showtime_id');
+            showtimeIDInput.setAttribute('value', showtime_id);
+            form.appendChild(showtimeIDInput);
+
+            // Append the form to the body and submit it
+            document.body.appendChild(form);
+            form.submit();
+        });
+
     </script>
 
 }
