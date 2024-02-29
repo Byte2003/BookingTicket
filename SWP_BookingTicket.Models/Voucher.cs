@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,8 +13,11 @@ namespace SWP_BookingTicket.Models
 
         public string? VoucherName { get; set; } = string.Empty;
 
-        public double Value { get; set; }
+        [Required] 
+		[Range(1, 100)]
+		public double Value { get; set; }
 
+        [Required]
         public int Quantity { get; set; }
 
         //public virtual Ticket Ticket { get; set; }
