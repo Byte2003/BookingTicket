@@ -17,6 +17,7 @@ namespace SWP_BookingTicket.DataAccess.Repositories
 		IRepository<Showtime> Showtime { get; }
 		IRepository<Promotion> Promotion { get; }
 		IRepository<Comment> Comment { get; }
+		IRepository<Voucher> Voucher { get; }
 		void Save();
 	}
 }

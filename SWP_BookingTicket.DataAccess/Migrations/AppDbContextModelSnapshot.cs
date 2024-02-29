@@ -256,7 +256,7 @@ namespace SWP_BookingTicket.DataAccess.Migrations
 
                     b.HasKey("CinemaID");
 
-                    b.ToTable("Cinemas");
+                    b.ToTable("Cinemas", (string)null);
                 });
 
             modelBuilder.Entity("SWP_BookingTicket.Models.Comment", b =>
@@ -282,7 +282,7 @@ namespace SWP_BookingTicket.DataAccess.Migrations
 
                     b.HasIndex("MovieID");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("SWP_BookingTicket.Models.Movie", b =>
@@ -335,7 +335,7 @@ namespace SWP_BookingTicket.DataAccess.Migrations
 
                     b.HasKey("MovieID");
 
-                    b.ToTable("Movies");
+                    b.ToTable("Movies", (string)null);
                 });
 
             modelBuilder.Entity("SWP_BookingTicket.Models.Promotion", b =>
@@ -361,7 +361,7 @@ namespace SWP_BookingTicket.DataAccess.Migrations
 
                     b.HasKey("PromotionID");
 
-                    b.ToTable("Promotions");
+                    b.ToTable("Promotions", (string)null);
                 });
 
             modelBuilder.Entity("SWP_BookingTicket.Models.Room", b =>
@@ -390,7 +390,7 @@ namespace SWP_BookingTicket.DataAccess.Migrations
 
                     b.HasIndex("CinemaID");
 
-                    b.ToTable("Rooms");
+                    b.ToTable("Rooms", (string)null);
                 });
 
             modelBuilder.Entity("SWP_BookingTicket.Models.Seat", b =>
@@ -414,7 +414,7 @@ namespace SWP_BookingTicket.DataAccess.Migrations
 
                     b.HasIndex("RoomID");
 
-                    b.ToTable("Seats");
+                    b.ToTable("Seats", (string)null);
                 });
 
             modelBuilder.Entity("SWP_BookingTicket.Models.Showtime", b =>
@@ -444,7 +444,7 @@ namespace SWP_BookingTicket.DataAccess.Migrations
 
                     b.HasIndex("RoomID");
 
-                    b.ToTable("Showtimes");
+                    b.ToTable("Showtimes", (string)null);
                 });
 
             modelBuilder.Entity("SWP_BookingTicket.Models.Ticket", b =>
@@ -479,7 +479,7 @@ namespace SWP_BookingTicket.DataAccess.Migrations
 
                     b.HasIndex("VoucherID");
 
-                    b.ToTable("Tickets");
+                    b.ToTable("Tickets", (string)null);
                 });
 
             modelBuilder.Entity("SWP_BookingTicket.Models.Voucher", b =>
@@ -499,7 +499,7 @@ namespace SWP_BookingTicket.DataAccess.Migrations
 
                     b.HasKey("VoucherID");
 
-                    b.ToTable("Vouchers");
+                    b.ToTable("Vouchers", (string)null);
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>
