@@ -5,14 +5,12 @@
     <div class="row">
         <div class="col-md-8 border border-dark left-panel">
             <div id="daysList" class="row" style="min-height:64px">
-
             </div>
             <hr />
             <div class="address-list" style="min-height:64px">
             </div>
             <hr />
             <div class="showtime-list" style="min-height:64px">
-
             </div>
         </div>
         <div class="col-md-4 border border-dark">
@@ -26,7 +24,7 @@
                         <div class="col-md-8">
                             <div class="card-body">
                                 <h5 class="card-title">@item.MovieName</h5>
-                                <p class="card-text">@Html.Raw(item.Description)</p>
+                                @* <p class="card-text">@Html.Raw(item.Description)</p> *@
                                 <p class="card-text"><small class="text-muted">@item.Price VND</small></p>
                             </div>
                         </div>
@@ -36,13 +34,15 @@
         </div>
     </div>
 </div>
-@*Validate on client side*@
+
 @section Scripts {
     @{
         <partial name="_ValidationScriptsPartial" />
+
         <script type="text/javascript">
             let movieID = "";
             let days;
+
             function getDate(daysToAdd) {
                 var date = new Date();
                 date.setDate(date.getDate() + daysToAdd);
@@ -55,13 +55,12 @@
             // Function to create a card HTML for a given day
             function createCard(day) {
                 return `
-                            <div class="col-md-2">
-                             <div class="btn btn-outline-secondary my-2 mx-1 days">
-                                ${day}
-                            </div>
-                            </div>
-
-                        `;
+                                    <div class="col-md-2">
+                                        <div class="btn btn-outline-secondary my-2 mx-1 days">
+                                            ${day}
+                                        </div>
+                                    </div>
+                                `;
             }
 
             // Function to generate cards for the next 8 days
@@ -77,9 +76,10 @@
                     daysListDiv.innerHTML = cardsHTML;
                 }
             }
+
             // Call the function to generate day cards on page load
             window.onload = function () {
-                generateDayCards();
+                    generateDayCards();
                 $(".movie").click(function () {
                     movieID = $(this).attr("data-movieID");
                     $(".movie").removeClass("border border-4 border-info");
@@ -87,7 +87,8 @@
                     $(".showtime-list").text("");
                     $(".address-list").text("");
                     console.log(movieID);
-                })
+                });
+
                 $(".days").click(function () {
                     days = $(this).text();
                     $.get(`/Customer/Ticket/GetShowtimeForAMovieWithinADay?movie_id=${movieID}&date=${days}`, (data, status) => {
@@ -97,6 +98,7 @@
                     }, "json");
 
                 });
+
                 $(document).on("click", ".address", function () {
                     var address_text = $(this).text();
                     $.get(`/Customer/Ticket/GetShowtimeForAMovieWithinADay?movie_id=${movieID}&date=${days}&address=${address_text}`, (data, status) => {
@@ -104,12 +106,14 @@
                         console.log(data.showtimesForAllCondition);
                         renderShowtimes(showtimeInfo);
                     }, "json");
-                })
+                });
+
                 $(document).on("click", ".showtime", function () {
                     var showtimeID = $(this).attr("data-showtimeID");
-                    window.location.href = `/Customer/Ticket/ChooseSeat?showtime_id=${showtimeID}`
-                })
-            }
+                    window.location.href = `/Customer/Ticket/ChooseSeat?showtime_id=${showtimeID}`;
+                });
+            };
+
             function renderAddresses(addresses) {
                 var addressListDiv = document.querySelector('.address-list');
                 if (addressListDiv) {
@@ -119,28 +123,30 @@
                         addresses.forEach(function (address) {
                             var addressHTML = `<div class="btn btn-primary my-2 mx-1 address">${address}</div>`;
                             addressesHTML += addressHTML;
-                            addressListDiv.innerHTML = addressesHTML;
-                        })
+                        });
                     } else {
-                        addressListDiv.innerHTML = "<p> No showtime available for this movie </p>"
+                        addressesHTML = "<p>No showtime available for this movie</p>";
                     }
+                    addressListDiv.innerHTML = addressesHTML;
                 }
             }
+
             function renderShowtimes(showtime) {
                 var showtimeListDiv = document.querySelector('.showtime-list');
                 if (showtimeListDiv) {
-                    var showtimesHTML = ``;
+                    var showtimesHTML = '';
                     showtime.forEach(function (showtime) {
                         var showtimeHTML = `
-                            <div class="btn btn-success my-2 mx-1 showtime" data-showtimeID="${showtime.showtimeID}">
-                                <p>${showtime.name}</p>
-                                ${showtime.time}:${showtime.minute}
-                            </div>`;
+                                            <div class="btn btn-success my-2 mx-1 showtime" data-showtimeID="${showtime.showtimeID}">
+                                                <p>${showtime.name}</p>
+                                                ${showtime.time}:${showtime.minute}
+                                            </div>`;
                         showtimesHTML += showtimeHTML;
                     });
                     showtimeListDiv.innerHTML = showtimesHTML;
                 }
             }
         </script>
+
     }
 }

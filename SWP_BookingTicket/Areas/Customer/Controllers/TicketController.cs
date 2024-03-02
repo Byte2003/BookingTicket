@@ -10,6 +10,7 @@ using SWP_BookingTicket.Models;
 using SWP_BookingTicket.Models.ViewModels;
 using SWP_BookingTicket.Services;
 using System;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 
@@ -42,10 +43,29 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         }
         public async Task<IActionResult> Index(Guid? movie_id = null)
         {
+            // Get all movies
             IEnumerable<Movie> movieList = await _unitOfWork.Movie.GetAllAsync();
+
+            if (movie_id != null)
+            {
+                var movieToMove = movieList.FirstOrDefault(m => m.MovieID == movie_id);
+                if (movieToMove != null)
+                {
+                    movieList = movieList.Where(m => m.MovieID != movie_id); // Remove the movie from the list
+                    movieList = new[] { movieToMove }.Concat(movieList); // Add the movie to the beginning of the list
+                }
+                // ViewData["movie_id"] = movie_id;
+            }
+            else
+            {
+                // ViewData["movie_id"] = "";
+            }
+
             ViewData["MovieList"] = movieList;
             return View();
         }
+
+
 
         public async Task<IActionResult> BookedTickets()
         {
@@ -187,7 +207,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             foreach (var s in seatIDListString)
             {
                 Guid sID = Guid.Parse(s);
-                seatIDList.Add(sID); 
+                seatIDList.Add(sID);
             }
 
             if (voucher != null)
