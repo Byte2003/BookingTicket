@@ -1,38 +1,24 @@
 ﻿@model IEnumerable<Seat>
 
 <style>
-    .seat-block {
-        width: 45px;
-        height: 45px;
-        border: 1px solid #ccc;
-        display: flex;
-        justify-content: center;
-        align-items: center;
+    .custom-checkbox {
+        display: none;
     }
 
-        .seat-block.available:hover {
-            cursor: pointer;
-            border: 2px #ff6a00;
+        .custom-checkbox + label {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 1px solid #aaa;
+            border-radius: 4px;
         }
 
-    .available {
-        background-color: #007bff; /* Change this to your desired color for selected seats */
-        color: #fff;
-    }
-
-    .selected {
-        background-color: #ffc107; /* Change this to your desired color for selected seats */
-        color: #000;
-    }
-
-    .unavailable {
-        background-color: #ccc;
-        color: #000;
-    }
+        .custom-checkbox:checked + label {
+            background-color: #ccc;
+        }
 </style>
 
-
-<div class="container w-100 mt-5">
+<div class="container my-5 row">
     <h3 class="text-primary">Room Seats</h3>
     <hr />
     <div class="table-responsive">
@@ -121,18 +107,25 @@
                     "data": @Html.Raw(Json.Serialize(Model)),
                     "columns": [
                         { "data": "seatName" },
-                        { "data": "seatStatus" },
+                        {
+                            "data": "seatStatus",
+                            "render": function (data) {
+                                var statusText = data ? "Locked" : "Available";
+                                return statusText;
+                            },
+
+                        },
                         {
                             "data": "seatID",
                             "render": function (data) {
                                 return `
 
-                                                      <a href="/CinemaManager/Seat/Update?seat_id=${data}"
-                                                      class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i></a>
-                                                      <a onClick=Delete('/CinemaManager/Seat/Delete?seat_id=${data}')
-                                                      class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i></a>
+                                                                      <a href="/CinemaManager/Seat/Update?seat_id=${data}"
+                                                                      class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i></a>
+                                                                      <a onClick=Delete('/CinemaManager/Seat/Delete?seat_id=${data}')
+                                                                      class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i></a>
 
-                                               `
+                                                               `
                             },
 
                         }

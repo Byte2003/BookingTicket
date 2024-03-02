@@ -1,39 +1,54 @@
-﻿// Loading DataTable with Ajax
+﻿
 var dataTable;
+
 $(document).ready(function () {
     loadDataTable();
 })
 function loadDataTable() {
-    dataTable = $('#roomTable').DataTable({
+    dataTable = $('#showtimeTable').DataTable({
         "ajax": {
-            "url": "/CinemaManager/Room/GetAllRooms"
+            "url": "/CinemaManager/Showtime/GetAllShowtime"
         },
         "columns": [
-            { "data": "roomID", "width": "20%" },
-            { "data": "roomName", "width": "15%" },
-            { "data": "status", "width": "15%" },
-            { "data": "cinema.cinemaName", "width": "25%" },
-            { "data": "note", "width": "20%" },
-            { "data": "numOfSeats", "width": "10%" },
+            //{ "data": "showtimeID", "width": "20%" },
+            { "data": "date", "width": "15%" },
+            {
+                "data": "time",
+                "width": "10%",
+                "render": function (data) {
+                    return data + "h";
+                }
+            },
+            {
+                "data": "minute",
+                "width": "10%",
+                "render": function (data) {
+                    return data + "m";
+                }
+            },
+            { "data": "movie.movieName", "width": "10%" },
+            { "data": "movie.duration", "width": "10%" },
+            { "data": "cinema_name", "width": "15%" },
+            { "data": "room.roomName", "width": "10%" },
 
             {
-                "data": "roomID",
+                "data": "showtimeID",
                 "render": function (data) {
                     return `
                        
-                            <a href="/CinemaManager/Room/Update?room_id=${data}"
+                            <a href="/CinemaManager/Showtime/Update?showtime_id=${data}"
                             class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
-                            <a onClick=Delete('/CinemaManager/Room/Delete?room_id=${data}')
+                            <a onClick=Delete('/CinemaManager/Showtime/Delete?showtime_id=${data}')
                             class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
-					        <a href="/CinemaManager/Seat/RoomSeats?room_id=${data}"
-                            class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Manage Seats</a>
+					   
                         `
                 },
-                "width": "25%"
+                "width": "20%"
             }
         ]
     });
 }
+
 
 // SweetAlert library
 function Delete(url) {

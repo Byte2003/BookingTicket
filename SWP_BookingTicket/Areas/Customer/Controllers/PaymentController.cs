@@ -23,8 +23,15 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> AuthorizePaymentAsync(string seatIDs, Guid showtime_id, string? status = null, string Cancel = null)
+        public async Task<IActionResult> AuthorizePaymentAsync(string seatIDs, Guid showtime_id, string? voucherCode, string? status = null, string Cancel = null)
         {
+            var voucher_value = 0.0;
+            var voucher = await _unitOfWork.Voucher.GetFirstOrDefaultAsync(u => u.VoucherName == voucherCode);
+            if (voucher != null)
+            {
+                voucher_value = voucher.Value;
+            }
+
             try
             {
                 APIContext apiContext = PaypalConfiguration.GetAPIContext();
@@ -43,7 +50,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                     var requestUrl = HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path;
                     var guid = Convert.ToString((new Random()).Next(100000));
                     requestUrl = requestUrl + "?guid=" + guid;
-                    var createdPayment = await CreatePayment(apiContext, requestUrl, seatIDs, showtime_id);
+                    var createdPayment = await CreatePayment(apiContext, requestUrl, seatIDs, showtime_id, voucher_value);
 
                     var links = createdPayment.links.GetEnumerator();
                     string paypalRedirectUrl = "";
@@ -61,6 +68,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                     HttpContext.Session.SetString("payment", createdPayment.id);
                     HttpContext.Session.SetString("seatIDs", seatIDs);
                     HttpContext.Session.SetString("showtime_id", showtime_id.ToString());
+                    HttpContext.Session.SetString("voucher_code", voucherCode + "");
                     return Redirect(paypalRedirectUrl);
                 }
                 else
@@ -91,7 +99,9 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             {
                 seatIDs = HttpContext.Session.GetString("seatIDs"),
                 showtime_id = HttpContext.Session.GetString("showtime_id"),
+                payment_method = "paypal",
                 status = "success",
+                voucherCode = HttpContext.Session.GetString("voucher_code"),
             });
             // return View("SuccessPayment");
         }
@@ -111,7 +121,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             return this.payment.Execute(aPIContext, paymentExecution);
         }
 
-        private async Task<Payment> CreatePayment(APIContext aPIContext, string redirectUrl, string seatIDs, Guid showtime_id)
+        private async Task<Payment> CreatePayment(APIContext aPIContext, string redirectUrl, string seatIDs, Guid showtime_id, double? voucher_value)
         {
 
             string[] seatIDListString = seatIDs.Split(',');
@@ -140,10 +150,10 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 var seat = await _unitOfWork.Seat.GetFirstOrDefaultAsync(u => u.SeatID == seatID);
                 seat_names += seat.SeatName;
                 total += movie.Price;
-            }          
+            }
             var Time = $"Date: {showtime.Date.ToString()} Time: {showtime.Time}h{showtime.Minute}";
 
-            
+
             var itemList = new ItemList()
             {
                 items = new List<Item>(),
@@ -153,7 +163,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             {
                 name = cinema.CinemaName + " " + movie.MovieName,
                 currency = "USD",
-                price = movie.Price.ToString(),
+                price = (movie.Price * (1 - voucher_value / 100)).ToString(),
                 quantity = seatIDList.Count().ToString(),
                 sku = "sku"
             });
@@ -172,7 +182,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             var amount = new Amount()
             {
                 currency = "USD",
-                total = total.ToString(),
+                total = (total * (1 - voucher_value / 100)).ToString(),
             };
 
             var transactionList = new List<Transaction>();

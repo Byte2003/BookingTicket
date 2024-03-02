@@ -19,7 +19,8 @@
                     <th>Cinema</th>
                     <th>Room</th>
                     <th>Seat</th>
-                    <th>Price</th
+                    <th>Price</th>
+                    <th>Booked Date</th>
                 </tr>
             </thead>
             <tbody>
@@ -33,6 +34,7 @@
                         <td>@ticket.Showtime.Room.RoomName</td>
                         <td>@ticket.Seat.SeatName</td>
                         <td>$@ticket.Total</td>
+                        <td>@ticket.BookedDate</td>
                     </tr>
                 }
             </tbody>
