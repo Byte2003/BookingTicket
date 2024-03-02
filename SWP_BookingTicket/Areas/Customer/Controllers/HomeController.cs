@@ -29,6 +29,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 			var movies = await _unitOfWork.Movie.GetAllAsync();
              return View(PaginatedList<Movie>.Create(movies, pageNumber ?? 1, PAGESIZE));
 		}
+        [HttpGet]
         public async Task<IActionResult> MovieDetail(Guid movie_id)
         {
             var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync( x => x.MovieID == movie_id);
@@ -39,6 +40,18 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             return View();
         }
 
-
-    }
+        #region API Calll
+        [HttpGet]
+        public async Task<IActionResult> GetMoviesByCharacters(string text)
+        {
+            if (text is not null)
+            {
+				var movies = _unitOfWork.Movie.GetAllAsync(u => u.MovieName.ToLower().Contains(text.ToLower()));
+                var moviestoRender = movies.Result.Take(4);
+				return Json(new { data = moviestoRender });
+			}
+            return Json(new { success = false });
+        }
+		#endregion
+	}
 }

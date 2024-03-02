@@ -31,10 +31,16 @@
 
             </a>
             <div class="input-group rounded mx-2" style="width:360px">
-                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
-                <span class="input-group-text border-0" id="search-addon">
-                    <i class="fas fa-search"></i>
-                </span>
+                <div class="search-input position-relative d-flex justify-content-center w-100">
+                    <input type="search" class="form-control movie-search" placeholder="Find a movie" aria-label="Search" aria-describedby="search-addon" />
+                    <span class="input-group-text border-0" id="search-addon">
+                        <i class="fas fa-search"></i>
+                    </span>
+                </div>               
+                <div class="search-result position-absolute bg-white" style="z-index:100; top:38px;left:0;right:0">
+                    <div class="list-group">                       
+                    </div>
+                </div>
             </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars"></span>
@@ -71,8 +77,6 @@
                             <li><hr class="dropdown-divider"></li>
                         </ul>
                     </div>
-
-
                     <partial name="_LoginPartial" />
                     @*<a href="contact.html" class="nav-item nav-link">Contact</a>*@
                 </div>
@@ -189,5 +193,49 @@
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" src="~/js/site.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script type="text/javascript">
+        //debounce
+        function debounce(func, delay) {
+            let timeoutId;
+            return function () {
+                const context = this;
+                const args = arguments;
+                clearTimeout(timeoutId);
+                timeoutId = setTimeout(function () {
+                    func.apply(context, args);
+                }, delay);
+            };
+        }
+        //search function
+        function HandleSearch() {
+            var value = $(this).val();
+            var url = '/Customer/Home/GetMoviesByCharacters?text=' + value;
+
+            $.ajax({
+                url: url,
+                method: 'GET',
+                success: function (response) {
+                    var resultContainer = $('.search-result .list-group');
+                    resultContainer.empty(); // Clear previous search results
+                    // Check if response contains result array
+                    if (response.data && Array.isArray(response.data.result)) {
+                        // Render each movie as a tag
+                        response.data.result.forEach(function (movie) {
+                            var tag = $('<a>', {
+                                class: 'list-group-item list-group-item-action fw-normal text-wrap',
+                                href: `/Customer/Home/MovieDetail?movie_id=${movie.movieID} `,
+                                text: movie.movieName // Accessing movieName property
+                            });
+                            resultContainer.append(tag);
+                        });
+                    }
+                }
+            });
+        }
+        var debounceAjax = debounce(HandleSearch, 100);
+        $(".movie-search").on("input", debounceAjax);
+
+    </script>
 </body>
 </html>
