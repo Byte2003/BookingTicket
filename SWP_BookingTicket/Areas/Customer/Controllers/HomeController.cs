@@ -1,8 +1,11 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using SWP_BookingTicket.DataAccess.Repositories;
 using SWP_BookingTicket.Models;
+using SWP_BookingTicket.Utils;
 using System.Diagnostics;
+using System.Drawing.Printing;
 
 namespace SWP_BookingTicket.Areas.Customer.Controllers
 {
@@ -12,17 +15,25 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
     {
         private readonly ILogger<HomeController> _logger;
         private readonly UserManager<AppUser> _userManager;
-        public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager)
+        private const int PAGESIZE = 5;
+        private readonly IUnitOfWork _unitOfWork;
+        public HomeController(ILogger<HomeController> logger, UserManager<AppUser> userManager, IUnitOfWork unitOfWork)
         {
             _logger = logger;
             _userManager = userManager;
+            _unitOfWork = unitOfWork;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(int? pageNumber, string? searchString)
         {
-             return View();
+			var movies = await _unitOfWork.Movie.GetAllAsync();
+             return View(PaginatedList<Movie>.Create(movies, pageNumber ?? 1, PAGESIZE));
 		}
-
+        public async Task<IActionResult> MovieDetail(Guid movie_id)
+        {
+            var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync( x => x.MovieID == movie_id);
+            return View(movie);
+        }
         public IActionResult Privacy()
         {
             return View();
