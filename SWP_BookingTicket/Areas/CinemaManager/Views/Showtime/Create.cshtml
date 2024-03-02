@@ -239,28 +239,7 @@
 				});
 
 
-				// $(document).ready(function () {
-				// 	$("#Showtime_Showtime_MovieID").change(function () {
-
-				// 		var movieId = document.getElementById("Showtime_Showtime_MovieID").value;
-				// 		console.log(movieId);
-				// 		// call ajax GetMovieDuration(movieId)
-				// 		// tra ve data(vd 120)
-				// 		// success(data)
-				// 		$.ajax({
-				// 			url: "/CinemaManager/Showtime/GetDuration",
-				// 			type: 'GET',
-				// 			data: {
-				// 				movie_id: movieId,
-				// 			},
-				// 			success: function (data) {
-				// 				console.log(data);
-				// 			}
-				// 		})
-
-
-				// 	});
-				// });
+				
 				var hasErrorMessage = '@ViewData.ContainsKey("ErrorMessage")';
 				if (hasErrorMessage.toLowerCase() === "true") {
 					console.log(selectCinema.value);	
