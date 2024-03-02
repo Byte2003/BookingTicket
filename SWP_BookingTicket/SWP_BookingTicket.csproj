@@ -41,6 +41,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Customer\Views\Payment\" />
     <Folder Include="Logs\" />
     <Folder Include="Ultils\" />
     <Folder Include="wwwroot\images\avatar\" />

@@ -16,8 +16,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         private Payment payment;
         private readonly IUnitOfWork _unitOfWork;
 
-        private TicketVM TicketVM { get; set; }
-
         public PaymentController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
@@ -38,11 +36,15 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 
                 if (!string.IsNullOrEmpty(Cancel))
                 {
-                    return View("CancelledPayment");
+                    return RedirectToAction("BookingProcess", "Ticket", new
+                    {
+                        seatIDs = HttpContext.Session.GetString("seatIDs"),
+                        showtime_id = HttpContext.Session.GetString("showtime_id"),
+                        payment_method = "paypal",
+                        status = "cancel",
+                        voucherCode = HttpContext.Session.GetString("voucher_code"),
+                    });
                 }
-
-                //HttpContext.Session.SetString("seatIDs", seatIDs);
-                //HttpContext.Session.SetString("showtime_id", showtime_id.ToString());
 
                 string payerId = HttpContext.Request.Query["PayerID"].ToString();
                 if (string.IsNullOrEmpty(payerId))
@@ -86,14 +88,31 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             }
             catch (PayPal.PaymentsException ex)
             {
-                return View("FailedPayment");
+                return RedirectToAction("BookingProcess", "Ticket", new
+                {
+                    seatIDs = HttpContext.Session.GetString("seatIDs"),
+                    showtime_id = HttpContext.Session.GetString("showtime_id"),
+                    payment_method = "paypal",
+                    status = "fail",
+                    voucherCode = HttpContext.Session.GetString("voucher_code"),
+                });
             }
             catch (Exception ex)
             {
-                return View("FailedPayment");
+                return RedirectToAction("BookingProcess", "Ticket", new
+                {
+                    seatIDs = HttpContext.Session.GetString("seatIDs"),
+                    showtime_id = HttpContext.Session.GetString("showtime_id"),
+                    payment_method = "paypal",
+                    status = "fail",
+                    voucherCode = HttpContext.Session.GetString("voucher_code"),
+                });
             }
 
             HttpContext.Session.Remove("payment");
+            HttpContext.Session.Remove("seatIDs");
+            HttpContext.Session.Remove("showtime_id");
+            HttpContext.Session.Remove("voucher_code");
 
             return RedirectToAction("BookingProcess", "Ticket", new
             {
@@ -103,7 +122,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 status = "success",
                 voucherCode = HttpContext.Session.GetString("voucher_code"),
             });
-            // return View("SuccessPayment");
         }
 
         private Payment ExecutePayment(APIContext aPIContext, string payerId, string paymentId)

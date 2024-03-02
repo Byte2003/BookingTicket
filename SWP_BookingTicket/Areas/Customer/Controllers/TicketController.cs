@@ -3,10 +3,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.CodeAnalysis.Elfie.Extensions;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using SWP_BookingTicket.DataAccess.Data;
 using SWP_BookingTicket.DataAccess.Repositories;
 using SWP_BookingTicket.Models;
@@ -24,9 +21,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly UserManager<AppUser> _userManager;
-        private readonly int _pendingLockDuration = 15 * 1000; // 3 minutes
         public TicketVM TicketVM;
-        private readonly object _lockObject = new object();
         private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
         private readonly IUnlockASeatService _unlockASeatService;
         private readonly IBackgroundJobClient _backgroundJobClient;
@@ -69,24 +64,9 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 {
                     ticket.Total = ticket.Total * (1 - voucher.Value / 100);
                 }
-
-
             }
-
-            var futureTickets = new List<Ticket>();
 
             foreach (var ticket in allTickets)
-            {
-                var showtimeDateTime = new DateTime(ticket.Showtime.Date.Year, ticket.Showtime.Date.Month, ticket.Showtime.Date.Day, ticket.Showtime.Time, ticket.Showtime.Minute, 0);
-
-                // Compare the showtime with the current time
-                //if (showtimeDateTime >= currentTime)
-                //{
-                futureTickets.Add(ticket);
-                //}
-            }
-
-            foreach (var ticket in futureTickets)
             {
                 var showtime = ticket.Showtime;
                 var movieID = showtime.MovieID;
@@ -99,7 +79,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 ticket.Showtime = showtime;
             }
 
-            return View(futureTickets);
+            return View(allTickets.OrderByDescending(u => u.BookedDate).ToList());
         }
 
 
@@ -134,19 +114,16 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 
                 if (status == "success")
                 {
-                    //Showtime showtime = await uow.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id);
+                    Showtime showtime = await uow.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id);
 
-                    //DateTime currentTime = DateTime.Now;
-                    //DateOnly showTimeDate = showtime.Date;
-                    //DateTime endShow = new DateTime(showTimeDate.Year, showTimeDate.Month, showTimeDate.Day, showtime.Time, showtime.Minute, 0);
+                    DateTime currentTime = DateTime.Now;
+                    DateOnly showTimeDate = showtime.Date;
+                    DateTime endShow = new DateTime(showTimeDate.Year, showTimeDate.Month, showTimeDate.Day, showtime.Time, showtime.Minute, 0);
 
-                    //TimeSpan difference = endShow - currentTime;
-                    //// Get the difference in seconds
-                    //double timeUntilShowtimeEnd = difference.TotalSeconds;
-                    //timeSpan = timeUntilShowtimeEnd;
-
-
-                    timeSpan = 3 * 60; // test 
+                    TimeSpan difference = endShow - currentTime;
+                    // Get the difference in seconds
+                    double timeUntilShowtimeEnd = difference.TotalSeconds;
+                    timeSpan = timeUntilShowtimeEnd;
                 }
 
 
@@ -210,9 +187,8 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             foreach (var s in seatIDListString)
             {
                 Guid sID = Guid.Parse(s);
-                seatIDList.Add(sID); // Use Add method to append to the list
+                seatIDList.Add(sID); 
             }
-
 
             if (voucher != null)
             {
@@ -223,14 +199,14 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             if (payment_method == null)
             {
                 // return to the error page
-                // return View();
+                return View("FailedPayment");
             }
             else if (payment_method == "point")
             {
                 HandleLockAndUnlock(seatIDList, showtime_id, "success");
 
                 // Add Ticket to db
-                var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id);
+                var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id, includeProperties: "Room");
                 var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == showtime.MovieID);
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
                 var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -252,23 +228,21 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                     if (voucher != null)
                     {
                         ticket.VoucherID = voucher_id;
-                        voucher.Quantity--;
-                        _unitOfWork.Voucher.Update(voucher);
                     }
                     ticket.BookedDate = DateTime.Now;
-
-                    // If using point to pay, does not increase their culumative point
-                    //user.Point += (decimal)(0.8 * movie.Price);
-
                     ticketList.Add(ticket);
                     _unitOfWork.Ticket.Add(ticket);
                     user.Point = user.Point - (decimal)movie.Price * (decimal)(1 - voucher_value / 100) * 1000;
                 }
+                if (voucher != null)
+                {
+                    voucher.Quantity--;
+                    _unitOfWork.Voucher.Update(voucher);
+                }
 
-                // Send mail to user include ticket 
-                // TODO: modify the message appropriately
                 _unitOfWork.Save();
-                string message = GenerateEmailMessage(ticketList);
+
+                string message = await GenerateEmailMessage(ticketList, showtime);
                 await _emailSender.SendEmailAsync(user.Email, "Booking Ticket: Your Tickets", message);
 
             }
@@ -286,7 +260,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                                 status = status,
                                 voucherCode = voucherCode
                             });
-                            // break;
                         }
                     case "success":
                         {
@@ -294,7 +267,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                             HandleLockAndUnlock(seatIDList, showtime_id, "success");
 
                             // Add Ticket to db
-                            var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id);
+                            var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id, includeProperties: "Room");
                             var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == showtime.MovieID);
                             var claimsIdentity = (ClaimsIdentity)User.Identity;
                             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
@@ -325,10 +298,15 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                                 ticketList.Add(ticket);
                                 _unitOfWork.Ticket.Add(ticket);
                             }
+                            if (voucher != null)
+                            {
+                                voucher.Quantity--;
+                                _unitOfWork.Voucher.Update(voucher);
+                            }
 
                             // Send mail to user include ticket 
                             // TODO: modify the message appropriately
-                            string message = GenerateEmailMessage(ticketList);
+                            string message = await GenerateEmailMessage(ticketList, showtime);
                             await _emailSender.SendEmailAsync(user.Email, "Booking Ticket: Your Tickets", message);
 
                             _unitOfWork.Save();
@@ -337,17 +315,15 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                         }
                     case "cancel":
                         {
-
-                            break;
+                            return View("CancelledPayment");
                         }
                     case "fail":
                         {
-
-                            break;
+                            return View("FailedPayment");
                         }
                     default:
                         {
-                            break;
+                            return View("FailedPayment");
                         }
                 }
             }
@@ -355,56 +331,20 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             return View();
         }
 
-        public string GenerateEmailMessage(List<Ticket> tickets)
-        {
-            // Start building the HTML message
-            StringBuilder message = new StringBuilder();
-            message.Append("<p>Dear Customer,</p>");
-            message.Append("<p>Thank you for booking tickets with us. Below are the details of your booking:</p>");
-
-            // Add a table to display ticket details
-            message.Append("<table border='1' cellpadding='5' cellspacing='0'>");
-            message.Append("<tr><th>Seat</th><th>Movie</th><th>Showtime</th><th>Total</th></tr>");
-
-            // Iterate through each ticket and add its details to the table
-            foreach (var ticket in tickets)
-            {
-                var date = ticket.Showtime.Date.ToShortDateString()+ " " + ticket.Showtime.Time+ ":"+ticket.Showtime.Minute;
-                message.AppendFormat("<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3:C}</td></tr>",
-                    ticket.Seat.SeatName, ticket.Showtime.Movie.MovieName, date, ticket.Total);
-            }
-
-            message.Append("</table>");
-
-            // Add closing message
-            message.Append("<p>Thank you for choosing our service. Enjoy the show!</p>");
-            message.Append("<p>Best regards,<br/>Your Cinema Team</p>");
-
-            return message.ToString();
-        }
-
 
         [HttpPost]
         public async Task<IActionResult> BookingConfirmation(string seatIDs, Guid showtime_id)
         {
-
-            // TODO: handle 2 user choose seats at the same time before purchase: done
-            // TODO: Create View Booked Tickets page: done
-            // CRUD Voucher Apply voucher for the total amount : done
-            // Increase User Point after booking ticket: done
-            // Using point for payment option: done
-
-            ViewData["seatIDs"] = seatIDs;
-            ViewData["showtime_id"] = showtime_id;
-
             string[] seatIDListString = seatIDs.Split(',');
-            List<Guid> seatIDList = new List<Guid>(); // Use List<Guid> instead of Guid[]
+            List<Guid> seatIDList = new List<Guid>();
             foreach (var s in seatIDListString)
             {
                 Guid sID = Guid.Parse(s);
-                seatIDList.Add(sID); // Use Add method to append to the list
+                seatIDList.Add(sID);
             }
-            // HandleLockAndUnlock(seatIDList, showtime_id, "pending"); // pending in 3 min
+
+            // Uncomment this when submit the assignment
+            HandleLockAndUnlock(seatIDList, showtime_id, "pending");
 
             var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(x => x.ShowtimeID == showtime_id, includeProperties: "Room");
             var room = showtime.Room;
@@ -414,7 +354,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             var user = await _userManager.FindByIdAsync(claim.Value);
-            ViewData["user_points"] = user.Point;
 
 
             List<Seat> seatList = new List<Seat>();
@@ -437,9 +376,42 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             ViewData["Cinema"] = cinema.CinemaName;
             ViewData["Price"] = movie.Price.ToString();
             ViewData["Total"] = total.ToString();
+            ViewData["user_points"] = user.Point;
+
+            ViewData["seatIDs"] = seatIDs;
+            ViewData["showtime_id"] = showtime_id;
+
             return View();
         }
 
+
+
+        public async Task<string> GenerateEmailMessage(List<Ticket> tickets, Showtime showtime)
+        {
+            Room room = await _unitOfWork.Room.GetFirstOrDefaultAsync(u => u.RoomID == showtime.RoomID);
+            Cinema cinema = await _unitOfWork.Cinema.GetFirstOrDefaultAsync(u => u.CinemaID == room.CinemaID);
+
+            StringBuilder message = new StringBuilder();
+            message.Append("<p>Dear Customer,</p>");
+            message.Append("<p>Thank you for booking tickets with us. Below are the details of your booking:</p>");
+            message.Append($"<strong>{cinema.CinemaName}</strong>");
+
+            message.Append("<table border='1' cellpadding='5' cellspacing='0'>");
+            message.Append("<tr><th>Movie</th><th>Room</th><th>Seat</th><th>Showtime</th><th>Total</th></tr>");
+
+            foreach (var ticket in tickets)
+            {
+                var date = ticket.Showtime.Date.ToShortDateString() + " " + ticket.Showtime.Time + ":" + ticket.Showtime.Minute;
+                message.AppendFormat("<tr><td>{0}</td><td>{1}</td><td>{2}</td><td>{3}</td><td>{4:C}</td></tr>",
+                    ticket.Showtime.Movie.MovieName, room.RoomName, ticket.Seat.SeatName, date, ticket.Total);
+            }
+
+            message.Append("</table>");
+            message.Append("<p>Thank you for choosing our service. Enjoy the show!</p>");
+            message.Append("<p>Best regards,<br/>Your Cinema Team</p>");
+
+            return message.ToString();
+        }
 
 
         #region API Call
@@ -465,7 +437,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                     }
                 }
 
-                // Construct data to be sent as JSON response
                 var seatStatuses = seats.Select(seat => new { seatID = seat.SeatID, seatStatus = seat.SeatStatus, seatName = seat.SeatName });
 
                 return Json(seatStatuses);
@@ -481,6 +452,10 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         {
             Voucher voucher = await _unitOfWork.Voucher.GetFirstOrDefaultAsync(u => u.VoucherName == voucherCode);
             if (voucher == null)
+            {
+                return Json(new { data = "" });
+            }
+            else if (voucher.Quantity <= 0)
             {
                 return Json(new { data = "" });
             }
