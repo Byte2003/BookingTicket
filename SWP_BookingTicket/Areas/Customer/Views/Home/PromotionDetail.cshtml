@@ -1,0 +1,81 @@
+﻿@model Promotion
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Promotion Detail</title>
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			margin: 0;
+			padding: 0;
+			background-color: #f8f9fa; /* Màu nền */
+		}
+
+		.container {
+			max-width: 70%;
+			margin: 20px auto;
+			text-align: center;
+			padding: 20px;
+			border-radius: 10px;
+			box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+		}
+
+
+		.promotion {
+			display: flex;
+			justify-content: center;
+			align-items: flex-start;
+		}
+
+		.promotion-image {
+			width: 40%;
+			margin-right: 20px;
+		}
+
+			.promotion-image img {
+				max-width: 100%;
+				height: auto;
+				border-radius: 8px;
+				width: 100%;
+			}
+
+		.promotion-content {
+			width: 50%;
+			font-size: 16px;
+			line-height: 1.5;
+			text-align: left; /* Chỉnh nội dung về trái */
+		}
+
+		.promotion .time{
+			border-radius: 5px;
+			margin-top:20px;
+			border: 2px inset #b1154a;
+			background-color: #dbdbd9;
+			font-size: larger;
+		}
+
+	</style>
+</head>
+<body>
+	<div class="container">
+		<div style="margin-bottom: 20px; font-size: 32px; font-weight: bold; color: #f00a24;">
+			<h1>@Model.Topic</h1>
+		</div>
+		
+
+		<div class="promotion">
+			<div class="promotion-image">
+				<img src="@Model.ImageUrl" alt="Promotion Image">
+				<div class="time">
+					@Model.StartDate - @Model.EndDate
+				</div>
+			</div>
+			<div class="promotion-content">
+				@Html.Raw(Model.Content)
+			</div>
+		</div>
+	</div>
+</body>
+</html>
