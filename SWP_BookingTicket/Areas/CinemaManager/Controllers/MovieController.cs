@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SWP_BookingTicket.DataAccess.Data;
 using SWP_BookingTicket.DataAccess.Repositories;
 using SWP_BookingTicket.Models;
 using SWP_BookingTicket.Services;
@@ -7,13 +9,13 @@ using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 {
-    [Area("CinemaManager")]
-    [Authorize(Roles = "cinemaManager")]
-    public class MovieController : Controller
-    {
-        private readonly IUnitOfWork _unitOfWork;
-        private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly UploadImageService _uploadImageService;
+	[Area("CinemaManager")]
+	[Authorize(Roles = "cinemaManager")]
+	public class MovieController : Controller
+	{
+		private readonly IUnitOfWork _unitOfWork;
+		private readonly IWebHostEnvironment _webHostEnvironment;
+		private readonly UploadImageService _uploadImageService;
 
         public MovieController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, UploadImageService uploadImageService)
         {
@@ -30,28 +32,28 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
             return View(movies);
         }
 
-        [HttpGet]
-        public IActionResult Create()
-        {
-            return View();
-        }
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public IActionResult Create(Movie movie, IFormFile? fileImage, IFormFile? fileVideo)
-        {
-            if (ModelState.IsValid)
-            {
-                //string wwwRootPath = _webHostEnvironment.WebRootPath;
-                //if (fileImage != null)
-                //{
-                //	string fileNameImage = Guid.NewGuid().ToString() + Path.GetExtension(fileImage.FileName);
-                //	string MovieImagePath = Path.Combine(wwwRootPath, @"images\movie");
-                //	using (var fileStream = new FileStream(Path.Combine(MovieImagePath, fileNameImage), FileMode.Create))
-                //	{
-                //		fileImage.CopyTo(fileStream);
+		[HttpGet]
+		public IActionResult Create()
+		{
+			return View();
+		}
+		[HttpPost]
+		[ValidateAntiForgeryToken]
+		public IActionResult Create(Movie movie, IFormFile? fileImage, IFormFile? fileVideo)
+		{
+			if (ModelState.IsValid)
+			{
+				//string wwwRootPath = _webHostEnvironment.WebRootPath;
+				//if (fileImage != null)
+				//{
+				//	string fileNameImage = Guid.NewGuid().ToString() + Path.GetExtension(fileImage.FileName);
+				//	string MovieImagePath = Path.Combine(wwwRootPath, @"images\movie");
+				//	using (var fileStream = new FileStream(Path.Combine(MovieImagePath, fileNameImage), FileMode.Create))
+				//	{
+				//		fileImage.CopyTo(fileStream);
 
-                //	}
-                //	movie.ImageUrl = @"\images\movie\" + fileNameImage;
+				//	}
+				//	movie.ImageUrl = @"\images\movie\" + fileNameImage;
 
                 //}
                 movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie");
