@@ -236,6 +236,7 @@
 @section Scripts {
 	<script type="text/javascript">
 		$(".blog-item").hover(function () {
+			console.log(1);
 			var id = $(this).attr("data-movie-id");
 			console.log(id);
 			$(`.btn-list-${id}`).removeClass("d-none").addClass("d-flex");
@@ -244,7 +245,6 @@
 			var id = $(this).attr("data-movie-id");
 			$(`.btn-list-${id}`).removeClass("d-flex").addClass("d-none");
 		})
-
 
 	</script>
 }

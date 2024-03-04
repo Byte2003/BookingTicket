@@ -28,8 +28,14 @@
                     <img src="~/svg/movie-svgrepo-com.svg" alt="Alternate Text" />
                     <h3 class="m-0 text-white">BookingTicket</h3>
                 </div>
-                
+
             </a>
+            <div class="input-group rounded mx-2" style="width:360px">
+                <input type="search" class="form-control rounded" placeholder="Search" aria-label="Search" aria-describedby="search-addon" />
+                <span class="input-group-text border-0" id="search-addon">
+                    <i class="fas fa-search"></i>
+                </span>
+            </div>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
                 <span class="fa fa-bars"></span>
             </button>
@@ -40,11 +46,11 @@
                     <a asp-area="Customer" asp-controller="Home" asp-action="PromotionViewAll" class="nav-item nav-link">News - Promotion</a>
 
                     @*<a href="#" class="nav-item nav-link">About</a>
-        <a href="#" class="nav-item nav-link">Services</a>
-        <a href="#" class="nav-item nav-link">Packages</a>
-        <a href="#" class="nav-item nav-link">Blog</a>*@
+                        <a href="#" class="nav-item nav-link">Services</a>
+                        <a href="#" class="nav-item nav-link">Packages</a>
+                        <a href="#" class="nav-item nav-link">Blog</a>*@
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Manage</a>                     
+                        <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Manage</a>
 
                         <ul class="dropdown-menu m-0" aria-labelledby="navbarDropdown" style="background-color:#33186B">
                             <li>
@@ -53,11 +59,11 @@
                             <li>
                                 <a asp-area="CinemaManager" asp-action="Index" asp-controller="Movie" class="dropdown-item text-white">Movie</a>
                             </li>
-                             <li>
+                            <li>
                                 <a asp-area="Admin" asp-action="Index" asp-controller="UserAccount" class="dropdown-item text-white">Account</a>
                             </li>
                             <li>
-                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Room" class="dropdown-item text-white">Room</a>  
+                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Room" class="dropdown-item text-white">Room</a>
                             </li>
                             <li>
                                 <a asp-area="CinemaManager" asp-action="Index" asp-controller="Showtime" class="dropdown-item text-white">Showtime</a>
@@ -69,7 +75,7 @@
                                 <a asp-area="CinemaManager" asp-action="Index" asp-controller="Promotion" class="dropdown-item text-white">Promotion</a>
                             </li>
                             <li><hr class="dropdown-divider"></li>
-                        </ul>                     
+                        </ul>
                     </div>
 
 
