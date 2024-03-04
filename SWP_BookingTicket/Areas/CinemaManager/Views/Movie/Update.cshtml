@@ -32,12 +32,12 @@
             </div>
             <div class="col-12 mt-5">
                 <label asp-for="@Model.ImageUrl">ImageUrl</label>
-                <input type="file" name="file" asp-for="@Model.ImageUrl" rows="3" class="form-control"> </input>
+                <input type="file" name="fileImage" asp-for="@Model.ImageUrl" rows="3" class="form-control">
                 <span asp-validation-for="@Model.ImageUrl" class="text-danger"></span>
             </div>
             <div class="col-12 mt-5">
                 <label asp-for="@Model.VideoUrl">VideoUrl</label>
-                <input type="file" asp-for="@Model.VideoUrl" rows="3" class="form-control"> </input>
+                <input type="file" name="fileVideo" asp-for="@Model.VideoUrl" rows="3" class="form-control">
                 <span asp-validation-for="@Model.VideoUrl" class="text-danger"></span>
             </div>
             <div class="col-12 mt-5">
@@ -47,12 +47,12 @@
             </div>
             <div class="col-12 mt-5">
                 <label asp-for="@Model.ReleaseDate">ReleaseDate</label>
-                <input asp-for="@Model.ReleaseDate" rows="3" class="form-control"></input>
+                <input asp-for="@Model.ReleaseDate" rows="3" class="form-control">
                 <span asp-validation-for="@Model.ReleaseDate" class="text-danger"></span>
             </div>
             <div class="col-12 mt-5">
                 <label asp-for="@Model.EndDate">EndDate</label>
-                <input asp-for="@Model.EndDate" rows="3" class="form-control"></input>
+                <input asp-for="@Model.EndDate" rows="3" class="form-control">
                 <span asp-validation-for="@Model.EndDate" class="text-danger"></span>
             </div>
             <div class="col-12 mt-5">
@@ -72,7 +72,7 @@
             </div>
             <div class="col-12 mt-5">
                 <label asp-for="@Model.Status">Status</label>
-                <input type="checkbox" asp-for="@Model.Status" rows="3" class="form-check-input"> </input>
+                <input type="checkbox" asp-for="@Model.Status" rows="3" class="form-check-input">
                 <span asp-validation-for="@Model.Status" class="text-danger"></span>
             </div>
         </div>

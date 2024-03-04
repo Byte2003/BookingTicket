@@ -7,17 +7,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Areas\Admin\Controllers\**" />
-    <Compile Remove="Areas\Admin\Views\**" />
-    <Content Remove="Areas\Admin\Controllers\**" />
-    <Content Remove="Areas\Admin\Views\**" />
-    <EmbeddedResource Remove="Areas\Admin\Controllers\**" />
-    <EmbeddedResource Remove="Areas\Admin\Views\**" />
-    <None Remove="Areas\Admin\Controllers\**" />
-    <None Remove="Areas\Admin\Views\**" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="EfCore.SchemaCompare" Version="8.0.0" />
     <PackageReference Include="MailKit" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.1" />
