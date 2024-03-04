@@ -46,8 +46,8 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         {
             if (text is not null)
             {
-				var movies = _unitOfWork.Movie.GetAllAsync(u => u.MovieName.ToLower().Contains(text.ToLower()));
-                var moviestoRender = movies.Result.Take(4);
+				var movies = await _unitOfWork.Movie.GetAllAsync(u => u.MovieName.ToLower().Contains(text.ToLower()));
+                var moviestoRender = movies.Take(4);
 				return Json(new { data = moviestoRender });
 			}
             return Json(new { success = false });

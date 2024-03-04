@@ -216,20 +216,19 @@
                 url: url,
                 method: 'GET',
                 success: function (response) {
+                    console.log(response.data);
                     var resultContainer = $('.search-result .list-group');
                     resultContainer.empty(); // Clear previous search results
                     // Check if response contains result array
-                    if (response.data && Array.isArray(response.data.result)) {
-                        // Render each movie as a tag
-                        response.data.result.forEach(function (movie) {
-                            var tag = $('<a>', {
-                                class: 'list-group-item list-group-item-action fw-normal text-wrap',
-                                href: `/Customer/Home/MovieDetail?movie_id=${movie.movieID} `,
-                                text: movie.movieName // Accessing movieName property
-                            });
-                            resultContainer.append(tag);
+                    var data = response.data;
+                    $.each(data, function (index, movie) {
+                        var tag = $('<a>', {
+                            class: 'list-group-item list-group-item-action fw-normal text-wrap',
+                            href: `/Customer/Home/MovieDetail?movie_id=${movie.movieID}`,
+                            text: movie.movieName // Accessing movieName property
                         });
-                    }
+                        resultContainer.append(tag);
+                    });                                                                     
                 }
             });
         }
