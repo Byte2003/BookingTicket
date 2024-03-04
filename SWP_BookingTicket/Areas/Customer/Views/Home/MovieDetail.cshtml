@@ -5,10 +5,10 @@
     <hr />
     <div class="row px-xl-5">
         <div class="col-lg-5 pb-5">
-            <div id="product-carousel" class="carousel slide d-flex justify-content-center align-items-center" data-ride="carousel">
-                <div class="carousel-inner">
-                    <div class="carousel-item active">
-                        <img class="" src="@Model.ImageUrl" alt="Image">
+            <div id="product-carousel" class="d-flex justify-content-center align-items-center" data-ride="carousel">
+                <div class="">
+                    <div class="active">
+                        <img class="img-fluid" src="@Model.ImageUrl" alt="Image" style="max-height:355px">
                     </div>
                 </div>
             </div>
@@ -46,7 +46,7 @@
             <div class="tab-content">
                 <h4>Description</h4>
                 <div class="tab-pane fade show active" id="tab-pane-1">
-                    @Model.Description
+                    @Html.Raw(Model.Description)
                 </div>
                 <div class="tab-pane fade" id="tab-pane-2">
                     <h4 class="mb-3">Additional Information</h4>
