@@ -110,9 +110,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             }
 
             HttpContext.Session.Remove("payment");
-            HttpContext.Session.Remove("seatIDs");
-            HttpContext.Session.Remove("showtime_id");
-            HttpContext.Session.Remove("voucher_code");
 
             return RedirectToAction("BookingProcess", "Ticket", new
             {

@@ -1,7 +1,63 @@
 ﻿@model Movie
+<style>
+    /* Custom styles for the comment section */
+
+    .comment {
+        margin-bottom: 20px;
+        border-left: 5px solid #007bff;
+        padding-left: 10px;
+    }
+
+    .comment-body {
+        background-color: #f5f5f5;
+        border-radius: 10px;
+        padding: 15px;
+    }
+
+    .comment-author {
+        font-weight: bold;
+        color: #007bff;
+    }
+
+    .comment-date {
+        color: #6c757d;
+    }
+
+    .add-comment {
+        margin-top: 30px;
+    }
+
+        .add-comment textarea {
+            width: 100%;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #ced4da;
+        }
+
+        .add-comment button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            .add-comment button:hover {
+                background-color: #0056b3;
+            }
+
+    .comment-section {
+        max-height: 300px; /* Adjust the max-height as needed */
+        overflow-y: auto;
+    }
+
+</style>
+
 <div class="container py-5">
     <div class="text-primary">
-    </div>        
+    </div>
     <hr />
     <div class="row px-xl-5">
         <div class="col-lg-5 pb-5">
@@ -19,13 +75,13 @@
             <div class="d-flex flex-column">
                 <h3 class="font-weight-semi-bold mb-4">Price: @Model.Price$</h3>
                 <div class="information">
-                    <p>Director:  @Model.Director</p>                 
+                    <p>Director:  @Model.Director</p>
                     <p>Actors : @Model.Actor</p>
                     <p>Duration : @Model.Duration minutes</p>
                     <p>Release Date: @Model.ReleaseDate</p>
                     <p>Studio: @Model.Studio</p>
                 </div>
-            </div>          
+            </div>
             <hr />
             <div class="d-flex">
                 <a class="btn w-50 mx-2 my-4 text-white" style="height: 36px; background-color: #c61118">
@@ -35,11 +91,11 @@
                     <span>Home</span>
                 </a>
             </div>
-            
+
         </div>
     </div>
     <div class="row px-xl-5">
-        <div class="col">
+        <div class="row">
             <div class="nav nav-tabs justify-content-center border-secondary mb-4">
                 <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Description</a>
             </div>
@@ -48,97 +104,189 @@
                 <div class="tab-pane fade show active" id="tab-pane-1">
                     @Model.Description
                 </div>
-                <div class="tab-pane fade" id="tab-pane-2">
-                    <h4 class="mb-3">Additional Information</h4>
-                    <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam invidunt duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore diam stet rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no ut diam consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor accusam, ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem elitr sanctus eirmod takimata dolor ea invidunt.</p>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item px-0">
-                                    Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                </li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item px-0">
-                                    Sit erat duo lorem duo ea consetetur, et eirmod takimata.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Duo amet accusam eirmod nonumy stet et et stet eirmod.
-                                </li>
-                                <li class="list-group-item px-0">
-                                    Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
+
+            </div>
+            <hr />
+        </div>
+        <h4>Comments</h4>
+        <div id="commentsSection" class="comment-section">
+            <!-- Comments will be added dynamically here -->
+            <div class="comment">
+                <div class="comment-body">
+                    <p class="comment-text">This movie was amazing!</p>
+                    <p class="comment-author">John Doe</p>
                 </div>
-                <div class="tab-pane fade" id="tab-pane-3">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4 class="mb-4">1 review for "Colorful Stylish Shirt"</h4>
-                            <div class="media mb-4">
-                                <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
-                                <div class="media-body">
-                                    <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
-                                    <div class="text-primary mb-2">
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star"></i>
-                                        <i class="fas fa-star-half-alt"></i>
-                                        <i class="far fa-star"></i>
-                                    </div>
-                                    <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
-                                </div>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <h4 class="mb-4">Leave a review</h4>
-                            <small>Your email address will not be published. Required fields are marked *</small>
-                            <div class="d-flex my-3">
-                                <p class="mb-0 mr-2">Your Rating * :</p>
-                                <div class="text-primary">
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                    <i class="far fa-star"></i>
-                                </div>
-                            </div>
-                            <form>
-                                <div class="form-group">
-                                    <label for="message">Your Review *</label>
-                                    <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
-                                </div>
-                                <div class="form-group">
-                                    <label for="name">Your Name *</label>
-                                    <input type="text" class="form-control" id="name">
-                                </div>
-                                <div class="form-group">
-                                    <label for="email">Your Email *</label>
-                                    <input type="email" class="form-control" id="email">
-                                </div>
-                                <div class="form-group mb-0">
-                                    <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
+            </div>
+        </div>
+        <!-- Add Comment Form -->
+        <div class="add-comment">
+            <h4>Add a Comment</h4>
+
+            <div class="form-group">
+                <textarea id="commentInput" class="form-control" rows="3" placeholder="Write your comment here..."></textarea>
+            </div>
+            <button id="postCommentBtn" class="btn btn-primary">Submit</button>
+
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="editCommentModal" tabindex="-1" aria-labelledby="editCommentModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editCommentModalLabel">Edit Comment</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <textarea class="form-control" id="editCommentTextarea" rows="3"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-primary" id="saveEditCommentBtn">Save changes</button>
             </div>
         </div>
     </div>
 </div>
+
+@section Scripts {
+    <script>
+        function loadComments(movieId) {
+            $.ajax({
+                url: '../Comment/GetComments',
+                method: 'GET',
+                data: { movieId: movieId },
+                success: function (response) {
+                    var comments = response.data; // Access the comments array
+                    var currentUserId = response.user; // Access the current user's ID
+
+                    $('#commentsSection').empty();
+                    // Iterate over the comments array
+                    comments.forEach(function (comment) {
+                        var editIconHtml = '';
+
+                        // Check if the comment author's ID matches the current user's ID
+                        if (comment.appUser.id === currentUserId) {
+                            // Show edit icon if the comment author's ID matches the current user's ID
+                            editIconHtml = `<i class="fas fa-edit edit-comment-icon" data-comment-id="${comment.commentID}"></i>`;
+                        }
+
+                        // Construct the HTML for the comment
+                        var commentHtml = `
+                                <div class="comment">
+                                    <div class="comment-body">
+                                        <p class="comment-author">${comment.appUser.lastName} ${comment.appUser.firstName}</p>
+                                        <p class="comment-text">${comment.content} ${editIconHtml}</p>
+                                    </div>
+                                </div>`;
+
+                        // Append the comment HTML to the comments section
+                        $('#commentsSection').append(commentHtml);
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error('Error loading comments:', error);
+                }
+            });
+
+        }
+
+        $(document).on('click', '.edit-comment-icon', function () {
+            var commentId = $(this).data('comment-id');
+            var commentText = $(this).closest('.comment-body').find('.comment-text').text();
+            console.log(commentText);
+            // Open a modal or inline editor to allow the user to modify the comment
+            openEditCommentModal(commentId, commentText);
+        });
+
+        function openEditCommentModal(commentId, commentText) {
+            var movieId = '@Model.MovieID.ToString()';
+            // Assuming you have a Bootstrap modal with the id "editCommentModal"
+            $('#editCommentModal').modal('show');
+            // Set the comment text in the modal textarea for editing
+            $('#editCommentTextarea').val(commentText);
+
+            // Handle the save button click inside the modal
+            $('#saveEditCommentBtn').off('click').on('click', function () {
+                var newText = $('#editCommentTextarea').val();
+
+                if (newText.trim() !== '') {
+                    // Send AJAX request to update the comment with the new text
+                    $.ajax({
+                        url: '../Comment/UpdateComment',
+                        method: 'POST',
+                        data: { commentId: commentId, newText: newText },
+                        success: function () {
+                            // Close the modal after successful edit
+                            $('#editCommentModal').modal('hide');
+                            // Reload comments after editing a comment
+                            loadComments(movieId);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error editing comment:', error);
+                        }
+                    });
+                } else {
+                    // Send AJAX request to delete the comment
+                    $.ajax({
+                        url: '../Comment/DeleteComment',
+                        method: 'POST',
+                        data: { commentId: commentId },
+                        success: function () {
+                            // Close the modal after successful deletion
+                            $('#editCommentModal').modal('hide');
+                            // Reload comments after deleting a comment
+                            loadComments(movieId);
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error deleting comment:', error);
+                        }
+                    });
+                }
+            });
+        }
+
+
+
+        $(document).ready(function () {
+            // Load comments when the page is ready
+            var movieId = '@Model.MovieID.ToString()'; // Assuming you have a property for MovieId in your Movie model
+            loadComments(movieId);
+
+            function addComment(movieId, commentText) {
+                if (commentText.trim() !== '') {
+                    // Send AJAX request to add comment
+                    $.ajax({
+                        url: '../Comment/AddComment',
+                        method: 'POST',
+                        data: { movieId: movieId, text: commentText },
+                        success: function () {
+                            // Reload comments after adding a new comment
+                            loadComments(movieId);
+                            // Clear the input box
+                            $('#commentInput').val('');
+                        },
+                        error: function (xhr, status, error) {
+                            console.error('Error adding comment:', error);
+                        }
+                    });
+                }
+            }
+
+            // Event listener for clicking the submit button
+            $('#postCommentBtn').click(function () {
+                var commentText = $('#commentInput').val();
+                addComment(movieId, commentText);
+            });
+
+            // Event listener for pressing Enter in the comment input field
+            $('#commentInput').keypress(function (event) {
+                if (event.which === 13) { // 13 is the key code for Enter
+                    var commentText = $('#commentInput').val();
+                    addComment(movieId, commentText);
+                }
+            });
+        });
+
+    </script>
+}

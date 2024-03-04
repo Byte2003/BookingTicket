@@ -1,4 +1,10 @@
 ﻿@model Ticket
+<style>
+    .movie-list {
+        max-height: 600px; /* Adjust the max-height as needed */
+        overflow-y: auto;
+    }
+</style>
 <div class="container mt-5" style="min-height:840px">
     <h3 class="text-primary">Booking Your Ticket</h3>
     <hr />
@@ -13,7 +19,7 @@
             <div class="showtime-list" style="min-height:64px">
             </div>
         </div>
-        <div class="col-md-4 border border-dark">
+        <div class="col-md-4 border border-dark" style="overflow-y: auto; max-height: 600px;">
             @foreach (var item in @ViewData["MovieList"] as IEnumerable<Movie>)
             {
                 <div class="card mb-3 movie mt-1" style="max-width: 540px;" data-movieID="@item.MovieID" data-movieName="@item.MovieName">
@@ -25,7 +31,7 @@
                             <div class="card-body">
                                 <h5 class="card-title">@item.MovieName</h5>
                                 @* <p class="card-text">@Html.Raw(item.Description)</p> *@
-                                <p class="card-text"><small class="text-muted">@item.Price VND</small></p>
+                                <p class="card-text"><small class="text-muted">@item.Director</small></p>
                             </div>
                         </div>
                     </div>

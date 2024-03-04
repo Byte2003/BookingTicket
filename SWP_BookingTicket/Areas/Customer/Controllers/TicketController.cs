@@ -200,6 +200,11 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             var voucher = await _unitOfWork.Voucher.GetFirstOrDefaultAsync(u => u.VoucherName == voucherCode);
             double voucher_value = 0;
             Guid? voucher_id = null;
+            if (voucher != null)
+            {
+                voucher_value = voucher.Value;
+                voucher_id = voucher.VoucherID;
+            }
 
             string[] seatIDListString = seatIDs.Split(',');
             List<Guid> seatIDList = new List<Guid>(); // Use List<Guid> instead of Guid[]
@@ -210,11 +215,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 seatIDList.Add(sID);
             }
 
-            if (voucher != null)
-            {
-                voucher_value = voucher.Value;
-                voucher_id = voucher.VoucherID;
-            }
 
             if (payment_method == null)
             {
