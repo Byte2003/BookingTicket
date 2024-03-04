@@ -41,7 +41,7 @@
                         <td>$@ticket.Total</td>
                         <td>@ticket.BookedDate</td>
                         <td>
-                            @if (timeDifference < 0)
+                            @if (timeDifference >= 1)
                             {
                                 <a class="btn btn-warning" asp-controller="Ticket" asp-action="Refund" asp-route-ticketId="@ticket.TicketID">Refund</a>
                             }
