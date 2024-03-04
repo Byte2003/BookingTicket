@@ -79,9 +79,19 @@
                                 @if (seat != null)
                                 {
                                     var showtimeID = ViewData["ShowtimeID"] as string;
-                                    <div class="seat-block w-100  @(!seat.SeatStatus.ToLower().Contains(showtimeID.ToLower()) || seat.SeatStatus.ToLower() == "available"  ? "available" : "unavailable")" id="@(seatId)">
-                                        <span>@(rowLetter + col)</span>
-                                    </div>
+                                    if (seat.SeatStatus.ToLower() == "locked")
+                                    {
+                                        <div class="seat-block w-100 unavailable" id="@(seatId)">
+                                            <span>@(rowLetter + col)</span>
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="seat-block w-100  @(!seat.SeatStatus.ToLower().Contains(showtimeID.ToLower()) || seat.SeatStatus.ToLower() == "available" ? "available" : "unavailable")" id="@(seatId)">
+                                            <span>@(rowLetter + col)</span>
+                                        </div>
+                                    }
+
                                 }
 
                             </td>
