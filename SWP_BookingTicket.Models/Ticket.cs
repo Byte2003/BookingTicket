@@ -35,5 +35,7 @@ namespace SWP_BookingTicket.Models
 		[ForeignKey(nameof(VoucherID))]
 		[ValidateNever]
 		public Voucher Voucher { get; set; }
+
+		public DateTime? BookedDate { get; set; }
 	}
 }

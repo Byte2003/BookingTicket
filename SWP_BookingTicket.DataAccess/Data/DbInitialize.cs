@@ -25,7 +25,7 @@ namespace SWP_BookingTicket.DataAccess.Data
 				UserName = "truongdinhphuc23@gmail.com",
 				NormalizedUserName = "truongdinhphuc23@gmail.com".ToUpper(),
 				Email = "truongdinhphuc23@gmail.com",
-				NormalizedEmail = "byte050403@gmail.com".ToUpper(),
+				NormalizedEmail = "truongdinhphuc23@gmail.com".ToUpper(),
 				EmailConfirmed = true,
 				LockoutEnabled = false,
 				SecurityStamp = Guid.NewGuid().ToString(),

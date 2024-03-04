@@ -39,8 +39,8 @@
                         <th scope="row"><label asp-for="SeatStatus" class="form-label"></label></th>
                         <td>
                             <select asp-for="SeatStatus" class="form-control w-25">
-                                <option value="false" style="color: green;">Available</option>
-                                <option value="true" style="color: red;">Locked</option>
+                                <option value="AVAILABLE" style="color: green;">Available</option>
+                                <option value="LOCKED" style="color: red;">Locked</option>
                             </select>
                             <span asp-validation-for="SeatStatus" class="text-danger"></span>
                         </td>

@@ -21,12 +21,12 @@
 </head>
 <body>
     <div class="container-fluid p-0">
-        <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0" style="background-color: #33186B">
+        <nav class="navbar navbar-expand-lg navbar-light px-4 px-lg-5 py-3 py-lg-0" style="background-color: #000">
             <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="navbar-brand p-0">
                 <!-- <img src="img/logo.png" alt="Logo"> -->
                 <div class="logo d-flex align-items-center">
-                    <img src="~/svg/movie-svgrepo-com.svg" alt="Alternate Text" />
-                    <h3 class="m-0 text-white">BookingTicket</h3>
+                    <img src="~/svg/Cinema_Hub_1.svg" alt="Alternate Text" />
+                    <h3 class="m-0 text-white">Cinema<span style="background-color:goldenrod; color:#000; border-radius: 2px; padding:0 2px; margin-left: 2px;">Hub</span></h3>
                 </div>
 
             </a>
@@ -80,13 +80,19 @@
                             <li>
                                 <a asp-area="CinemaManager" asp-action="Index" asp-controller="Promotion" class="dropdown-item text-white">Promotion</a>
                             </li>
+
+                            <li>
+                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Voucher" class="dropdown-item text-white">Voucher</a>
+                            </li>
                             <li><hr class="dropdown-divider"></li>
                         </ul>
                     </div>
+                     <a asp-area="Customer" asp-controller="Ticket" asp-action="BookedTickets" class="nav-item nav-link">Your Tickets</a>
+
                     <partial name="_LoginPartial" />
                     @*<a href="contact.html" class="nav-item nav-link">Contact</a>*@
                 </div>
-                <a href="" class="btn btn-primary rounded-pill py-2 px-4 ms-lg-4">Book Now</a>
+                <a asp-area="Customer" asp-controller="Ticket" asp-action="Index" class="btn btn-danger rounded-pill py-2 px-4 ms-lg-4">Book Now</a>
             </div>
         </nav>
     </div>
