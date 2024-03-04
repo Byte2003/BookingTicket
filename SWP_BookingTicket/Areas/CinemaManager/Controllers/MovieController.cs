@@ -15,23 +15,22 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IWebHostEnvironment _webHostEnvironment;
-        private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
-        private readonly UploadImageService _uploadImageService;
+		private readonly UploadImageService _uploadImageService;
 
-		public MovieController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, UploadImageService uploadImageService, IDbContextFactory<AppDbContext> dbContextFactory)
-		{
-			_unitOfWork = unitOfWork;
-			_webHostEnvironment = webHostEnvironment;
-			_uploadImageService = uploadImageService;
-			_dbContextFactory = dbContextFactory;
-		}
-		[HttpGet]
-		public async Task<IActionResult> Index()
-		{
-			IEnumerable<Movie> movies = await _unitOfWork.Movie.GetAllAsync();
-			//return View(cinemas);
-			return View(movies);
-		}
+        public MovieController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, UploadImageService uploadImageService)
+        {
+            _unitOfWork = unitOfWork;
+            _webHostEnvironment = webHostEnvironment;
+            _uploadImageService = uploadImageService;
+
+        }
+        [HttpGet]
+        public async Task<IActionResult> Index()
+        {
+            IEnumerable<Movie> movies = await _unitOfWork.Movie.GetAllAsync();
+            //return View(cinemas);
+            return View(movies);
+        }
 
 		[HttpGet]
 		public IActionResult Create()
@@ -56,82 +55,91 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 				//	}
 				//	movie.ImageUrl = @"\images\movie\" + fileNameImage;
 
-				//}
-				movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie");
-				movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie");
-				_unitOfWork.Movie.Add(movie);
-				_unitOfWork.Save();
-				TempData["success"] = "Procduct created succesfully";
-			}
-			return RedirectToAction("Index");
-		}
-		[HttpGet]
-		public async Task<IActionResult> Update(Guid movie_id)
-		{
-			var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movie_id);
-			if (movie == null)
-			{
-				return NotFound();
-			}
-			else
-			{
-				return View(movie);
-			}
-		}
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public async Task<IActionResult> Update(Movie movie, IFormFile? fileImage, IFormFile? fileVideo)
-		{
-            // Get the old image of movie
-            using var dbContext = _dbContextFactory.CreateDbContext();
-            IUnitOfWork uow = new UnitOfWork(dbContext);
-
-            var _movie = await uow.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movie.MovieID);
-			
-			var oldMovieImg = _movie.ImageUrl;
-			var oldMovieVideo = _movie.VideoUrl;
-			if (ModelState.IsValid)
-			{
-				if (fileImage is not null)
-				{
-					movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie", oldMovieImg);
-
-				} else
-				{
-					movie.ImageUrl = oldMovieImg;
-					
-				}
-                if (fileVideo is not null)
-				{
-					movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie", oldMovieVideo);
-				} else
-				{
-					movie.VideoUrl = oldMovieVideo;
-				}
-                _unitOfWork.Movie.Update(movie);
+                //}
+                movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie");
+                movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie");
+                _unitOfWork.Movie.Add(movie);
                 _unitOfWork.Save();
-			}
-			return RedirectToAction("Index");
-		}
-		#region API Calls
-		[HttpGet]
-		public async Task<IActionResult> GetAllMovies()
-		{
-			var movies = await _unitOfWork.Movie.GetAllAsync();
-			return Json(new { data = movies });
-		}
-		[HttpDelete]
-		public async Task<IActionResult> Delete(Guid movie_id)
-		{
-			var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movie_id);
-			if (movie == null)
-			{
-				return Json(new { success = false, message = "Error while deleting" });
-			}
-			_unitOfWork.Movie.Delete(movie);
-			_unitOfWork.Save();
-			return Json(new { success = true, message = "Delete successfully! " });
-		}
-		#endregion
-	}
+                TempData["success"] = "Procduct created succesfully";
+            }
+            return RedirectToAction("Index");
+        }
+        [HttpGet]
+        public async Task<IActionResult> Update(Guid movie_id)
+        {
+            var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movie_id);
+            if (movie == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                return View(movie);
+            }
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Update(Movie movie, IFormFile? fileImage, IFormFile? fileVideo)
+        {
+            // Get the old image of movie
+            var _movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movie.MovieID);
+
+            if (_movie == null)
+            {
+                return NotFound();
+            }
+            _movie.MovieName = movie.MovieName;
+            _movie.Description = movie.Description;
+            _movie.Price = movie.Price;
+            _movie.Director = movie.Director;
+            _movie.Actor = movie.Actor;
+            _movie.Duration = movie.Duration;
+            _movie.Country = movie.Country;
+            _movie.Status = movie.Status;
+            _movie.Studio = movie.Studio;
+            _movie.ReleaseDate = movie.ReleaseDate;
+            _movie.EndDate = movie.EndDate;
+            _movie.Version = movie.Version;
+
+            if (ModelState.IsValid)
+            {
+                if (fileImage is not null)
+                {
+                    _movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie");
+
+                }
+
+                if (fileVideo is not null)
+                {
+                    movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie");
+                }
+
+                _unitOfWork.Movie.Update(_movie);
+                _unitOfWork.Save();
+                return RedirectToAction("Index");
+            }
+
+            return View(movie);
+        }
+        #region API Calls
+        [HttpGet]
+        public async Task<IActionResult> GetAllMovies()
+        {
+            var movies = await _unitOfWork.Movie.GetAllAsync();
+            return Json(new { data = movies });
+        }
+        [HttpDelete]
+        public async Task<IActionResult> Delete(Guid movie_id)
+        {
+            var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movie_id);
+            if (movie == null)
+            {
+                return Json(new { success = false, message = "Error while deleting" });
+            }
+            _unitOfWork.Movie.Delete(movie);
+            _unitOfWork.Save();
+            return Json(new { success = true, message = "Delete successfully! " });
+        }
+        #endregion
+    }
 }
