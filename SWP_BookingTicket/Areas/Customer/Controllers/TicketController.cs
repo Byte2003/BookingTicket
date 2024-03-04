@@ -65,6 +65,53 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             return View();
         }
 
+        [HttpGet]
+        public async Task<IActionResult> Refund(Guid ticketId)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(claim.Value);
+
+            Ticket ticket = await _unitOfWork.Ticket.GetFirstOrDefaultAsync(u => u.TicketID == ticketId, includeProperties: "Showtime,Seat,Voucher");
+
+            return View(ticket);
+        }
+        [HttpPost]
+        public async Task<IActionResult> Refund(Guid ticketId, string fullName, string email, string reason)
+        {
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(claim.Value);
+
+            Ticket ticket = await _unitOfWork.Ticket.GetFirstOrDefaultAsync(u => u.TicketID == ticketId, includeProperties: "Voucher");
+            var pointsRefund = 0.0;
+            if (ticket.Voucher != null)
+            {
+                pointsRefund = ticket.Total * (1 - ticket.Voucher.Value / 100) * 0.8 * 1000; // Convert to points
+            }
+            else
+            {
+                pointsRefund = ticket.Total * 0.8 * 1000; // Convert to points
+            }
+            user.Point += (decimal)pointsRefund; // Increase the user's points
+
+            string message = $@"
+                        <p>Dear {fullName},</p>
+                        <p>We hope this message finds you well.</p>
+                        <p>We want to inform you that your refund request for ticket ID <strong>{ticketId}</strong> has been successfully processed.</p>
+                        <p>As per our refund policy, an amount of <strong>{pointsRefund} points</strong> has been credited to your account. These points can be redeemed for future purchases on CinemaHub.</p>
+                        <p>If you have any questions or concerns regarding your refund or any other matter, please don't hesitate to contact us. Our customer support team is available to assist you.</p>
+                        <p>Thank you for choosing CinemaHub. We appreciate your business and look forward to serving you again in the future.</p>
+                        <p>Best regards,<br>
+                        The CinemaHub Team</p>
+                            ";
+            await _emailSender.SendEmailAsync(email, "CinemaHub: Your Refund Request", message);
+
+            _unitOfWork.Ticket.Delete(ticket);
+            _unitOfWork.Save();
+
+            return RedirectToAction("BookedTickets");
+        }
 
 
         public async Task<IActionResult> BookedTickets()
@@ -263,7 +310,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 _unitOfWork.Save();
 
                 string message = await GenerateEmailMessage(ticketList, showtime);
-                await _emailSender.SendEmailAsync(user.Email, "Booking Ticket: Your Tickets", message);
+                await _emailSender.SendEmailAsync(user.Email, "CinemaHub: Your Tickets", message);
 
             }
             else if (payment_method == "paypal")
@@ -327,7 +374,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                             // Send mail to user include ticket 
                             // TODO: modify the message appropriately
                             string message = await GenerateEmailMessage(ticketList, showtime);
-                            await _emailSender.SendEmailAsync(user.Email, "Booking Ticket: Your Tickets", message);
+                            await _emailSender.SendEmailAsync(user.Email, "CinemaHub: Your Tickets", message);
 
                             _unitOfWork.Save();
                             // redirect to the sucess payment page  
@@ -451,7 +498,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 
                 foreach (var seat in seats)
                 {
-                    if (!seat.SeatStatus.ToLower().Contains(showtime_id.ToLower()))
+                    if (!seat.SeatStatus.ToLower().Contains(showtime_id.ToLower()) && seat.SeatStatus.ToLower() != "locked")
                     {
                         seat.SeatStatus = "AVAILABLE";
                     }
