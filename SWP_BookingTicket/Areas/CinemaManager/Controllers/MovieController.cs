@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using SWP_BookingTicket.DataAccess.Data;
 using SWP_BookingTicket.DataAccess.Repositories;
 using SWP_BookingTicket.Models;
 using SWP_BookingTicket.Services;
@@ -13,14 +15,15 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 	{
 		private readonly IUnitOfWork _unitOfWork;
 		private readonly IWebHostEnvironment _webHostEnvironment;
-		private readonly UploadImageService _uploadImageService;
+        private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
+        private readonly UploadImageService _uploadImageService;
 
-		public MovieController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, UploadImageService uploadImageService)
+		public MovieController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, UploadImageService uploadImageService, IDbContextFactory<AppDbContext> dbContextFactory)
 		{
 			_unitOfWork = unitOfWork;
 			_webHostEnvironment = webHostEnvironment;
 			_uploadImageService = uploadImageService;
-
+			_dbContextFactory = dbContextFactory;
 		}
 		[HttpGet]
 		public async Task<IActionResult> Index()
@@ -79,8 +82,12 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 		[ValidateAntiForgeryToken]
 		public async Task<IActionResult> Update(Movie movie, IFormFile? fileImage, IFormFile? fileVideo)
 		{
-			// Get the old image of movie
-			var _movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movie.MovieID);
+            // Get the old image of movie
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            IUnitOfWork uow = new UnitOfWork(dbContext);
+
+            var _movie = await uow.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movie.MovieID);
+			
 			var oldMovieImg = _movie.ImageUrl;
 			var oldMovieVideo = _movie.VideoUrl;
 			if (ModelState.IsValid)
@@ -92,16 +99,17 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 				} else
 				{
 					movie.ImageUrl = oldMovieImg;
+					
 				}
-				if (fileVideo is not null)
+                if (fileVideo is not null)
 				{
 					movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie", oldMovieVideo);
 				} else
 				{
 					movie.VideoUrl = oldMovieVideo;
 				}
-				_unitOfWork.Movie.Update(movie);
-				_unitOfWork.Save();
+                _unitOfWork.Movie.Update(movie);
+                _unitOfWork.Save();
 			}
 			return RedirectToAction("Index");
 		}
