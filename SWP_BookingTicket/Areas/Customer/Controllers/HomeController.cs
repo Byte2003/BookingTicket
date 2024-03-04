@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using SWP_BookingTicket.DataAccess.Repositories;
@@ -24,11 +24,17 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<IActionResult> Index(int? pageNumber, string? searchString)
+        public async Task<IActionResult> Index(int? pageNumber,int? pagePromotionNumber, string? searchString)
         {
+
 			var movies = await _unitOfWork.Movie.GetAllAsync();
+
+            var promotion = await _unitOfWork.Promotion.GetAllAsync();
+            ViewData["promotionData"] = PaginatedList<Promotion>.Create(promotion, pagePromotionNumber ?? 1,promotion.Count());
+
              return View(PaginatedList<Movie>.Create(movies, pageNumber ?? 1, PAGESIZE));
 		}
+        [HttpGet]
         public async Task<IActionResult> MovieDetail(Guid movie_id)
         {
             var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync( x => x.MovieID == movie_id);
@@ -38,7 +44,28 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         {
             return View();
         }
+        public async Task<IActionResult> PromotionDetail(Guid id)
+        {
+            var promotion = await _unitOfWork.Promotion.GetFirstOrDefaultAsync(x => x.PromotionID == id);
+            return View("~/Areas/Customer/Views/Home/PromotionDetail.cshtml", promotion);
+            
+        }
 
 
-    }
+
+
+        #region API Calll
+        [HttpGet]
+        public async Task<IActionResult> GetMoviesByCharacters(string text)
+        {
+            if (text is not null)
+            {
+				var movies = await _unitOfWork.Movie.GetAllAsync(u => u.MovieName.ToLower().Contains(text.ToLower()));
+                var moviestoRender = movies.Take(4);
+				return Json(new { data = moviestoRender });
+			}
+            return Json(new { success = false });
+        }
+		#endregion
+	}
 }

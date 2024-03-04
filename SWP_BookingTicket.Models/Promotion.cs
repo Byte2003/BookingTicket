@@ -5,17 +5,17 @@ namespace SWP_BookingTicket.Models
 {
 	public class Promotion
 	{
-        public Guid PromotionID { get; set; }
+		public Guid PromotionID { get; set; }
 
-        public string? Topic { get; set; } = string.Empty;
+		public string? Topic { get; set; } = string.Empty;
 
-        public string? Content { get; set; } = string.Empty;
+		public string? Content { get; set; } = string.Empty;
 
-        public DateTime StartDate { get; set; }
+		public DateTime StartDate { get; set; }
 
-        public DateTime EndDate { get; set; }
+		public DateTime EndDate { get; set; }
 
-        [ValidateNever]
-        public string? ImageUrl { get; set; }
-    }
+		[ValidateNever]
+		public string? ImageUrl { get; set; }
+	}
 }
