@@ -1,4 +1,52 @@
 ﻿@model SWP_BookingTicket.Utils.PaginatedList<Movie>
+<style>
+	.image-zoom img {
+		display: block;
+		transition: all .3s ease;
+	}
+
+		.image-zoom img:hover {
+			transform: scale(1.1);
+		}
+
+	.image-zoom div {
+		display: block;
+		overflow: hidden;
+	}
+
+	.carousel-control-prev,
+	.carousel-control-next {
+		width: 50px;
+		height: 50px;
+		font-size: 1.5rem;
+		top: 50%;
+		transform: translateY(-50%);
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+
+	.carousel-control-prev {
+		left: 0;
+	}
+
+	.carousel-control-next {
+		right: 0;
+	}
+
+	.promotion_title {
+		position: relative;
+	}
+
+	.red-line {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 20%;
+		border-bottom: 2px solid red;
+	}
+
+</style>
+
 <div>
 	<!-- Carousel Start -->
 	<div>
@@ -68,60 +116,11 @@
 		</div>
 		<!-- Carousel End -->
 		<!--Promotion Start -->
-
-		<style>
-			.image-zoom img {
-				display: block;
-				transition: all .3s ease;
-			}
-
-				.image-zoom img:hover {
-					transform: scale(1.1);
-				}
-
-			.image-zoom div {
-				display: block;
-				overflow: hidden;
-			}
-
-			.carousel-control-prev,
-			.carousel-control-next {
-				width: 50px;
-				height: 50px;
-				font-size: 1.5rem;
-				top: 50%;
-				transform: translateY(-50%);
-				background-color: rgba(0, 0, 0, 0.5);
-			}
-
-			.carousel-control-prev {
-				left: 0;
-			}
-
-			.carousel-control-next {
-				right: 0;
-			}
-
-			.promotion_title {
-				position: relative;
-			}
-
-			.red-line {
-				position: absolute;
-				bottom: 0;
-				left: 50%;
-				transform: translateX(-50%);
-				width: 20%;
-				border-bottom: 2px solid red;
-			}
-
-		</style>
-		
 	</div>
 	@{
 		var promotions = ViewData["promotionData"] as IEnumerable<Promotion>;
 		var totalCount = promotions.Count();
-		
+
 	}
 
 	<div class="container-fluid blog py-5">
@@ -177,7 +176,7 @@
 
 	<!--Promotion End-->
 	<!-- Blog Start -->
-	<div class="container-fluid blog py-5">
+	<div id="#movie" class="container-fluid blog py-5">
 		<div class="container py-5">
 			<div class="mx-auto text-center mb-5" style="max-width: 900px;">
 				<h5 class="section-title px-3">Movies</h5>
@@ -245,8 +244,7 @@
 			var id = $(this).attr("data-movie-id");
 			$(`.btn-list-${id}`).removeClass("d-flex").addClass("d-none");
 		})
-			< script src = "https://code.jquery.com/jquery-3.6.0.min.js" ></script>
 
 
-				</script>
+	</script>
 }
