@@ -111,7 +111,7 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 
                 if (fileVideo is not null)
                 {
-                    movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie");
+                    _movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie");
                 }
 
                 _unitOfWork.Movie.Update(_movie);
