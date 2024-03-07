@@ -21,6 +21,7 @@
                     <th>Seat</th>
                     <th>Price</th>
                     <th>Booked Date</th>
+                    <th>Status</th>
                     <th></th>
                 </tr>
             </thead>
@@ -41,14 +42,17 @@
                         <td>$@ticket.Total</td>
                         <td>@ticket.BookedDate</td>
                         <td>
-                            @if (timeDifference >= 1)
+                            @if (timeDifference >= 1 && ticket.TicketStatus.ToLower() == "available")
                             {
                                 <a class="btn btn-warning" asp-controller="Ticket" asp-action="Refund" asp-route-ticketId="@ticket.TicketID">Refund</a>
                             }
                             else
                             {
-                                <span class="text-muted">Refund unavailable</span>
+                                <span class="text-muted">@ticket.TicketStatus</span>
                             }
+                        </td>
+                        <td>
+                            <button class="btn btn-success view-qr-code" data-ticket-id="@ticket.TicketID">QRCode</button>
                         </td>
                     </tr>
                 }
@@ -56,6 +60,20 @@
             </tbody>
         </table>
     }
+</div>
+
+<div class="modal fade" id="qrCodeModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">QR Code</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div id="qrCodeContent"></div> <!-- Placeholder for partial view content -->
+            </div>
+        </div>
+    </div>
 </div>
 <!-- Include DataTables JS -->
 @section Scripts {
@@ -70,8 +88,21 @@
                     $('td:eq(0)', row).html(counter);
                 }
             });
+        });
 
-            
+        $(document).ready(function () {
+            // Handler for QRCode button click
+            $('.view-qr-code').click(function () {
+                var ticketId = $(this).data('ticket-id');
+                var url = '../Ticket/ViewQRCode?ticketId=' + ticketId;
+
+                // Load the partial view content into the modal
+                $('#qrCodeContent').load(url);
+
+                // Show the modal
+                var qrCodeModal = new bootstrap.Modal(document.getElementById('qrCodeModal'));
+                qrCodeModal.show();
+            });
         });
     </script>
 }

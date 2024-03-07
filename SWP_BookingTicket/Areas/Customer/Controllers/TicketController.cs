@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using QRCoder;
 using SWP_BookingTicket.DataAccess.Data;
 using SWP_BookingTicket.DataAccess.Repositories;
 using SWP_BookingTicket.Models;
@@ -25,16 +26,19 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         public TicketVM TicketVM;
         private readonly IDbContextFactory<AppDbContext> _dbContextFactory;
         private readonly IUnlockASeatService _unlockASeatService;
+        private readonly ITicketService _ticketService;
         private readonly IBackgroundJobClient _backgroundJobClient;
         private readonly IEmailSender _emailSender;
         public TicketController(IUnitOfWork unitOfWork,
                                 IDbContextFactory<AppDbContext> dbContextFactory,
                                 IUnlockASeatService unlockASeatService,
+                                ITicketService ticketService,
                                 IBackgroundJobClient backgroundJobClient,
                                 UserManager<AppUser> userManager,
                                 IEmailSender emailSender)
         {
             _unlockASeatService = unlockASeatService;
+            _ticketService = ticketService;
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _dbContextFactory = dbContextFactory;
@@ -76,6 +80,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 
             return View(ticket);
         }
+
         [HttpPost]
         public async Task<IActionResult> Refund(Guid ticketId, string fullName, string email, string reason)
         {
@@ -107,13 +112,16 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                             ";
             await _emailSender.SendEmailAsync(email, "CinemaHub: Your Refund Request", message);
 
-            _unitOfWork.Ticket.Delete(ticket);
+            _backgroundJobClient.Enqueue(() =>
+                        _unlockASeatService.UnlockASeat(ticket.SeatID, ticket.ShowtimeID, "success"));
+
+            ticket.TicketStatus = "Refunded";
+            _unitOfWork.Ticket.Update(ticket);
             _unitOfWork.Save();
 
             return RedirectToAction("BookedTickets");
         }
-
-
+        [HttpGet]
         public async Task<IActionResult> BookedTickets()
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -149,7 +157,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             return View(allTickets.OrderByDescending(u => u.BookedDate).ToList());
         }
 
-
         [HttpGet]
         public async Task<IActionResult> ChooseSeat(Guid showtime_id)
         {
@@ -162,84 +169,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 ViewData["Seats"] = seats;
             }
             return View();
-        }
-        public async Task HandleLockAndUnlock(List<Guid> seats, Guid showtime_id, string? status)
-        {
-
-
-            try
-            {
-                using var dbContext = _dbContextFactory.CreateDbContext();
-                IUnitOfWork uow = new UnitOfWork(dbContext);
-                // Handle payment settings -- On developing
-
-                double timeSpan = 0;
-                if (status == "pending")
-                {
-                    timeSpan = 3 * 60; // 3 min
-                }
-
-                if (status == "success")
-                {
-                    Showtime showtime = await uow.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id);
-
-                    DateTime currentTime = DateTime.Now;
-                    DateOnly showTimeDate = showtime.Date;
-                    DateTime endShow = new DateTime(showTimeDate.Year, showTimeDate.Month, showTimeDate.Day, showtime.Time, showtime.Minute, 0);
-
-                    TimeSpan difference = endShow - currentTime;
-                    // Get the difference in seconds
-                    double timeUntilShowtimeEnd = difference.TotalSeconds;
-                    timeSpan = timeUntilShowtimeEnd;
-                }
-
-
-                foreach (var seatID in seats)
-                {
-                    var seat = await uow.Seat.GetFirstOrDefaultAsync(u => u.SeatID == seatID);
-                    LockASeat(seat, showtime_id, status);
-                    _ = _backgroundJobClient.Schedule(() =>
-                        _unlockASeatService.UnlockASeat(seatID, showtime_id, status), TimeSpan.FromSeconds(timeSpan));
-
-                }
-
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine(ex.Message);
-                throw;
-            }
-
-        }
-
-
-        private void LockASeat(Seat seat, Guid showtime_id, string? status)
-        {
-            using var dbContext = _dbContextFactory.CreateDbContext();
-            IUnitOfWork uow = new UnitOfWork(dbContext);
-            if (!seat.SeatStatus.ToLower().Contains("locked"))
-            {
-                seat.SeatStatus = "LOCKED_";
-            }
-
-            if (status == "pending")
-                seat.SeatStatus += showtime_id.ToString() + "_status=pending";
-
-            if (status == "success")
-            {
-                if (seat.SeatStatus.ToLower().Contains((showtime_id.ToString() + "_status=pending").ToLower()))
-                {
-                    seat.SeatStatus = seat.SeatStatus.Replace(showtime_id.ToString() + "_status=pending", showtime_id.ToString() + "_status=success");
-                }
-                else
-                {
-                    seat.SeatStatus += showtime_id.ToString() + "_status=success";
-                }
-            }
-
-            uow.Seat.Update(seat);
-            uow.Save();
-            Console.WriteLine($"Lock : {showtime_id.ToString().ToUpper()}");
         }
 
         public async Task<IActionResult> BookingProcess(string seatIDs, Guid showtime_id, string? payment_method, string? status = null, string? voucherCode = null)
@@ -254,7 +183,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             }
 
             string[] seatIDListString = seatIDs.Split(',');
-            List<Guid> seatIDList = new List<Guid>(); // Use List<Guid> instead of Guid[]
+            List<Guid> seatIDList = new List<Guid>();
 
             foreach (var s in seatIDListString)
             {
@@ -262,17 +191,14 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 seatIDList.Add(sID);
             }
 
-
             if (payment_method == null)
             {
-                // return to the error page
                 return View("FailedPayment");
             }
             else if (payment_method == "point")
             {
                 HandleLockAndUnlock(seatIDList, showtime_id, "success");
 
-                // Add Ticket to db
                 var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id, includeProperties: "Room");
                 var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == showtime.MovieID);
                 var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -300,18 +226,21 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                     ticketList.Add(ticket);
                     _unitOfWork.Ticket.Add(ticket);
                     user.Point = user.Point - (decimal)movie.Price * (decimal)(1 - voucher_value / 100) * 1000;
+
+                    var timeSpan = await CalculateDifferentTime(ticket.ShowtimeID);
+                    _backgroundJobClient.Schedule(() =>
+                         _ticketService.ExpriedTicket(ticket.TicketID), TimeSpan.FromSeconds(timeSpan));
+
                 }
                 if (voucher != null)
                 {
                     voucher.Quantity--;
                     _unitOfWork.Voucher.Update(voucher);
                 }
-
-                _unitOfWork.Save();
-
                 string message = await GenerateEmailMessage(ticketList, showtime);
                 await _emailSender.SendEmailAsync(user.Email, "CinemaHub: Your Tickets", message);
 
+                _unitOfWork.Save();
             }
             else if (payment_method == "paypal")
             {
@@ -330,10 +259,8 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                         }
                     case "success":
                         {
-                            // Set another HandleLockAndUnlock
                             HandleLockAndUnlock(seatIDList, showtime_id, "success");
 
-                            // Add Ticket to db
                             var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id, includeProperties: "Room");
                             var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == showtime.MovieID);
                             var claimsIdentity = (ClaimsIdentity)User.Identity;
@@ -362,6 +289,9 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                                 }
                                 user.Point += (decimal)(0.05 * movie.Price) * 1000;
 
+                                var timeSpan = await CalculateDifferentTime(ticket.ShowtimeID);
+                                _backgroundJobClient.Schedule(() =>
+                                     _ticketService.ExpriedTicket(ticket.TicketID), TimeSpan.FromSeconds(timeSpan));
                                 ticketList.Add(ticket);
                                 _unitOfWork.Ticket.Add(ticket);
                             }
@@ -371,13 +301,10 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                                 _unitOfWork.Voucher.Update(voucher);
                             }
 
-                            // Send mail to user include ticket 
-                            // TODO: modify the message appropriately
                             string message = await GenerateEmailMessage(ticketList, showtime);
                             await _emailSender.SendEmailAsync(user.Email, "CinemaHub: Your Tickets", message);
 
                             _unitOfWork.Save();
-                            // redirect to the sucess payment page  
                             break;
                         }
                     case "cancel":
@@ -394,10 +321,8 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                         }
                 }
             }
-
             return View();
         }
-
 
         [HttpPost]
         public async Task<IActionResult> BookingConfirmation(string seatIDs, Guid showtime_id)
@@ -410,7 +335,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 seatIDList.Add(sID);
             }
 
-            // Uncomment this when submit the assignment
             HandleLockAndUnlock(seatIDList, showtime_id, "pending");
 
             var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(x => x.ShowtimeID == showtime_id, includeProperties: "Room");
@@ -452,7 +376,135 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         }
 
 
+        [HttpGet]
+        public async Task<IActionResult> ViewQRCode(Guid ticketId)
+        {
+            QRCodeGenerator QrGenerator = new QRCodeGenerator();
+            QRCodeData QrCodeInfo = QrGenerator.CreateQrCode(ticketId.ToString(), QRCodeGenerator.ECCLevel.Q);
 
+            BitmapByteQRCode qrCode = new BitmapByteQRCode(QrCodeInfo);
+            string QrUri = string.Format("data:image/png;base64,{0}", Convert.ToBase64String(qrCode.GetGraphic(60)));
+            //ViewBag.QrCodeUri = QrUri;
+            Ticket ticket = await _unitOfWork.Ticket.GetFirstOrDefaultAsync(u => u.TicketID == ticketId, includeProperties: "Showtime,Seat");
+            if (ticket != null)
+            {
+                ViewData["SeatName"] = ticket.Seat.SeatName;
+                Showtime showtime = ticket.Showtime;
+                Movie movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == showtime.MovieID);
+                Room room = await _unitOfWork.Room.GetFirstOrDefaultAsync(u => u.RoomID == showtime.RoomID);
+                ViewData["RoomName"] = room.RoomName;
+                ViewData["TicketStatus"] = ticket.TicketStatus;
+                ViewData["Showtime"] = showtime.Date.ToShortDateString() 
+                    + " " + showtime.Time + ":" + showtime.Minute 
+                    + " | " + movie.MovieName;
+            }
+            return PartialView("_QRCodePartial", QrUri);
+        }
+
+        [HttpGet]
+        public IActionResult DownloadQRCode(Guid ticketId)
+        {
+            QRCodeGenerator qrGenerator = new QRCodeGenerator();
+            QRCodeData qrCodeData = qrGenerator.CreateQrCode(ticketId.ToString(), QRCodeGenerator.ECCLevel.Q);
+
+            BitmapByteQRCode qrCode = new BitmapByteQRCode(qrCodeData);
+            byte[] qrCodeBytes = qrCode.GetGraphic(60);
+
+            return File(qrCodeBytes, "image/png", "QRCode.png");
+        }
+
+
+
+        public async Task<double> CalculateDifferentTime(Guid showtime_id)
+        {
+            Showtime showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id);
+
+            DateTime currentTime = DateTime.Now;
+            DateOnly showTimeDate = showtime.Date;
+            DateTime endShow = new DateTime(showTimeDate.Year, showTimeDate.Month, showTimeDate.Day, showtime.Time, showtime.Minute, 0);
+
+            TimeSpan difference = endShow - currentTime;
+            // Get the difference in seconds
+            double timeUntilShowtimeEnd = difference.TotalSeconds;
+
+            return timeUntilShowtimeEnd;
+        }
+        public async Task HandleLockAndUnlock(List<Guid> seats, Guid showtime_id, string? status)
+        {
+
+
+            try
+            {
+                using var dbContext = _dbContextFactory.CreateDbContext();
+                IUnitOfWork uow = new UnitOfWork(dbContext);
+                // Handle payment settings -- On developing
+
+                double timeSpan = 0;
+                if (status == "pending")
+                {
+                    timeSpan = 3 * 60; // 3 min
+                }
+
+                if (status == "success")
+                {
+                    //Showtime showtime = await uow.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id);
+
+                    //DateTime currentTime = DateTime.Now;
+                    //DateOnly showTimeDate = showtime.Date;
+                    //DateTime endShow = new DateTime(showTimeDate.Year, showTimeDate.Month, showTimeDate.Day, showtime.Time, showtime.Minute, 0);
+
+                    //TimeSpan difference = endShow - currentTime;
+                    //// Get the difference in seconds
+                    //double timeUntilShowtimeEnd = difference.TotalSeconds;
+                    timeSpan = await CalculateDifferentTime(showtime_id);
+                }
+
+
+                foreach (var seatID in seats)
+                {
+                    var seat = await uow.Seat.GetFirstOrDefaultAsync(u => u.SeatID == seatID);
+                    LockASeat(seat, showtime_id, status);
+                    _backgroundJobClient.Schedule(() =>
+                        _unlockASeatService.UnlockASeat(seatID, showtime_id, status), TimeSpan.FromSeconds(timeSpan));
+                }
+
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+
+        }
+
+        private void LockASeat(Seat seat, Guid showtime_id, string? status)
+        {
+            using var dbContext = _dbContextFactory.CreateDbContext();
+            IUnitOfWork uow = new UnitOfWork(dbContext);
+            if (!seat.SeatStatus.ToLower().Contains("locked"))
+            {
+                seat.SeatStatus = "LOCKED_";
+            }
+
+            if (status == "pending")
+                seat.SeatStatus += showtime_id.ToString() + "_status=pending";
+
+            if (status == "success")
+            {
+                if (seat.SeatStatus.ToLower().Contains((showtime_id.ToString() + "_status=pending").ToLower()))
+                {
+                    seat.SeatStatus = seat.SeatStatus.Replace(showtime_id.ToString() + "_status=pending", showtime_id.ToString() + "_status=success");
+                }
+                else
+                {
+                    seat.SeatStatus += showtime_id.ToString() + "_status=success";
+                }
+            }
+
+            uow.Seat.Update(seat);
+            uow.Save();
+            Console.WriteLine($"Lock : {showtime_id.ToString().ToUpper()}");
+        }
         public async Task<string> GenerateEmailMessage(List<Ticket> tickets, Showtime showtime)
         {
             Room room = await _unitOfWork.Room.GetFirstOrDefaultAsync(u => u.RoomID == showtime.RoomID);
@@ -480,9 +532,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             return message.ToString();
         }
 
-
         #region API Call
-
         [HttpGet]
         public async Task<IActionResult> GetSeatStatuses(string showtime_id)
         {
