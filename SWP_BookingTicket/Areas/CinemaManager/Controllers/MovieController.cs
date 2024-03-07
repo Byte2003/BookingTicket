@@ -9,13 +9,13 @@ using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 
 namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 {
-	[Area("CinemaManager")]
-	[Authorize(Roles = "cinemaManager")]
-	public class MovieController : Controller
-	{
-		private readonly IUnitOfWork _unitOfWork;
-		private readonly IWebHostEnvironment _webHostEnvironment;
-		private readonly UploadImageService _uploadImageService;
+    [Area("CinemaManager")]
+    [Authorize(Roles = "cinemaManager")]
+    public class MovieController : Controller
+    {
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebHostEnvironment _webHostEnvironment;
+        private readonly UploadImageService _uploadImageService;
 
         public MovieController(IUnitOfWork unitOfWork, IWebHostEnvironment webHostEnvironment, UploadImageService uploadImageService)
         {
@@ -32,28 +32,28 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
             return View(movies);
         }
 
-		[HttpGet]
-		public IActionResult Create()
-		{
-			return View();
-		}
-		[HttpPost]
-		[ValidateAntiForgeryToken]
-		public IActionResult Create(Movie movie, IFormFile? fileImage, IFormFile? fileVideo)
-		{
-			if (ModelState.IsValid)
-			{
-				//string wwwRootPath = _webHostEnvironment.WebRootPath;
-				//if (fileImage != null)
-				//{
-				//	string fileNameImage = Guid.NewGuid().ToString() + Path.GetExtension(fileImage.FileName);
-				//	string MovieImagePath = Path.Combine(wwwRootPath, @"images\movie");
-				//	using (var fileStream = new FileStream(Path.Combine(MovieImagePath, fileNameImage), FileMode.Create))
-				//	{
-				//		fileImage.CopyTo(fileStream);
+        [HttpGet]
+        public IActionResult Create()
+        {
+            return View();
+        }
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Create(Movie movie, IFormFile? fileImage, IFormFile? fileVideo)
+        {
+            if (ModelState.IsValid)
+            {
+                //string wwwRootPath = _webHostEnvironment.WebRootPath;
+                //if (fileImage != null)
+                //{
+                //	string fileNameImage = Guid.NewGuid().ToString() + Path.GetExtension(fileImage.FileName);
+                //	string MovieImagePath = Path.Combine(wwwRootPath, @"images\movie");
+                //	using (var fileStream = new FileStream(Path.Combine(MovieImagePath, fileNameImage), FileMode.Create))
+                //	{
+                //		fileImage.CopyTo(fileStream);
 
-				//	}
-				//	movie.ImageUrl = @"\images\movie\" + fileNameImage;
+                //	}
+                //	movie.ImageUrl = @"\images\movie\" + fileNameImage;
 
                 //}
                 movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie");
@@ -105,15 +105,31 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
             {
                 if (fileImage is not null)
                 {
-                    _movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie");
-
+                    // Check extension of file, make sure it's an image file (.jpg / .png)
+                    string extension = Path.GetExtension(fileImage.FileName);
+                    if (extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) || extension.Equals(".png", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie");
+                    }
+                    else
+                    {
+                        return View(movie);
+                    }
                 }
 
                 if (fileVideo is not null)
                 {
-                    _movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie");
+                    // Make sure the extension of the file is .mp4/.mov/
+                    string extension = Path.GetExtension(fileVideo.FileName);
+                    if (extension.Equals(".mp4", StringComparison.OrdinalIgnoreCase) || extension.Equals(".mov", StringComparison.OrdinalIgnoreCase))
+                    {
+                        _movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie");
+                    }
+                    else
+                    {
+                        return View(movie);
+                    }
                 }
-
                 _unitOfWork.Movie.Update(_movie);
                 _unitOfWork.Save();
                 return RedirectToAction("Index");
