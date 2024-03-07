@@ -34,11 +34,14 @@
                 <label asp-for="@Model.ImageUrl">ImageUrl</label>
                 <input type="file" name="fileImage" asp-for="@Model.ImageUrl" rows="3" class="form-control">
                 <span asp-validation-for="@Model.ImageUrl" class="text-danger"></span>
+                <span class="text-danger">@ViewData["imageError"]</span>
+
             </div>
             <div class="col-12 mt-5">
                 <label asp-for="@Model.VideoUrl">VideoUrl</label>
                 <input type="file" name="fileVideo" asp-for="@Model.VideoUrl" rows="3" class="form-control">
                 <span asp-validation-for="@Model.VideoUrl" class="text-danger"></span>
+                <span class="text-danger">@ViewData["videoError"]</span>
             </div>
             <div class="col-12 mt-5">
                 <label asp-for="@Model.Duration" class="form-label">Duration</label>
@@ -87,6 +90,13 @@
 @*Validate on client side*@
 @section Scripts {
     @{
+        <script type="text/javascript">
+            tinymce.init({
+                selector: 'textarea',
+                plugins: 'anchor autolink charmap codesample emoticons image link lists media searchreplace table visualblocks wordcount',
+                toolbar: 'undo redo | blocks fontfamily fontsize | bold italic underline strikethrough | link image media table | align lineheight | numlist bullist indent outdent | emoticons charmap | removeformat',
+            });
+        </script>
         <partial name="_ValidationScriptsPartial" />
     }
 }
