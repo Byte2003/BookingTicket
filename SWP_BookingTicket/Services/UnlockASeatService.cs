@@ -30,6 +30,7 @@ namespace SWP_BookingTicket.Services
                             seat.SeatStatus = "AVAILABLE";
                         }
                     }
+         
                     _unitOfWork.Seat.Update(seat);
                     _unitOfWork.Save();
                 }
