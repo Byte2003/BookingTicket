@@ -160,24 +160,44 @@
     });
 
 
-    // Single Line Chart
-    var ctx3 = $("#line-chart").get(0).getContext("2d");
-    var myChart3 = new Chart(ctx3, {
-        type: "line",
-        data: {
-            labels: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
-            datasets: [{
-                label: "Salse",
-                fill: false,
-                backgroundColor: "rgba(0, 156, 255, .3)",
-                data: [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15]
-            }]
-        },
-        options: {
-            responsive: true
+    //// Single Line Chart
+    //var ctx3 = $("#line-chart").get(0).getContext("2d");
+    //var myChart3 = new Chart(ctx3, {
+    //    type: "line",
+    //    data: {
+    //        labels: [50, 60, 70, 80, 90, 100, 110, 120, 130, 140, 150],
+    //        datasets: [{
+    //            label: "Salse",
+    //            fill: false,
+    //            backgroundColor: "rgba(0, 156, 255, .3)",
+    //            data: [7, 8, 8, 9, 9, 9, 10, 11, 14, 14, 15]
+    //        }]
+    //    },
+    //    options: {
+    //        responsive: true
+    //    }
+    //});
+    $.ajax({
+        url: "/Admin/Dashboard/GetTrendingMovies",
+        method: "GET",
+        success: function (response) {
+            var trendingMovies = $(".trending-movies");
+            console.log(response);
+            trendingMovies.empty(); // Clear existing content
+            $.each(response.data, function (index, data) {
+                var movieName = data.movie; 
+                var totalRevenue = data.totalRevenue;                
+                trendingMovies.append(`<div class="d-flex align-items-center border-bottom py-3">                  
+                    <div class="w-100 ms-3">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-0">${movieName}</h5>
+                            <h6 class="pb-0">Revenue: $${totalRevenue}</h6>
+                        </div>
+                    </div>
+                </div >`);
+            });
         }
-    });
-
+    })
 
     // Single Bar Chart
     var ctx4 = $("#bar-chart").get(0).getContext("2d");
@@ -245,8 +265,7 @@
         options: {
             responsive: true
         }
-    });
-
+    });    
 
 })(jQuery);
 

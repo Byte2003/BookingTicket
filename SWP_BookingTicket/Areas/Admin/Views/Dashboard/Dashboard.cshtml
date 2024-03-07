@@ -46,21 +46,24 @@
         </div>
     </div>
     <!-- Sale & Revenue End -->
-    <!-- Sales Chart Start -->
+
+    <!-- Chart Sections -->
     <div class="container-fluid pt-4 px-4">
         <div class="row g-4">
+            @* Tickets Per days *@
             <div class="col-sm-12 col-xl-6">
                 <div class="bg-light text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">Tickets per day</h6>
+                        <h6 class="mb-0" style="color:#0000ff">Tickets per day</h6>
                     </div>
                     <canvas id="tickets-per-day"></canvas>
                 </div>
             </div>
+            @* Revenue per day *@
             <div class="col-sm-12 col-xl-6">
                 <div class="bg-light text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">Revenue per day</h6>
+                        <h6 class="mb-0" style="color:#0000ff">Revenue per day</h6>
                     </div>
                     <canvas id="revenue-per-day"></canvas>
                 </div>
@@ -69,10 +72,20 @@
             <div class="col-sm-12 col-xl-6">
                 <div class="bg-light text-center rounded p-4">
                     <div class="d-flex align-items-center justify-content-between mb-4">
-                        <h6 class="mb-0">Online Users</h6>
-                        <a href="">Show All</a>
+                        <h6 class="mb-0" style="color:#0000ff">Online Users</h6>
                     </div>
                     <canvas id="online-user-chart"></canvas>
+                </div>
+            </div>
+           @*  Trending Movies *@
+            <div class="col-sm-12 col-xl-6">
+                <div class="bg-light h-100 text-center rounded p-4">
+                    <div class="d-flex align-items-center justify-content-between mb-4">
+                        <h6 class="mb-0" style="color:#0000ff">Trending Movies</h6>
+                    </div>
+                    <div class="d-flex flex-column trending-movies">
+                                              
+                    </div>
                 </div>
             </div>
         </div>

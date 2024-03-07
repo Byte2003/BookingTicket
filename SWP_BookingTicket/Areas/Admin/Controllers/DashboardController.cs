@@ -72,6 +72,29 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
 			var tickets = await _unitOfWork.Ticket.GetAllAsync();
 			return Json(new {data = tickets});
 		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetTrendingMovies()
+		{
+            DateTime tenDaysAgo = DateTime.Now.AddDays(-10);
+            var tickets = await _unitOfWork.Ticket.GetAllAsync(u => u.BookedDate > tenDaysAgo);
+			var movies = await _unitOfWork.Movie.GetAllAsync();
+			var showtimes = await _unitOfWork.Showtime.GetAllAsync();
+
+			var data = from ticket in tickets
+								 join showtime in showtimes on ticket.ShowtimeID equals showtime.ShowtimeID
+								 join movie in movies on showtime.MovieID equals movie.MovieID
+								 select new { movie = movie.MovieName, revenue = ticket.Total };
+
+			var trendingMovies = data.GroupBy( u => u.movie)
+				                            .Select(g => new { Movie = g.Key, TotalRevenue = g.Sum(u => u.revenue) })
+											.OrderByDescending(u => u.TotalRevenue)
+											.Take(3)
+											.ToList();
+
+			return Json(new { data = trendingMovies });
+		}
 		#endregion
+
 	}
 }
