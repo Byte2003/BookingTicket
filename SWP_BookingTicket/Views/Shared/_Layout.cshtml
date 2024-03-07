@@ -50,6 +50,7 @@
 
                     <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="nav-item nav-link">Home</a>
                     <a asp-area="Customer" asp-controller="Home" asp-action="PromotionViewAll" class="nav-item nav-link">News - Promotion</a>
+                    <a asp-area="Admin" asp-action="Dashboard" asp-controller="Dashboard" class="nav-item nav-link">Dashboard</a>
 
                     @*<a href="#" class="nav-item nav-link">About</a>
                         <a href="#" class="nav-item nav-link">Services</a>
@@ -66,7 +67,7 @@
                                 <a asp-area="CinemaManager" asp-action="Index" asp-controller="Movie" class="dropdown-item text-white">Movie</a>
                             </li>
                             <li>
-                                <a asp-area="Admin" asp-action="Index" asp-controller="UserAccount" class="dropdown-item text-white">Account</a>
+                                <a asp-area="Admin" asp-action="Dashboard" asp-controller="UserAccount" class="dropdown-item text-white">Dashboard</a>
                             </li>
                             <li>
                                 <a asp-area="CinemaManager" asp-action="Index" asp-controller="Room" class="dropdown-item text-white">Room</a>
@@ -204,6 +205,8 @@
     <script type="text/javascript" src="https://cdn.tiny.cloud/1/ducankyqmyft90amgwny0kxjmlvoq6q04s0s4sgfzxyrc6o5/tinymce/6/tinymce.min.js" referrerpolicy="origin"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript" src="~/js/site.js"></script>
+    <script type="text/javascript" src="~/js/signalr.js"></script>
+    <script type="text/javascript" src="~/js/onlineuser.js"></script>
     @await RenderSectionAsync("Scripts", required: false)
 
     <script type="text/javascript">

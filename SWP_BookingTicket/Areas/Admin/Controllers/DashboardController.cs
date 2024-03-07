@@ -12,23 +12,27 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
 {
 	[Area("Admin")]
 	[Authorize(Roles = "admin")]
-	public class UserAccountController : Controller
+	public class DashboardController : Controller
 	{
 		private readonly UserManager<AppUser> _userManager;
 		private readonly IEmailSender _emailSender;
-        public UserAccountController(UserManager<AppUser> userManager, IEmailSender emailSender)
+		private readonly IUnitOfWork _unitOfWork;
+        public DashboardController(UserManager<AppUser> userManager, IEmailSender emailSender, IUnitOfWork unitOfWork)
         {
            _userManager = userManager;
 			_emailSender = emailSender;
+			_unitOfWork = unitOfWork;
         }
-        [HttpGet]
-		public IActionResult Index()
-		{		
+		[HttpGet]
+		public IActionResult UserAccount()
+		{
 			return View();
 		}
-		
-
-
+		[HttpGet]
+		public IActionResult Dashboard()
+		{
+			return View();
+		}
 		#region API Calls 
 		[HttpGet]
 		public async Task<IActionResult> GetAllUsers()
@@ -60,6 +64,13 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
 				return Json(new { success = true, message = "UnLock successfully!" });
 			}
 			return Json(new { success = false, message = "Fail to unlock this account" });
+		}
+
+		[HttpGet]
+		public async Task<IActionResult> GetAllTickets()
+		{
+			var tickets = await _unitOfWork.Ticket.GetAllAsync();
+			return Json(new {data = tickets});
 		}
 		#endregion
 	}
