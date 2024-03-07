@@ -56,8 +56,36 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
                 //	movie.ImageUrl = @"\images\movie\" + fileNameImage;
 
                 //}
-                movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie");
-                movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie");
+                if (fileImage is not null)
+                {
+                    // Check extension of file, make sure it's an image file (.jpg / .png)
+                    string extension = Path.GetExtension(fileImage.FileName);
+                    if (extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) || extension.Equals(".png", StringComparison.OrdinalIgnoreCase))
+                    {
+                        movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie");
+                    }
+                    else
+                    {
+                        ViewData["imageError"] = "Invalid image file format. Only .jpg and .png files are supported.";
+                        return View(movie);
+                    }
+                }
+
+                if (fileVideo is not null)
+                {
+                    // Make sure the extension of the file is .mp4/.mov/
+                    string extension = Path.GetExtension(fileVideo.FileName);
+                    if (extension.Equals(".mp4", StringComparison.OrdinalIgnoreCase) || extension.Equals(".mov", StringComparison.OrdinalIgnoreCase))
+                    {
+                        movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie");
+                    }
+                    else
+                    {
+                        ViewData["videoError"] = "Invalid video file format. Only .mp4 and .mov files are supported.";
+                        return View(movie);
+                    }
+                }
+
                 _unitOfWork.Movie.Add(movie);
                 _unitOfWork.Save();
                 TempData["success"] = "Procduct created succesfully";
@@ -113,6 +141,7 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
                     }
                     else
                     {
+                        ViewData["imageError"] = "Invalid image file format. Only .jpg and .png files are supported.";
                         return View(movie);
                     }
                 }
@@ -127,6 +156,7 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
                     }
                     else
                     {
+                        ViewData["videoError"] = "Invalid video file format. Only .mp4 and .mov files are supported.";
                         return View(movie);
                     }
                 }
