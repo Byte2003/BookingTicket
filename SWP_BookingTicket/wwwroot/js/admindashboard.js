@@ -198,7 +198,30 @@
             });
         }
     })
-
+    $.ajax({
+        url: "/Admin/Dashboard/GetTotalCustomers",
+        method: "GET",
+        success: function (response) {
+            var totalCustomers = $(".total-customers");
+            totalCustomers.html(response.count.toString());
+        }
+    })
+    $.ajax({
+        url: "/Admin/Dashboard/GetTotalTickets",
+        method: "GET",
+        success: function (response) {
+            var totalCustomers = $(".total-tickets");
+            totalCustomers.html(response.totalTickets.toString());
+        }
+    })
+    $.ajax({
+        url: "/Admin/Dashboard/GetTotalRevenue",
+        method: "GET",
+        success: function (response) {
+            var totalCustomers = $(".total-revenue");
+            totalCustomers.html(response.totalRevenue.toString());
+        }
+    })
     // Single Bar Chart
     var ctx4 = $("#bar-chart").get(0).getContext("2d");
     var myChart4 = new Chart(ctx4, {

@@ -183,7 +183,27 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
 
 			return Json(new { data = trendingMovies });
 		}
-		#endregion
+		[HttpGet]
+		public async Task<IActionResult> GetTotalCustomers()
+		{
+			var customer = await _userManager.GetUsersInRoleAsync("customer");
+			return Json(new {count =  customer.Count});
+		}
+        [HttpGet]
+        public async Task<IActionResult> GetTotalTickets()
+        {
+			var tickets = await _unitOfWork.Ticket.GetAllAsync();
+			var total = tickets.Count();
+            return Json(new {totalTickets = total});
+        }
+        [HttpGet]
+        public async Task<IActionResult> GetTotalRevenue()
+        {
+            var tickets = await _unitOfWork.Ticket.GetAllAsync();
+            var total = tickets.Sum( u => u.Total);
+            return Json(new { totalRevenue = total });
+        }
+        #endregion
 
-	}
+    }
 }
