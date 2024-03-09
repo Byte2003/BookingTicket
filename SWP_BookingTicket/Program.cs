@@ -7,6 +7,7 @@ using Microsoft.Extensions.Options;
 using Serilog;
 using SWP_BookingTicket.DataAccess.Data;
 using SWP_BookingTicket.DataAccess.Repositories;
+using SWP_BookingTicket.Hubs;
 using SWP_BookingTicket.Models;
 using SWP_BookingTicket.Services;
 using System.Configuration;
@@ -93,7 +94,8 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Upload image
 builder.Services.AddScoped<UploadImageService>();
 
-
+// SignalR
+builder.Services.AddSignalR();
 builder.Services.AddSession(option =>
 {
     option.IOTimeout = TimeSpan.FromMinutes(20);
@@ -122,6 +124,7 @@ app.MapControllerRoute(
 
 
 app.UseSession();
+app.MapHub<UsersOnlineHub>("/UsersOnlineHub");
 app.Run();
 async void SeedData()
 {

@@ -4,9 +4,9 @@ $(document).ready(function () {
     loadDataTable();
 })
 function loadDataTable() {
-    dataTable = $('#userAccountTable').DataTable({
+    dataTable = $('#managerAccountTable').DataTable({
         "ajax": {
-            "url": "/Admin/Dashboard/GetCustomerUsers"
+            "url": "/Admin/Dashboard/GetManagerUsers"
         },
         "columns": [
             { "data": "id", "width": "5%" },
@@ -25,17 +25,19 @@ function loadDataTable() {
                     }                    
                     return `OK`
             }, "width": "10%" },
-            { "data": "point", "width": "5%" },
             {
                 "data": "id",
                 "render": function (data) {
                     
-                    return `                     
+                    return `  
+                    <div class="d-flex justity-content-between align-items-center w-100">
                             <a asp-area="Admin" onClick=LockAccount("/Admin/Dashboard/LockAccount?user_id=${data}")
                             class="btn btn-danger mx-2"><i class="bi bi-lock"></i>Lock</a>
                             <a asp-area="Admin" onClick=UnlockAccount("/Admin/Dashboard/UnlockAccount?user_id=${data}")
                             class="btn btn-primary mx-2"><i class="bi bi-unlock-fill"></i>Unlock</a>
-					                          `
+                            <a href="/Admin/Dashboard/UpdateManagerAccount?user_id=${data}")
+                            class="btn btn-primary mx-2"><i class="bi bi-pencil-square"></i></i>Edit</a>
+					 </div>                         `
                 },
                 "width": "20%"
             }

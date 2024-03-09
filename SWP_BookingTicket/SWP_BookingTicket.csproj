@@ -7,7 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Remove="wwwroot\img\registerImage.jpg" />
+    <Content Remove="wwwroot\js\onlineuser.js" />
+	  
+  </ItemGroup>
+	<ItemGroup>
+		<Content Remove="wwwroot\img\registerImage.jpg" />
+	</ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\onlineuser.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -55,7 +62,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <None Include="wwwroot\img\registerImage.jpg" />
+    <None Include="wwwroot\js\onlineuser.js" />
   </ItemGroup>
-
+	<ItemGroup>
+		<None Include="wwwroot\img\registerImage.jpg" />
+	</ItemGroup>
 </Project>
