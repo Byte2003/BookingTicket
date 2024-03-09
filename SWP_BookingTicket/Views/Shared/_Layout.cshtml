@@ -66,7 +66,7 @@
                     <a href="#" class="nav-item nav-link">Packages</a>
                     <a href="#" class="nav-item nav-link">Blog</a>*@
 
-                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("cinemaManager"))
+                    @if (SignInManager.IsSignedIn(User) && (User.IsInRole("cinemaManager") || User.IsInRole("admin")))
                     {
 
                         <div class="nav-item dropdown">
