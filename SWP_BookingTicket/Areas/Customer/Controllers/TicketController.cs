@@ -119,6 +119,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             _unitOfWork.Ticket.Update(ticket);
             _unitOfWork.Save();
 
+            TempData["msg"] = "Refund ticket successfully.";
             return RedirectToAction("BookedTickets");
         }
         [HttpGet]
@@ -193,7 +194,12 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 
             if (payment_method == null)
             {
-                return View("FailedPayment");
+                TempData["error"] = "Payment Fails.";
+                return RedirectToAction("BookingConfirmation", new
+                {
+                    seatIDs = seatIDs,
+                    showtime_id = showtime_id,
+                });
             }
             else if (payment_method == "point")
             {
@@ -309,22 +315,38 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                         }
                     case "cancel":
                         {
-                            return View("CancelledPayment");
+                            TempData["error"] = "Payment Cancelled.";
+                            return RedirectToAction("BookingConfirmation", new
+                            {
+                                seatIDs = seatIDs,
+                                showtime_id = showtime_id,
+                            });
                         }
                     case "fail":
                         {
-                            return View("FailedPayment");
+                            TempData["error"] = "Payment Fails.";
+                            return RedirectToAction("BookingConfirmation", new
+                            {
+                                seatIDs = seatIDs,
+                                showtime_id = showtime_id,
+                            });
                         }
                     default:
                         {
-                            return View("FailedPayment");
+                            TempData["error"] = "Payment Fails.";
+                            return RedirectToAction("BookingConfirmation", new
+                            {
+                                seatIDs = seatIDs,
+                                showtime_id = showtime_id,
+                            });
                         }
                 }
             }
+            TempData["msg"] = "Payment execute successfully.";
+
             return View();
         }
 
-        [HttpPost]
         public async Task<IActionResult> BookingConfirmation(string seatIDs, Guid showtime_id)
         {
             string[] seatIDListString = seatIDs.Split(',');
@@ -394,8 +416,8 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 Room room = await _unitOfWork.Room.GetFirstOrDefaultAsync(u => u.RoomID == showtime.RoomID);
                 ViewData["RoomName"] = room.RoomName;
                 ViewData["TicketStatus"] = ticket.TicketStatus;
-                ViewData["Showtime"] = showtime.Date.ToShortDateString() 
-                    + " " + showtime.Time + ":" + showtime.Minute 
+                ViewData["Showtime"] = showtime.Date.ToShortDateString()
+                    + " " + showtime.Time + ":" + showtime.Minute
                     + " | " + movie.MovieName;
             }
             return PartialView("_QRCodePartial", QrUri);

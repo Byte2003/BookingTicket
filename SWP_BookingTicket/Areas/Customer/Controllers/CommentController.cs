@@ -8,7 +8,7 @@ using System.Security.Claims;
 namespace SWP_BookingTicket.Areas.Customer.Controllers
 {
     [Area("Customer")]
-    [Authorize(Roles = "customer,admin,cinemaManager")]
+    [AllowAnonymous]
     public class CommentController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
@@ -24,7 +24,16 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
             var comments = await _unitOfWork.Comment.GetAllAsync(u => u.MovieID == movieId, includeProperties: "AppUser");
-            return Json(new { data = comments, user = claim.Value });
+            if (claim != null)
+            {
+
+                return Json(new { data = comments, user = claim.Value });
+            }
+            else
+            {
+
+                return Json(new { data = comments });
+            }
         }
         public async Task<IActionResult> AddComment(Guid movieId, string text)
         {
@@ -41,7 +50,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 
             _unitOfWork.Comment.Add(comment);
             _unitOfWork.Save();
-
             return Json(new { });
         }
         [HttpPost]
@@ -66,7 +74,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         [HttpPost]
         public async Task<IActionResult> DeleteComment(Guid commentId)
         {
-            var comment = await _unitOfWork.Comment.GetFirstOrDefaultAsync( u=> u.CommentID == commentId);
+            var comment = await _unitOfWork.Comment.GetFirstOrDefaultAsync(u => u.CommentID == commentId);
 
             if (comment == null)
             {
