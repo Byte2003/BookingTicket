@@ -26,10 +26,19 @@
         flex-wrap: wrap;
         justify-content: space-evenly;
     }
+
+    .btn.btn-primary.point:hover {
+        box-shadow: inset 300px 0 0 0 var(--bs-light) !important;
+        color: goldenrod !important;
+    }
+
+    .btn-primary.point {
+        border-color:goldenrod;
+    }
 </style>
 
-<div class="container mt-5" style="min-height: 840px">
-    <h3 class="text-primary">Your Order</h3>
+<div class="container mt-5" style="min-height: 650px">
+    <h3 class="text-dark">Your Order</h3>
     <hr />
     <div class="row">
         <!-- Left column for ticket list -->
@@ -74,20 +83,23 @@
             <div class="form-group mt-2">
                 <label for="voucherCode">Voucher Code:</label>
                 <div class="input-group">
-                    <input type="text" class="form-control w-25" id="voucherCode">
+                    <input type="text" class="form-control" style="margin-right:30%" id="voucherCode">
                     <div class="input-group-append">
-                        <button id="applyVoucherBtn" class="btn btn-primary">Apply Voucher</button>
+                        <button id="applyVoucherBtn" class="btn btn-primary" style="margin-left:-120%">Apply Voucher</button>
                     </div>
                 </div>
             </div>
 
-            <button id="pay_paypal" class="btn btn-primary mt-3">Pay with PayPal</button>
-            <button id="pay_point" class="btn btn-primary mt-3">Pay by Point</button>
+            <button style="background-color:#013088" id="pay_paypal" class="btn btn-primary mt-3"><i class="bi bi-paypal"></i> Pay with PayPal</button>
+            <button style="background-color:goldenrod" id="pay_point" class="btn btn-primary point mt-3">Pay by Point</button>
         </div>
     </div>
 </div>
 
 @section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
     <script>
 
         $(document).ready(function () {
@@ -100,16 +112,19 @@
             $('#pay_point').click(function () {
                 var point = parseFloat(@ViewData["user_points"]);
                 var total = getCurrentTotal();
-                console.log(point + " " + total);
                 // Check if user's point is sufficient for payment
                 if (point / 1000 >= total) {
-                    // Proceed with point payment
-                    console.log('User has sufficient points. Proceed with point payment.');
+                    toastr.options = {
+                        "closeButton": true
+                    }
+                    toastr.error('User has sufficient points. Proceed with point payment.');
+
                     createForm("point");
-                    // Implement your logic for point payment here
                 } else {
-                    // Display alert informing user that points are insufficient
-                    alert('Your points are insufficient. Please choose another payment method.');
+                    toastr.options = {
+                        "closeButton": true
+                    }
+                    toastr.error('Your points are insufficient. Please choose another payment method.');
                 }
             });
 
@@ -122,7 +137,6 @@
 
             $('#applyVoucherBtn').click(function () {
                 var voucherCode = $('#voucherCode').val();
-                console.log(voucherCode);
                 // Make an AJAX request to get the value of the voucher
                 $.ajax({
                     url: '/Customer/Ticket/GetVoucherValue',
@@ -133,7 +147,11 @@
                         var voucherValue = response.data;
 
                         if (voucherValue === "") {
-                            alert('Invalid voucher code. Please enter a valid voucher code.');
+                            toastr.options = {
+                                "closeButton": true
+                            }
+                            toastr.error('Invalid voucher code. Please enter a valid voucher code.');
+                            //alert('Invalid voucher code. Please enter a valid voucher code.');
                             $('#voucherCode').val('');
                             return;
                         }
@@ -144,7 +162,13 @@
 
                         // Update the total amount display with the discounted total
                         $('#totalAmount').text('Total Amount: $' + discountedTotal.toFixed(2)); // Update the total amount display
-                        alert('Apply voucher successfully.');
+
+                        toastr.options = {
+                            "closeButton": true
+                        }
+                        toastr.success('Apply voucher successfully.');
+
+                        //alert('Apply voucher successfully.');
                     },
                     error: function (xhr, status, error) {
                         // Handle error if the AJAX request fails

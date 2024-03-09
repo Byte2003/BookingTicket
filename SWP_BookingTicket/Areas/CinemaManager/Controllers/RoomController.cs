@@ -50,6 +50,8 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
             {
                 _unitOfWork.Room.Add(room);
                 _unitOfWork.Save();
+                TempData["msg"] = "Create Room successfully.";
+
             }
             return RedirectToAction("Index");
         }
@@ -81,6 +83,8 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
             {
                 _unitOfWork.Room.Update(room);
                 _unitOfWork.Save();
+                TempData["msg"] = "Update Room successfully.";
+
             }
             return RedirectToAction("Index");
         }

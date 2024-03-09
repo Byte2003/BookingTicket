@@ -216,7 +216,7 @@
             $.ajax({
                 url: url,
                 method: 'GET',
-                 : function (response) {
+                success: function (response) {
                     console.log(response.data);
                     var resultContainer = $('.search-result .list-group');
                     resultContainer.empty(); // Clear previous search results

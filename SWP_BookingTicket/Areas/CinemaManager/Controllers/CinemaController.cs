@@ -34,8 +34,10 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 			{
 				_unitOfWork.Cinema.Add(cinema);
 				_unitOfWork.Save();
-			}			
-			return RedirectToAction("Index");
+                TempData["msg"] = "Create Cinema successfully.";
+
+            }
+            return RedirectToAction("Index");
 		}
 		[HttpGet]
 		public async Task<IActionResult> Update(Guid cinema_id)
@@ -58,8 +60,10 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 			{
 				_unitOfWork.Cinema.Update(cinema);
 				_unitOfWork.Save();
-			}
-			return RedirectToAction("Index");
+                TempData["msg"] = "Update Cinema successfully.";
+
+            }
+            return RedirectToAction("Index");
 		}
 		#region API Calls
 		[HttpGet]

@@ -349,52 +349,60 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 
         public async Task<IActionResult> BookingConfirmation(string seatIDs, Guid showtime_id)
         {
-            string[] seatIDListString = seatIDs.Split(',');
-            List<Guid> seatIDList = new List<Guid>();
-            foreach (var s in seatIDListString)
+            try
             {
-                Guid sID = Guid.Parse(s);
-                seatIDList.Add(sID);
+
+                string[] seatIDListString = seatIDs.Split(',');
+                List<Guid> seatIDList = new List<Guid>();
+                foreach (var s in seatIDListString)
+                {
+                    Guid sID = Guid.Parse(s);
+                    seatIDList.Add(sID);
+                }
+
+                HandleLockAndUnlock(seatIDList, showtime_id, "pending");
+
+                var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(x => x.ShowtimeID == showtime_id, includeProperties: "Room");
+                var room = showtime.Room;
+                var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == showtime.MovieID);
+                var cinema = await _unitOfWork.Cinema.GetFirstOrDefaultAsync(u => u.CinemaID == room.CinemaID);
+
+                var claimsIdentity = (ClaimsIdentity)User.Identity;
+                var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+                var user = await _userManager.FindByIdAsync(claim.Value);
+
+
+                List<Seat> seatList = new List<Seat>();
+                List<string> seatsName = new List<string>();
+                var total = 0.0;
+                foreach (var seatID in seatIDList)
+                {
+                    var seat = await _unitOfWork.Seat.GetFirstOrDefaultAsync(u => u.SeatID == seatID);
+                    seatList.Add(seat);
+                    seatsName.Add(seat.SeatName);
+                    total += movie.Price;
+                }
+
+                var Time = $"Date: {showtime.Date.ToString()} Time: {showtime.Time}h{showtime.Minute}";
+                ViewData["Time"] = Time;
+                ViewData["Movie"] = movie.MovieName;
+                ViewData["Duration"] = movie.Duration.ToString();
+                ViewData["Seats"] = seatsName;
+                ViewData["Room"] = room.RoomName;
+                ViewData["Cinema"] = cinema.CinemaName;
+                ViewData["Price"] = movie.Price.ToString();
+                ViewData["Total"] = total.ToString();
+                ViewData["user_points"] = user.Point;
+
+                ViewData["seatIDs"] = seatIDs;
+                ViewData["showtime_id"] = showtime_id;
+
+                return View();
             }
-
-            HandleLockAndUnlock(seatIDList, showtime_id, "pending");
-
-            var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(x => x.ShowtimeID == showtime_id, includeProperties: "Room");
-            var room = showtime.Room;
-            var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == showtime.MovieID);
-            var cinema = await _unitOfWork.Cinema.GetFirstOrDefaultAsync(u => u.CinemaID == room.CinemaID);
-
-            var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(claim.Value);
-
-
-            List<Seat> seatList = new List<Seat>();
-            List<string> seatsName = new List<string>();
-            var total = 0.0;
-            foreach (var seatID in seatIDList)
+            catch (Exception ex)
             {
-                var seat = await _unitOfWork.Seat.GetFirstOrDefaultAsync(u => u.SeatID == seatID);
-                seatList.Add(seat);
-                seatsName.Add(seat.SeatName);
-                total += movie.Price;
+                return RedirectToAction("Index", "Home");
             }
-
-            var Time = $"Date: {showtime.Date.ToString()} Time: {showtime.Time}h{showtime.Minute}";
-            ViewData["Time"] = Time;
-            ViewData["Movie"] = movie.MovieName;
-            ViewData["Duration"] = movie.Duration.ToString();
-            ViewData["Seats"] = seatsName;
-            ViewData["Room"] = room.RoomName;
-            ViewData["Cinema"] = cinema.CinemaName;
-            ViewData["Price"] = movie.Price.ToString();
-            ViewData["Total"] = total.ToString();
-            ViewData["user_points"] = user.Point;
-
-            ViewData["seatIDs"] = seatIDs;
-            ViewData["showtime_id"] = showtime_id;
-
-            return View();
         }
 
 

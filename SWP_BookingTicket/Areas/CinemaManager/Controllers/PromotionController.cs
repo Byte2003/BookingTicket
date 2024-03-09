@@ -40,19 +40,15 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 		{
             if (ModelState.IsValid)
             {
-                // Kiểm tra xem tập tin hình ảnh đã được tải lên hay chưa
                 if (fileImage != null && fileImage.Length > 0)
                 {
-                    // Nếu có tập tin được tải lên, tiến hành tải lên và lưu trữ đường dẫn
                     promotion.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\promotion");
                 }
                 else
                 {
-                    // Nếu không có tập tin được tải lên, thiết lập ImageUrl thành null
                     promotion.ImageUrl = null;
                 }
 
-                // Tiến hành thêm promotion vào cơ sở dữ liệu
                 _unitOfWork.Promotion.Add(promotion);
                 _unitOfWork.Save();
             }
@@ -85,8 +81,8 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 			{
 				if (fileImage is not null)
 				{
-					_promotion.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\promotion");
-
+                    var old = _promotion.ImageUrl;
+					_promotion.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\promotion", old);
 				}
 					
 				_unitOfWork.Promotion.Update(_promotion);

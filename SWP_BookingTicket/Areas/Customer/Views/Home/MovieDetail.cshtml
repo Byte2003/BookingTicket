@@ -57,7 +57,7 @@
 
 </style>
 
-<div class="container py-5" >
+<div class="container py-5 bg-light">
     <div class="text-primary">
     </div>
     <hr />
@@ -72,16 +72,15 @@
             </div>
         </div>
         <div class="col-lg-7 pb-5">
-            <h3 class="font-weight-semi-bold">@Model.MovieName</h3>
+            <h3 class="font-weight-semi-bold">@Model.MovieName.ToUpper()</h3>
             <hr />
             <div class="d-flex flex-column">
-                <h3 class="font-weight-semi-bold mb-4">Price: @Model.Price$</h3>
                 <div class="information">
-                    <p>Director:  @Model.Director</p>
-                    <p>Actors : @Model.Actor</p>
-                    <p>Duration : @Model.Duration minutes</p>
-                    <p>Release Date: @Model.ReleaseDate</p>
-                    <p>Studio: @Model.Studio</p>
+                    <p><strong>Director:</strong>  @Model.Director</p>
+                    <p><strong>Actors:</strong> @Model.Actor</p>
+                    <p><strong>Duration:</strong> @Model.Duration minutes</p>
+                    <p><strong>Release Date:</strong> @Model.ReleaseDate</p>
+                    <p><strong>Studio:</strong> @Model.Studio</p>
                 </div>
             </div>
             <hr />
@@ -89,7 +88,7 @@
                 <a asp-controller="Ticket" asp-action="Index" asp-route-movie_id="@Model.MovieID" class="btn w-50 mx-2 my-4 text-white" style="height: 36px; background-color: #c61118">
                     <span>Book Now</span>
                 </a>
-                <a asp-controller="Home" asp-action="Index" class="btn btn-warning w-50 mx-2 my-4 text-white bi bi-house" style="height: 36px;">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-warning w-50 mx-2 my-4 text-dark bi bi-house" style="height: 36px;">
                     <span>Home</span>
                 </a>
 
@@ -128,10 +127,10 @@
             <div class="add-comment">
                 <h4>Add a Comment</h4>
 
-            <div class="form-group">
-                <textarea id="commentInput" class="form-control" rows="3" placeholder="Write your comment here..."></textarea>
-            </div>
-            <button id="postCommentBtn" class="btn btn-dark">Submit</button>
+                <div class="form-group">
+                    <textarea id="commentInput" class="form-control" rows="3" placeholder="Write your comment here..."></textarea>
+                </div>
+                <button id="postCommentBtn" class="btn btn-dark">Submit</button>
 
             </div>
         }
@@ -175,6 +174,9 @@
 </div>
 
 @section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
     <script>
         function loadComments(movieId) {
             $.ajax({
@@ -182,31 +184,27 @@
                 method: 'GET',
                 data: { movieId: movieId },
                 success: function (response) {
-                    var comments = response.data; // Access the comments array
-                    var currentUserId = response.user; // Access the current user's ID
+                    var comments = response.data;
+                    var currentUserId = response.user;
 
                     $('#commentsSection').empty();
-                    // Iterate over the comments array
                     comments.forEach(function (comment) {
                         var editIconHtml = '';
+                        var deleteIconHtml = '';
 
-                        // Check if the comment author's ID matches the current user's ID
                         if (comment.appUser.id === currentUserId) {
-                            // Show edit icon if the comment author's ID matches the current user's ID
                             editIconHtml = `<i class="fas fa-edit edit-comment-icon" data-comment-id="${comment.commentID}"></i>`;
                             deleteIconHtml = `<i class="fas fa-trash delete-comment-icon" data-comment-id="${comment.commentID}"></i>`;
                         }
 
-                        // Construct the HTML for the comment
                         var commentHtml = `
-                                                        <div class="comment">
-                                                            <div class="comment-body">
-                                                                <p class="comment-author">${comment.appUser.lastName} ${comment.appUser.firstName}</p>
-                                                                <p class="comment-text">${comment.content} <span class="text-success">${editIconHtml}</span> <span class="text-danger">${deleteIconHtml}</span></p>
-                                                            </div>
-                                                        </div>`;
+                         <div class="comment">
+                            <div class="comment-body">
+                                <p class="comment-author">${comment.appUser.lastName} ${comment.appUser.firstName}</p>
+                                <p class="comment-text">${comment.content} <span class="text-success">${editIconHtml}</span> <span class="text-danger">${deleteIconHtml}</span></p>
+                            </div>
+                        </div>`;
 
-                        // Append the comment HTML to the comments section
                         $('#commentsSection').append(commentHtml);
                     });
                 },
@@ -220,58 +218,63 @@
         $(document).on('click', '.edit-comment-icon', function () {
             var commentId = $(this).data('comment-id');
             var commentText = $(this).closest('.comment-body').find('.comment-text').text();
-            // Open a modal or inline editor to allow the user to modify the comment
             openEditCommentModal(commentId, commentText);
         });
 
         $(document).on('click', '.delete-comment-icon', function () {
             var commentId = $(this).data('comment-id');
             var commentText = $(this).closest('.comment-body').find('.comment-text').text();
-            // Open a modal or inline editor to allow the user to modify the comment
             openDeleteCommentModal(commentId, commentText);
         });
 
         function openEditCommentModal(commentId, commentText) {
             var movieId = '@Model.MovieID.ToString()';
-            // Assuming you have a Bootstrap modal with the id "editCommentModal"
             $('#editCommentModal').modal('show');
-            // Set the comment text in the modal textarea for editing
             $('#editCommentTextarea').val(commentText);
 
-            // Handle the save button click inside the modal
             $('#saveEditCommentBtn').off('click').on('click', function () {
                 var newText = $('#editCommentTextarea').val();
 
                 if (newText.trim() !== '') {
-                    // Send AJAX request to update the comment with the new text
                     $.ajax({
                         url: '../Comment/UpdateComment',
                         method: 'POST',
                         data: { commentId: commentId, newText: newText },
                         success: function () {
-                            // Close the modal after successful edit
                             $('#editCommentModal').modal('hide');
-                            // Reload comments after editing a comment
+                            toastr.options = {
+                                "closeButton": true
+                            }
+                            toastr.success('Comment edited successfully.');
                             loadComments(movieId);
                         },
                         error: function (xhr, status, error) {
-                            console.error('Error editing comment:', error);
+                            toastr.options = {
+                                "closeButton": true
+                            }
+                            toastr.error('Error editing comment:' + error);
+                            //console.error('Error editing comment:', error);
                         }
                     });
                 } else {
-                    // Send AJAX request to delete the comment
                     $.ajax({
                         url: '../Comment/DeleteComment',
                         method: 'POST',
                         data: { commentId: commentId },
                         success: function () {
-                            // Close the modal after successful deletion
                             $('#editCommentModal').modal('hide');
-                            // Reload comments after deleting a comment
+                            toastr.options = {
+                                "closeButton": true
+                            }
+                            toastr.success('Comment deleted successfully.');
                             loadComments(movieId);
                         },
                         error: function (xhr, status, error) {
-                            console.error('Error deleting comment:', error);
+                            toastr.options = {
+                                "closeButton": true
+                            }
+                            toastr.error('Error deleting comment:' + error);
+                            // console.error('Error deleting comment:', error);
                         }
                     });
                 }
@@ -280,22 +283,20 @@
 
         function openDeleteCommentModal(commentId, commentText) {
             var movieId = '@Model.MovieID.ToString()';
-            // Assuming you have a Bootstrap modal with the id "editCommentModal"
             $('#deleteCommentModal').modal('show');
-            // Set the comment text in the modal textarea for editing
             $('#deleteCommentTextarea').val(commentText);
 
-            // Handle the save button click inside the modal
             $('#saveDeleteCommentBtn').off('click').on('click', function () {
-                // Send AJAX request to delete the comment
                 $.ajax({
                     url: '../Comment/DeleteComment',
                     method: 'POST',
                     data: { commentId: commentId },
                     success: function () {
-                        // Close the modal after successful deletion
                         $('#deleteCommentModal').modal('hide');
-                        // Reload comments after deleting a comment
+                        toastr.options = {
+                            "closeButton": true
+                        }
+                        toastr.success('Comment deleted successfully.');
                         loadComments(movieId);
                     },
                     error: function (xhr, status, error) {
@@ -309,21 +310,21 @@
 
 
         $(document).ready(function () {
-            // Load comments when the page is ready
-            var movieId = '@Model.MovieID.ToString()'; // Assuming you have a property for MovieId in your Movie model
+            var movieId = '@Model.MovieID.ToString()';
             loadComments(movieId);
 
             function addComment(movieId, commentText) {
                 if (commentText.trim() !== '') {
-                    // Send AJAX request to add comment
                     $.ajax({
                         url: '../Comment/AddComment',
                         method: 'POST',
                         data: { movieId: movieId, text: commentText },
                         success: function () {
-                            // Reload comments after adding a new comment
                             loadComments(movieId);
-                            // Clear the input box
+                            toastr.options = {
+                                "closeButton": true
+                            }
+                            toastr.success('Comment added successfully.');
                             $('#commentInput').val('');
                         },
                         error: function (xhr, status, error) {
@@ -333,15 +334,13 @@
                 }
             }
 
-            // Event listener for clicking the submit button
             $('#postCommentBtn').click(function () {
                 var commentText = $('#commentInput').val();
                 addComment(movieId, commentText);
             });
 
-            // Event listener for pressing Enter in the comment input field
             $('#commentInput').keypress(function (event) {
-                if (event.which === 13) { // 13 is the key code for Enter
+                if (event.which === 13) { // Enter
                     var commentText = $('#commentInput').val();
                     addComment(movieId, commentText);
                 }
