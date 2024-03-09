@@ -3,6 +3,9 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
+using SWP_BookingTicket.Areas.Admin.Views.ViewModels;
+using SWP_BookingTicket.DataAccess.Data;
 using SWP_BookingTicket.DataAccess.Repositories;
 using SWP_BookingTicket.Models;
 using SWP_BookingTicket.Services;
@@ -17,11 +20,13 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
 		private readonly UserManager<AppUser> _userManager;
 		private readonly IEmailSender _emailSender;
 		private readonly IUnitOfWork _unitOfWork;
-        public DashboardController(UserManager<AppUser> userManager, IEmailSender emailSender, IUnitOfWork unitOfWork)
+		private readonly UploadImageService _uploadImageService;
+        public DashboardController(UserManager<AppUser> userManager, IEmailSender emailSender, IUnitOfWork unitOfWork, UploadImageService uploadImageService)
         {
            _userManager = userManager;
 			_emailSender = emailSender;
 			_unitOfWork = unitOfWork;
+			_uploadImageService = uploadImageService;
         }
 		[HttpGet]
 		public IActionResult UserAccount()
@@ -33,6 +38,42 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
         {
             return View();
         }
+		[HttpGet]
+		public IActionResult CreateManagerAccount()
+		{
+			return View();
+		}
+		[HttpPost]
+		public async Task<IActionResult> CreateManagerAccount(CinemaManagerVM model, IFormFile? file)
+		{
+            var cinemaManager = new AppUser
+            {
+                UserName =  model.CinemaManager.Email,
+                NormalizedUserName = model.CinemaManager.Email.ToUpper(),
+                Email = model.CinemaManager.Email,
+                NormalizedEmail = model.CinemaManager.Email.ToUpper(),
+                EmailConfirmed = true,
+                LockoutEnabled = false,
+                SecurityStamp = Guid.NewGuid().ToString(),
+                PhoneNumber = model.CinemaManager.PhoneNumber,
+                FirstName = model.CinemaManager.FirstName,
+                LastName = model.CinemaManager.LastName
+            };
+            var password = new PasswordHasher<AppUser>();
+            var hashed = password.HashPassword(cinemaManager, model.Password);
+            cinemaManager.PasswordHash = hashed;
+            if (file != null)
+			{
+				model.CinemaManager.Avatar = _uploadImageService.UploadImage(file, @"images\avatar");
+               
+			}
+             var result = await _userManager.CreateAsync(cinemaManager,model.Password);
+			if (result.Succeeded)
+			{
+				await _userManager.AddToRoleAsync(cinemaManager, "cinemaManager");
+			}
+            return RedirectToAction("ManagerAccount");
+		}
         [HttpGet]
 		public IActionResult Dashboard()
 		{
@@ -51,6 +92,43 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
             var managers = await _userManager.GetUsersInRoleAsync("cinemaManager");
             return Json(new { data = managers });
         }
+		[HttpGet]
+		public async Task<IActionResult> UpdateManagerAccount(Guid user_id)
+		{
+			var user = await _userManager.FindByIdAsync(user_id.ToString());
+			CinemaManagerVM cinemaManagerVM = new CinemaManagerVM
+			{
+				CinemaManager = user,
+			};
+			return View(cinemaManagerVM);
+		}
+		[HttpPost]
+		public async Task<IActionResult> UpdateManagerAccount(CinemaManagerVM model, IFormFile? file)
+		{
+			var _user = await _userManager.FindByIdAsync(model.CinemaManager.Id);
+			if (_user != null)
+			{
+				_user.UserName = model.CinemaManager.Email;
+				_user.PhoneNumber = model.CinemaManager.PhoneNumber;
+				_user.FirstName = model.CinemaManager.FirstName;
+				_user.LastName = model.CinemaManager.LastName;
+                var password = new PasswordHasher<AppUser>();
+                var hashed = password.HashPassword(_user, model.Password);
+                _user.PasswordHash = hashed;
+				_user.DOB = model.CinemaManager.DOB;
+				_user.Email = model.CinemaManager.Email;
+                if (file != null)
+                {
+                    _user.Avatar = _uploadImageService.UploadImage(file, @"images\avatar\", _user.Avatar);
+                }
+                var result = await _userManager.UpdateAsync(_user);
+                if (result.Succeeded)
+                {
+
+                }
+            }						
+            return RedirectToAction("ManagerAccount");
+        }
         [HttpPost]
 		public async Task<IActionResult> LockAccount(string user_id)
 		{
@@ -58,7 +136,7 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
 			if (user != null)
 			{
 				await _userManager.SetLockoutEnabledAsync(user, true);
-				await _userManager.SetLockoutEndDateAsync(user, DateTime.Now + TimeSpan.FromMinutes(5));
+				await _userManager.SetLockoutEndDateAsync(user, DateTime.Now + TimeSpan.FromDays(10000));
 				await _emailSender.SendEmailAsync(user.Email, "Lock Account", "Your account has been locked");
 				return Json(new { success = true, message = "Lock successfully!" });
 			}
@@ -70,7 +148,7 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
 			var user = await _userManager.FindByIdAsync(user_id);
 			if (user != null)
 			{
-				await _userManager.SetLockoutEndDateAsync(user, DateTime.Now - TimeSpan.FromMinutes(5));
+				await _userManager.SetLockoutEndDateAsync(user, DateTime.Now - TimeSpan.FromMinutes(10000));
 				await _emailSender.SendEmailAsync(user.Email, "Unlock Account", "Your account has been unlocked");
 				return Json(new { success = true, message = "UnLock successfully!" });
 			}

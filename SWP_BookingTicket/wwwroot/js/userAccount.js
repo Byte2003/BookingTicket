@@ -34,7 +34,7 @@ function loadDataTable() {
                             <a asp-area="Admin" onClick=LockAccount("/Admin/Dashboard/LockAccount?user_id=${data}")
                             class="btn btn-danger mx-2"><i class="bi bi-lock"></i>Lock</a>
                             <a asp-area="Admin" onClick=UnlockAccount("/Admin/Dashboard/UnlockAccount?user_id=${data}")
-                            class="btn btn-primary mx-2"><i class="bi bi-lock"></i>Unlock</a>
+                            class="btn btn-primary mx-2"><i class="bi bi-unlock-fill"></i>Unlock</a>
 					                          `
                 },
                 "width": "20%"
