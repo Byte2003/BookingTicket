@@ -6,7 +6,7 @@
     }
 </style>
 <div class="container mt-5" style="min-height:840px">
-    <h3 class="text-primary">Booking Your Ticket</h3>
+    <h3 class="text-dark">Booking Your Ticket</h3>
     <hr />
     <div class="row">
         <div class="col-md-8 border border-dark left-panel">
@@ -42,117 +42,111 @@
 </div>
 
 @section Scripts {
-    @{
-        <partial name="_ValidationScriptsPartial" />
+    <partial name="_ValidationScriptsPartial" />
 
-        <script type="text/javascript">
-            let movieID = "";
-            let days;
+    <script type="text/javascript">
+        let movieID = "";
+        let days;
 
-            function getDate(daysToAdd) {
-                var date = new Date();
-                date.setDate(date.getDate() + daysToAdd);
-                var year = date.getFullYear();
-                var month = String(date.getMonth() + 1).padStart(2, '0');
-                var day = String(date.getDate()).padStart(2, '0');
-                return day + '-' + month + '-' + year;
-            }
+        function getDate(daysToAdd) {
+            var date = new Date();
+            date.setDate(date.getDate() + daysToAdd);
+            var year = date.getFullYear();
+            var month = String(date.getMonth() + 1).padStart(2, '0');
+            var day = String(date.getDate()).padStart(2, '0');
+            return day + '-' + month + '-' + year;
+        }
 
-            // Function to create a card HTML for a given day
-            function createCard(day) {
-                return `
-                                    <div class="col-md-2">
-                                        <div class="btn btn-outline-secondary my-2 mx-1 days">
-                                            ${day}
-                                        </div>
-                                    </div>
-                                `;
-            }
+        // Function to create a card HTML for a given day
+        function createCard(day) {
+            return `
+                                            <div class="col-md-2">
+                                                <div class="btn btn-outline-secondary my-2 mx-1 days">
+                                                    ${day}
+                                                </div>
+                                            </div>
+                                        `;
+        }
 
-            // Function to generate cards for the next 8 days
-            function generateDayCards() {
-                var daysListDiv = document.getElementById('daysList');
-                if (daysListDiv) {
-                    var cardsHTML = '';
-                    for (var i = 0; i < 8; i++) {
-                        var day = getDate(i);
-                        var cardHTML = createCard(day);
-                        cardsHTML += cardHTML;
-                    }
-                    daysListDiv.innerHTML = cardsHTML;
+        // Function to generate cards for the next 8 days
+        function generateDayCards() {
+            var daysListDiv = document.getElementById('daysList');
+            if (daysListDiv) {
+                var cardsHTML = '';
+                for (var i = 0; i < 8; i++) {
+                    var day = getDate(i);
+                    var cardHTML = createCard(day);
+                    cardsHTML += cardHTML;
                 }
+                daysListDiv.innerHTML = cardsHTML;
             }
+        }
 
-            // Call the function to generate day cards on page load
-            window.onload = function () {
-                    generateDayCards();
-                $(".movie").click(function () {
-                    movieID = $(this).attr("data-movieID");
-                    $(".movie").removeClass("border border-4 border-info");
-                    $(this).addClass("border border-4 border-info");
-                    $(".showtime-list").text("");
-                    $(".address-list").text("");
-                    console.log(movieID);
-                });
+        // Call the function to generate day cards on page load
+        window.onload = function () {
+            generateDayCards();
+            $(".movie").click(function () {
+                movieID = $(this).attr("data-movieID");
+                $(".movie").removeClass("border border-4 border-info");
+                $(this).addClass("border border-4 border-info");
+                $(".showtime-list").text("");
+                $(".address-list").text("");
+            });
 
-                $(".days").click(function () {
-                    days = $(this).text();
-                    $.get(`/Customer/Ticket/GetShowtimeForAMovieWithinADay?movie_id=${movieID}&date=${days}`, (data, status) => {
-                        var showtimes = data.showtimes;
-                        var addresses = data.addresses;
-                        renderAddresses(addresses);
-                    }, "json");
+            $(".days").click(function () {
+                days = $(this).text();
+                $.get(`/Customer/Ticket/GetShowtimeForAMovieWithinADay?movie_id=${movieID}&date=${days}`, (data, status) => {
+                    var showtimes = data.showtimes;
+                    var addresses = data.addresses;
+                    renderAddresses(addresses);
+                }, "json");
 
-                });
+            });
 
-                $(document).on("click", ".address", function () {
-                    var address_text = $(this).text();
-                    $.get(`/Customer/Ticket/GetShowtimeForAMovieWithinADay?movie_id=${movieID}&date=${days}&address=${address_text}`, (data, status) => {
-                        var showtimeInfo = data.showtimesForAllCondition;
-                        console.log(data.showtimesForAllCondition);
-                        renderShowtimes(showtimeInfo);
-                    }, "json");
-                });
+            $(document).on("click", ".address", function () {
+                var address_text = $(this).text();
+                $.get(`/Customer/Ticket/GetShowtimeForAMovieWithinADay?movie_id=${movieID}&date=${days}&address=${address_text}`, (data, status) => {
+                    var showtimeInfo = data.showtimesForAllCondition;
+                    renderShowtimes(showtimeInfo);
+                }, "json");
+            });
 
-                $(document).on("click", ".showtime", function () {
-                    var showtimeID = $(this).attr("data-showtimeID");
-                    window.location.href = `/Customer/Ticket/ChooseSeat?showtime_id=${showtimeID}`;
-                });
-            };
+            $(document).on("click", ".showtime", function () {
+                var showtimeID = $(this).attr("data-showtimeID");
+                window.location.href = `/Customer/Ticket/ChooseSeat?showtime_id=${showtimeID}`;
+            });
+        };
 
-            function renderAddresses(addresses) {
-                var addressListDiv = document.querySelector('.address-list');
-                if (addressListDiv) {
-                    var addressesHTML = '';
-                    console.log(addresses.length);
-                    if (addresses.length > 0) {
-                        addresses.forEach(function (address) {
-                            var addressHTML = `<div class="btn btn-primary my-2 mx-1 address">${address}</div>`;
-                            addressesHTML += addressHTML;
-                        });
-                    } else {
-                        addressesHTML = "<p>No showtime available for this movie</p>";
-                    }
-                    addressListDiv.innerHTML = addressesHTML;
-                }
-            }
-
-            function renderShowtimes(showtime) {
-                var showtimeListDiv = document.querySelector('.showtime-list');
-                if (showtimeListDiv) {
-                    var showtimesHTML = '';
-                    showtime.forEach(function (showtime) {
-                        var showtimeHTML = `
-                                            <div class="btn btn-success my-2 mx-1 showtime" data-showtimeID="${showtime.showtimeID}">
-                                                <p>${showtime.name}</p>
-                                                ${showtime.time}:${showtime.minute}
-                                            </div>`;
-                        showtimesHTML += showtimeHTML;
+        function renderAddresses(addresses) {
+            var addressListDiv = document.querySelector('.address-list');
+            if (addressListDiv) {
+                var addressesHTML = '';
+                if (addresses.length > 0) {
+                    addresses.forEach(function (address) {
+                        var addressHTML = `<div class="btn btn-primary my-2 mx-1 address">${address}</div>`;
+                        addressesHTML += addressHTML;
                     });
-                    showtimeListDiv.innerHTML = showtimesHTML;
+                } else {
+                    addressesHTML = "<p>No showtime available for this movie</p>";
                 }
+                addressListDiv.innerHTML = addressesHTML;
             }
-        </script>
+        }
 
-    }
+        function renderShowtimes(showtime) {
+            var showtimeListDiv = document.querySelector('.showtime-list');
+            if (showtimeListDiv) {
+                var showtimesHTML = '';
+                showtime.forEach(function (showtime) {
+                    var showtimeHTML = `
+                                                    <div class="btn btn-success my-2 mx-1 showtime" data-showtimeID="${showtime.showtimeID}">
+                                                        <p>${showtime.name}</p>
+                                                        ${showtime.time}:${showtime.minute}
+                                                    </div>`;
+                    showtimesHTML += showtimeHTML;
+                });
+                showtimeListDiv.innerHTML = showtimesHTML;
+            }
+        }
+    </script>
 }

@@ -466,6 +466,9 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                     b.Property<Guid>("ShowtimeID")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("TicketStatus")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<double>("Total")
                         .HasColumnType("float");
 

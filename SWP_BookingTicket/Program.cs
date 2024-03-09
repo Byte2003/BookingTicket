@@ -86,6 +86,7 @@ var mailsetttings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailsetttings);
 builder.Services.AddTransient<IEmailSender, SendMailService>();
 builder.Services.AddScoped<IUnlockASeatService, UnlockASeatService>();
+builder.Services.AddScoped<ITicketService, TicketService>();
 // Initialize database
 builder.Services.AddScoped<DbInitialize>();
 // UnitOfWork 

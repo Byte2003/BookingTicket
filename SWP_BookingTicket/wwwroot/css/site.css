@@ -38,6 +38,7 @@ html {
 /*** Spinner End ***/
 
 .back-to-top {
+
     position: fixed;
     right: 30px;
     bottom: 30px;
@@ -165,7 +166,7 @@ html {
 
 .navbar-light .navbar-nav .nav-link:hover,
 .navbar-light .navbar-nav .nav-link.active {
-    color: var(--bs-primary) !important;
+    color: var(--bs-warning) !important;
 }
 
 .navbar-light .navbar-brand h1 {
@@ -186,6 +187,7 @@ html {
 }
 
 .navbar .dropdown-toggle::after {
+
     border: none;
     content: "\f107";
     font-family: "Font Awesome 5 Free";
@@ -209,8 +211,8 @@ html {
 }
 
 .dropdown .dropdown-menu a:hover {
-    background: var(--bs-primary);
-    color: var(--bs-white);
+    background: var(--bs-warning);
+    color: var(--bs-dark);
 }
 
 .navbar .nav-item:hover .dropdown-menu {
@@ -1233,7 +1235,7 @@ html {
 
 .footer .footer-item a:hover {
             letter-spacing: 2px;
-            color: var(--bs-primary);
+            color: var(--bs-warning);
 }
 
 /*** Footer End ***/
