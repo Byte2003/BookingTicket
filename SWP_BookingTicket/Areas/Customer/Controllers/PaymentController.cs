@@ -1,11 +1,13 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PayPal.Api;
 using SWP_BookingTicket.DataAccess.Repositories;
 using SWP_BookingTicket.Models;
 using SWP_BookingTicket.Models.ViewModels;
 using System.Security.Claims;
+using System.Threading.Channels;
 
 namespace SWP_BookingTicket.Areas.Customer.Controllers
 {
@@ -15,10 +17,97 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
     {
         private Payment payment;
         private readonly IUnitOfWork _unitOfWork;
+        private readonly UserManager<AppUser> _userManager;
 
-        public PaymentController(IUnitOfWork unitOfWork)
+
+        public PaymentController(IUnitOfWork unitOfWork, UserManager<AppUser> userManager)
         {
             _unitOfWork = unitOfWork;
+            _userManager = userManager;
+        }
+
+
+        public async Task<IActionResult> PurchasePointsAsync(string points, string amount, string Cancel = null)
+        {
+
+            try
+            {
+                APIContext apiContext = PaypalConfiguration.GetAPIContext();
+
+                if (!string.IsNullOrEmpty(Cancel))
+                {
+                    // Cancel msg
+                    TempData["error"] = "You payment has been cancelled.";
+                    return RedirectToAction("Index", "Wallet");
+                }
+
+                string payerId = HttpContext.Request.Query["PayerID"].ToString();
+                if (string.IsNullOrEmpty(payerId))
+                {
+                    var requestUrl = HttpContext.Request.Scheme + "://" + HttpContext.Request.Host + HttpContext.Request.Path;
+                    var guid = Convert.ToString((new Random()).Next(100000));
+                    requestUrl = requestUrl + "?guid=" + guid;
+                    var createdPayment = CreatePayment(apiContext, requestUrl, points, amount);
+                    var links = createdPayment.links.GetEnumerator();
+                    string paypalRedirectUrl = "";
+                    while (links.MoveNext())
+                    {
+                        Links link = links.Current;
+                        if (link.rel.ToLower().Trim().Equals("approval_url"))
+                        {
+                            paypalRedirectUrl = link.href;
+                            break;
+                        }
+                    }
+
+                    // Store payment ID in session
+                    HttpContext.Session.SetString("payment", createdPayment.id);
+                    HttpContext.Session.SetString("points", points);
+                    HttpContext.Session.SetString("amount", amount);
+                    return Redirect(paypalRedirectUrl);
+                }
+                else
+                {
+                    var guid = Request.Query["guid"];
+                    var paymentId = HttpContext.Session.GetString("payment");
+
+                    // Execute payment
+                    var executedPayment = ExecutePayment(apiContext, payerId, paymentId);
+                    if (executedPayment.state.ToLower() != "approved")
+                    {
+                        // Fail msg
+                        TempData["error"] = "You payment is not approved.";
+
+                        return RedirectToAction("Index", "Wallet");
+                    }
+                }
+            }
+            catch (PayPal.PaymentsException ex)
+            {
+                TempData["error"] = "An error occurs while excuting your payment." + ex.Message;
+
+                return RedirectToAction("Index", "Wallet");
+            }
+            catch (Exception ex)
+            {
+                TempData["error"] = "An error occurs while excuting your payment." + ex.Message;
+                return RedirectToAction("Index", "Wallet");
+            }
+
+
+            var claimsIdentity = (ClaimsIdentity)User.Identity;
+            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(claim.Value);
+            user.Point += decimal.Parse(HttpContext.Session.GetString("points"));
+            _unitOfWork.Save();
+
+            // Success msg with new points
+            TempData["msg"] = "You payment completed successfully." + HttpContext.Session.GetString("points") + " points has been added to your account.";
+            HttpContext.Session.Remove("payment");
+            HttpContext.Session.Remove("points");
+            HttpContext.Session.Remove("amount");
+
+            return RedirectToAction("Index", "Wallet");
         }
 
         public async Task<IActionResult> AuthorizePaymentAsync(string seatIDs, Guid showtime_id, string? voucherCode, string? status = null, string Cancel = null)
@@ -220,5 +309,60 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 
             return payment.Create(aPIContext);
         }
+
+        private Payment CreatePayment(APIContext aPIContext, string redirectUrl, string points, string amount_purchase)
+        {
+            var itemList = new ItemList()
+            {
+                items = new List<Item>(),
+            };
+
+            itemList.items.Add(new Item()
+            {
+                name = points + " Points",
+                currency = "USD",
+                price = amount_purchase,
+                quantity = "1",
+                sku = "sku"
+            });
+
+            var payer = new Payer()
+            {
+                payment_method = "paypal",
+            };
+
+            var redirUrl = new RedirectUrls()
+            {
+                cancel_url = redirectUrl + "&Cancel=true",
+                return_url = redirectUrl
+            };
+
+            var amount = new Amount()
+            {
+                currency = "USD",
+                total = amount_purchase,
+            };
+
+            var transactionList = new List<Transaction>();
+
+            transactionList.Add(new Transaction()
+            {
+                description = "Purchase Points",
+                invoice_number = Guid.NewGuid().ToString(),
+                amount = amount,
+                item_list = itemList
+            });
+
+            this.payment = new Payment()
+            {
+                intent = "sale",
+                payer = payer,
+                transactions = transactionList,
+                redirect_urls = redirUrl,
+            };
+
+            return this.payment.Create(aPIContext);
+        }
+
     }
 }

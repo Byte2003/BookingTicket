@@ -137,7 +137,8 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
                     string extension = Path.GetExtension(fileImage.FileName);
                     if (extension.Equals(".jpg", StringComparison.OrdinalIgnoreCase) || extension.Equals(".png", StringComparison.OrdinalIgnoreCase))
                     {
-                        _movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie");
+                        var old = _movie.ImageUrl;
+                        _movie.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\movie", old);
                     }
                     else
                     {
@@ -152,7 +153,8 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
                     string extension = Path.GetExtension(fileVideo.FileName);
                     if (extension.Equals(".mp4", StringComparison.OrdinalIgnoreCase) || extension.Equals(".mov", StringComparison.OrdinalIgnoreCase))
                     {
-                        _movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie");
+                        var old = _movie.VideoUrl;
+                        _movie.VideoUrl = _uploadImageService.UploadImage(fileVideo, @"images\movie", old);
                     }
                     else
                     {

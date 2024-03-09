@@ -60,7 +60,7 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
                         {
                             ViewData["room_id"] = room.RoomID;
                             ViewData["room_name"] = room.RoomName;
-                            ViewData["errorMsg"] = "No more seats available in the room.";
+                            TempData["error"] = "No more seats available in the room.";
                             return View(seat);
                         }
                     }
@@ -82,7 +82,7 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
                         {
                             ViewData["room_id"] = room.RoomID;
                             ViewData["room_name"] = room.RoomName;
-                            ViewData["errorMsg"] = "No more seats available in the room.";
+                            TempData["error"] = "No more seats available in the room.";
                             return View(seat);
                         }
                         else
@@ -103,6 +103,8 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
             }
             ViewData["room_id"] = seat.Room.RoomID;
             ViewData["room_name"] = seat.Room.RoomName;
+            TempData["msg"] = "Create successfully.";
+
             return View(seat);
         }
 
@@ -129,6 +131,7 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
                 _unitOfWork.Seat.Update(seat);
                 _unitOfWork.Save();
                 // ViewData["msg"] = "Seat updated successfully.";
+                TempData["msg"] = "Update successfully.";
                 return RedirectToAction("RoomSeats", new { room_id = seat.RoomID });
             }
             return View(seat);
