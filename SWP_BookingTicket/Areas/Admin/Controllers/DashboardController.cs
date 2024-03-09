@@ -163,10 +163,30 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
 		}
 
 		[HttpGet]
-		public async Task<IActionResult> GetTrendingMovies()
+		public async Task<IActionResult> GetTrendingMovies(string? filter = null)
 		{
-            DateTime tenDaysAgo = DateTime.Now.AddDays(-10);
-            var tickets = await _unitOfWork.Ticket.GetAllAsync(u => u.BookedDate > tenDaysAgo);
+			IEnumerable<Ticket> tickets = null ;
+			if (filter != null)
+			{
+				switch (filter)
+				{
+					case "Day":
+                        tickets = await _unitOfWork.Ticket.GetAllAsync(u => u.BookedDate.Value.Date == DateTime.Now.Date );
+                        break;
+                    case "Month":
+                        tickets = await _unitOfWork.Ticket.GetAllAsync(u => u.BookedDate.Value.Month == DateTime.Now.Month && u.BookedDate.Value.Year == DateTime.Now.Year);
+                        break;
+                    case "Year":
+                        tickets = await _unitOfWork.Ticket.GetAllAsync(u => u.BookedDate.Value.Year == DateTime.Now.Year);
+						break;
+					case "History":
+                        tickets = await _unitOfWork.Ticket.GetAllAsync();
+						break;
+                }
+            } else
+			{
+				tickets = await _unitOfWork.Ticket.GetAllAsync();
+			}
 			var movies = await _unitOfWork.Movie.GetAllAsync();
 			var showtimes = await _unitOfWork.Showtime.GetAllAsync();
 

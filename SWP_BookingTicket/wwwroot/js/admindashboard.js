@@ -84,14 +84,14 @@
                     labels: sortedDates,
                     datasets: [{
                         label: "Tickets",
-                        data: sortedDates.map(date => dailyTickets[date]) ,
+                        data: sortedDates.map(date => dailyTickets[date]),
                         backgroundColor: "#0d6efd",
                         borderColor: "#0d6efd",
                         borderWidth: 1,
                         fill: false,
                         barPercentage: 0.4
 
-                    }                       
+                    }
                     ]
                 },
                 options: {
@@ -109,7 +109,7 @@
         }
     });
     //Revenue per day
-    
+
     $.ajax({
         url: "/Admin/Dashboard/GetAllTickets",
         method: "GET",
@@ -140,7 +140,7 @@
                         borderColor: "#0d6efd",
                         borderWidth: 1,
                         fill: false,
-                        barPercentage : 0.4
+                        barPercentage: 0.4
                     }
                     ]
                 },
@@ -178,27 +178,6 @@
     //    }
     //});
     $.ajax({
-        url: "/Admin/Dashboard/GetTrendingMovies",
-        method: "GET",
-        success: function (response) {
-            var trendingMovies = $(".trending-movies");
-            console.log(response);
-            trendingMovies.empty(); // Clear existing content
-            $.each(response.data, function (index, data) {
-                var movieName = data.movie; 
-                var totalRevenue = data.totalRevenue;                
-                trendingMovies.append(`<div class="d-flex align-items-center border-bottom py-3">                  
-                    <div class="w-100 ms-3">
-                        <div class="d-flex w-100 justify-content-between">
-                            <h5 class="mb-0">${movieName}</h5>
-                            <h6 class="pb-0">Revenue: $${totalRevenue}</h6>
-                        </div>
-                    </div>
-                </div >`);
-            });
-        }
-    })
-    $.ajax({
         url: "/Admin/Dashboard/GetTotalCustomers",
         method: "GET",
         success: function (response) {
@@ -222,6 +201,64 @@
             totalCustomers.html(response.totalRevenue.toString());
         }
     })
+    $.ajax({
+        url: `/Admin/Dashboard/GetTrendingMovies`,
+        method: "GET",
+        success: function (response) {
+            var trendingMovies = $(".trending-movies");
+            console.log(response);
+            trendingMovies.empty(); // Clear existing content
+            $.each(response.data, function (index, data) {
+                var movieName = data.movie;
+                var totalRevenue = data.totalRevenue;
+                trendingMovies.append(`<div class="d-flex align-items-center border-bottom py-3">                  
+                    <div class="w-100 ms-3">
+                        <div class="d-flex w-100 justify-content-between">
+                            <h5 class="mb-0">${movieName}</h5>
+                            <h6 class="pb-0">Revenue: $${totalRevenue}</h6>
+                        </div>
+                    </div>
+                </div >`);
+            });
+        }
+    })
+    $(document).ready(function () {
+        // Attach change event handler to the select element
+        $("#floatingSelect").change(function () {
+            // Get the selected option value
+            var selectedOption = $(this).val();
+            $.ajax({
+                url: `/Admin/Dashboard/GetTrendingMovies?filter=${selectedOption}`,
+                method: "GET",
+                success: function (response) {
+                    var trendingMovies = $(".trending-movies");
+                    console.log(response.data.length);
+                    if (response.data.length == 0) {
+                        trendingMovies.empty();
+                        trendingMovies.append(`<div class="text-primary">
+                                            No tickets sold for this time period.
+                                             </div>`);
+                    } else {                      
+                        trendingMovies.empty(); // Clear existing content
+                        $.each(response.data, function (index, data) {
+                            var movieName = data.movie;
+                            var totalRevenue = data.totalRevenue;
+                            trendingMovies.append(`<div class="d-flex align-items-center border-bottom py-3">                  
+                            <div class="w-100 ms-3">
+                                <div class="d-flex w-100 justify-content-between">
+                                    <h5 class="mb-0">${movieName}</h5>
+                                    <h6 class="pb-0">Revenue: $${totalRevenue}</h6>
+                                </div>
+                            </div>
+                        </div >`);
+                        });
+                    }
+
+                }
+            })
+
+        });
+    });
     // Single Bar Chart
     var ctx4 = $("#bar-chart").get(0).getContext("2d");
     var myChart4 = new Chart(ctx4, {
@@ -288,7 +325,7 @@
         options: {
             responsive: true
         }
-    });    
+    });
 
 })(jQuery);
 
