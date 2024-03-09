@@ -28,19 +28,30 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
 		{
 			return View();
 		}
-		[HttpGet]
+        [HttpGet]
+        public IActionResult ManagerAccount()
+        {
+            return View();
+        }
+        [HttpGet]
 		public IActionResult Dashboard()
 		{
 			return View();
 		}
 		#region API Calls 
 		[HttpGet]
-		public async Task<IActionResult> GetAllUsers()
+		public async Task<IActionResult> GetCustomerUsers()
 		{
 			var customerUsers = await _userManager.GetUsersInRoleAsync("customer");							  
 			return Json(new {data = customerUsers});
 		}
-		[HttpPost]
+        [HttpGet]
+        public async Task<IActionResult> GetManagerUsers()
+        {
+            var managers = await _userManager.GetUsersInRoleAsync("cinemaManager");
+            return Json(new { data = managers });
+        }
+        [HttpPost]
 		public async Task<IActionResult> LockAccount(string user_id)
 		{
 			var user = await _userManager.FindByIdAsync(user_id);

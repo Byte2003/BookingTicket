@@ -4,9 +4,9 @@ $(document).ready(function () {
     loadDataTable();
 })
 function loadDataTable() {
-    dataTable = $('#userAccountTable').DataTable({
+    dataTable = $('#managerAccountTable').DataTable({
         "ajax": {
-            "url": "/Admin/Dashboard/GetCustomerUsers"
+            "url": "/Admin/Dashboard/GetManagerUsers"
         },
         "columns": [
             { "data": "id", "width": "5%" },

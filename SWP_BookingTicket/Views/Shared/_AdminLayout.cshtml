@@ -41,6 +41,7 @@
                 <div  class="navbar-nav w-100">
                     <a id="dashboard" asp-area="Admin" asp-controller="Dashboard" asp-action="Dashboard" class="nav-item nav-link "><i class="fa fa-tachometer-alt me-2"></i>Dashboard</a>
                     <a id="user" asp-area="Admin" asp-controller="Dashboard" asp-action="UserAccount" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Users</a>
+                    <a id="manager" asp-area="Admin" asp-controller="Dashboard" asp-action="ManagerAccount" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Managers</a>
                     <a id="back" asp-area="Customer" asp-controller="Home" asp-action="Index" class="nav-item nav-link"><i class="fa fa-chart-bar me-2"></i>Back to Home</a>
                 </div>
             </nav>
@@ -78,6 +79,9 @@
         } 
         if (currentUrl === '/Admin/Dashboard/UserAccount') {
             $("#user").addClass("active");
+        }
+        if (currentUrl === '/Admin/Dashboard/ManagerAccount') {
+            $("#manager").addClass("active");
         }
     })
 </script>
