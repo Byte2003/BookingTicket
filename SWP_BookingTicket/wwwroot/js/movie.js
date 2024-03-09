@@ -34,7 +34,7 @@ function loadDataTable() {
                 "data": "movieID",
                 "render": function (data) {
                     return `<td class="button-column">
-                                <a href="/CinemaManager/Movie/Update?movie_id=${data}" class="btn btn-primary mx-1">
+                                <a href="/CinemaManager/Movie/Update?movie_id=${data}" class="btn btn-dark mx-1">
                                     <i class="bi bi-pencil-square"></i> Edit
                                 </a>
                                 <a onClick=Delete('/CinemaManager/Movie/Delete?movie_id=${data}') class="btn btn-danger mx-1">

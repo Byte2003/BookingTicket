@@ -1,9 +1,10 @@
 ﻿@model IEnumerable<Cinema>
-<div class="container my-5">
-    <h3 class="text-primary">Manage Cinema</h3>
+
+<div class="container my-5" >
+    <h3 class="text-dark">Manage Cinema</h3>
     <hr />
     <div class="d-flex w-100 my-5 justify-content-end">
-        <a class="btn btn-success mx-2" asp-controller="Cinema" asp-action="Create">
+        <a class="btn btn-dark mx-2" asp-controller="Cinema" asp-action="Create">
             <i class="bi bi-plus-circle"></i>
             Add new Cinema
         </a>
@@ -20,8 +21,8 @@
         </thead>
     </table>
     <div class="d-flex w-100 my-5 justify-content-start error-actions">
-        <a class="btn btn-outline-success mx-2" asp-area="Customer" asp-controller="Home" asp-action="Index">
-            <i class="bi bi-plus-circle-dotted"></i> Back to Home
+        <a class="btn btn-warning mx-2" asp-area="Customer" asp-controller="Home" asp-action="Index">
+            <i class="bi bi-house"></i> Back to Home
         </a>
     </div>
 </div>
