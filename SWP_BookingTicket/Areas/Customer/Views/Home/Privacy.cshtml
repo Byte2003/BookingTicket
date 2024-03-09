@@ -1,641 +1,370 @@
-﻿
-<!--[if lt IE 7 ]> <html lang="vi" id="top" class="no-js ie6"> <![endif]-->
-<!--[if IE 7 ]>    <html lang="vi" id="top" class="no-js ie7"> <![endif]-->
-<!--[if IE 8 ]>    <html lang="vi" id="top" class="no-js ie8"> <![endif]-->
-<!--[if IE 9 ]>    <html lang="vi" id="top" class="no-js ie9"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!-->
-
-
-    <link rel="stylesheet" type="text/css" href="https://www.cgv.vn/skin/frontend/base/default/aw_blog/css/style.css" media="all" />
-    <script type="text/javascript" src="https://www.cgv.vn/js/prototype/prototype.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/lib/jquery/jquery-1.10.2.min.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/lib/jquery/noconflict.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/lib/ccard.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/prototype/validation.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/scriptaculous/builder.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/scriptaculous/effects.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/scriptaculous/dragdrop.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/scriptaculous/controls.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/scriptaculous/slider.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/varien/js.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/varien/form.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/mage/translate.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/mage/cookies.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/js/google/ga.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/lib/modernizr.custom.min.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/lib/selectivizr.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/lib/matchMedia.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/lib/matchMedia.addListener.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/lib/enquire.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/cgv.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/app.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/lib/jquery.cycle2.min.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/lib/jquery.cycle2.swipe.min.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/lib/jquery.cycle2.carousel.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/slideshow.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/lib/imagesloaded.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/enterprise/js/scripts.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/minicart.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/jquery.colorbox.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/default/js/swiper-bundle.min.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/enterprise/js/enterprise/catalogevent.js"></script>
-    <script type="text/javascript" src="https://www.cgv.vn/skin/frontend/cgv/enterprise/js/enterprise/wishlist.js"></script>
-    <link rel="stylesheet" href="//fonts.googleapis.com/css?family=Raleway:300,400,500,700,600" />
-    <link href="https://www.cgv.vn/default/newsoffer/rss/index/store_id/1/" title="Tin Khuyến Mãi Và Ưu Đãi Hấp Dẫn Tại CGV Cinemas Việt Nam" rel="alternate" type="application/rss+xml" />
-    <!--[if  (lte IE 8) & (!IEMobile)]>
-    <link rel="stylesheet" type="text/css" href="https://www.cgv.vn/skin/frontend/cgv/default/css/styles-ie8.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="https://www.cgv.vn/skin/frontend/cgv/enterprise/css/enterprise-ie8.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="https://www.cgv.vn/skin/frontend/cgv/default/css/madisonisland-ie8.css" media="all" />
-    <![endif]-->
-    <!--[if (gte IE 9) | (IEMobile)]><!-->
-    <link rel="stylesheet" type="text/css" href="https://www.cgv.vn/skin/frontend/cgv/enterprise/css/enterprise.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="https://www.cgv.vn/skin/frontend/cgv/default/css/swiper-bundle.min.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="https://www.cgv.vn/skin/frontend/cgv/default/css/styles.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="https://www.cgv.vn/skin/frontend/cgv/default/css/colorbox.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="https://www.cgv.vn/skin/frontend/cgv/default/css/madisonisland.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="https://www.cgv.vn/skin/frontend/cgv/default/css/g-erp-cgv.css" media="all" />
-    <link rel="stylesheet" type="text/css" href="https://www.cgv.vn/skin/frontend/cgv/default/css/custom-cgv.css" media="all" />
-    <!--<![endif]-->
-    <script type="text/javascript">
-        //<![CDATA[
-        Mage.Cookies.path = '/';
-        Mage.Cookies.domain = '.cgv.vn';
-        //]]>
-    </script>
-    <meta name="viewport" content="initial-scale=1.0, width=device-width" />
-    <script type="text/javascript">
-        //<![CDATA[
-        optionalZipCountries = ["HK", "IE", "MO", "PA"];
-        //]]>
-    </script>
-    <script type="text/javascript">
-        //<![CDATA[
-        var Translator = new Translate({
-            "HTML tags are not allowed": "kh\u00f4ng ch\u1ea5p nh\u1eadn th\u1ebb HTML",
-            "Please select an option.": "Ph\u1ea3i ch\u1ecdn m\u1ed9t gi\u00e1 tr\u1ecb.",
-            "This is a required field.": "Ph\u1ea3i nh\u1eadp th\u00f4ng tin.",
-            "Please enter a valid email address. For example johndoe@domain.com.": "Vui l\u00f2ng nh\u1eadp \u0111\u00fang \u0111\u1ecba ch\u1ec9 email. V\u00ed d\u1ee5: johndoe@domain.com",
-            "Please enter 6 or more characters without leading or trailing spaces.": "Vui l\u00f2ng nh\u1eadp 6 k\u00fd t\u1ef1 tr\u1edf l\u00ean, kh\u00f4ng kho\u1ea3ng tr\u1eafng ho\u1eb7c d\u1ea5u c\u00e1ch d\u1eabn",
-            "Please make sure your passwords match.": "Vui l\u00f2ng \u0111\u1ea3m b\u1ea3o m\u1eadt kh\u1ea9u ph\u00f9 h\u1ee3p.",
-            "Please select one of the above options.": "Ph\u1ea3i ch\u1ecdn m\u1ed9t gi\u00e1 tr\u1ecb.",
-            "Please select one of the options.": "Ph\u1ea3i ch\u1ecdn m\u1ed9t gi\u00e1 tr\u1ecb.",
-            "This date is a required value.": "Ph\u1ea3i nh\u1eadp th\u00f4ng tin.",
-            "Please enter a valid full date": "Vui l\u00f2ng nh\u1eadp \u0111\u00fang \u0111\u1ecbnh d\u1ea1ng ng\u00e0y sinh",
-            "Complete": "Ho\u00e0n T\u1ea5t",
-            "Please specify shipping method.": "B\u1ea1n ph\u1ea3i ch\u1ecdn ph\u01b0\u01a1ng th\u1ee9c thanh to\u00e1n.",
-            "Please specify payment method.": "B\u1ea1n ph\u1ea3i ch\u1ecdn ph\u01b0\u01a1ng th\u1ee9c thanh to\u00e1n.",
-            "Add to Cart": "\u0110\u1eb7t mua",
-            "In Stock": "C\u00f2n h\u00e0ng",
-            "Out of Stock": "H\u1ebft h\u00e0ng",
-            "Save": "L\u01b0u l\u1ea1i",
-            "Cancel": "H\u1ee7y",
-            "Add to Wishlist": "L\u01b0u l\u1ea1i"
-        });
-        //]]>
-    </script>
-    
-    <!-- Google Tag Manager -->
-    <script>
-        (function (w, d, s, l, i) {
-            w[l] = w[l] || [];
-            w[l].push({
-                'gtm.start': new Date().getTime(),
-                event: 'gtm.js'
-            });
-            var f = d.getElementsByTagName(s)[0]
-                , j = d.createElement(s)
-                , dl = l != 'dataLayer' ? '&l=' + l : '';
-            j.async = true;
-            j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
-            f.parentNode.insertBefore(j, f);
-        }
-        )(window, document, 'script', 'dataLayer', 'GTM-MSDTZ2C');
-    </script>
-    <!-- End Google Tag Manager -->
-    <!-- Viet tracking -->
-    <script src='//cdnt.netcoresmartech.com/smartechclient.js'></script>
-    <script>
-        smartech('create', 'ADGMOT35CHFLVDHBJNIG50K96A9NS1B3N9HRR3983R33HRONTL6G');
-        smartech('register', 'd072e0b5f30e44990b34dec62fde4fe1');
-        smartech('identify', '');
-        smartech('dispatch', 'Page Browse', {
-            'url': "https://www.cgv.vn/default/cgv-membership"
-        });
-    </script>
-    <!-- The core Firebase JS SDK is always required and must be listed first -->
-    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/8.2.1/firebase-messaging.js"></script>
-
-<div class=" cms-page-view cms-cgv-membership">
-    <!-- Google Tag Manager (noscript) -->
-    <noscript>
-        <iframe src="https://www.googletagmanager.com/ns.html?id=GTM-MSDTZ2C" height="0" width="0" style="display:none;visibility:hidden"></iframe>
-    </noscript>
-    <!-- End Google Tag Manager (noscript) -->
-    <div class="mtw_banner_left">
-        <div class="content-banner">
-            <a href="https://www.cgv.vn/default/kung-fu-panda-4.html" target="_blank">
-                <ul>
-                    
-                </ul>
-            </a>
-            <a class="load-popup-banners cboxElements" href="https://www.cgv.vn/default/avatar.html" target="_blank"></a>
-        </div>
+﻿<div class="container py-5">
+    <div class="text-primary">
     </div>
-    <div class="mtw_banner_right">
-        <div class="content-banner">
-            <a href="https://www.cgv.vn/default/kung-fu-panda-4.html" target="_blank">
-                <ul>
-                    
-                </ul>
-            </a>
-            <a class="load-popup-banners cboxElements" href="https://www.cgv.vn/default/avatar.html" target="_blank"></a>
-        </div>
-    </div>
-    <script type="text/javascript">
-        // <![CDATA[
-        $j(window).ready(function () {
-            var wsize = ($j(window).width());
-            if (wsize >= 771) {
-                var adjlsize = (wsize / 2) - 635;
-                var adjrsize = (wsize / 2) - 635;
-                $j('.mtw_banner_left').css({
-                    "left": adjlsize + 'px'
-                });
-                $j('.mtw_banner_right').css({
-                    "right": adjrsize + 'px'
-                });
-            }
-        });
-        // ]]>
-    </script>
-    <!-- BEGIN GOOGLE ANALYTICS CODE -->
-    <script type="text/javascript">
-        //<![CDATA[
-        var _gaq = _gaq || [];
-
-        _gaq.push(['_setAccount', '55803327']);
-
-        _gaq.push(['_trackPageview']);
-
-        (function () {
-            var ga = document.createElement('script');
-            ga.type = 'text/javascript';
-            ga.async = true;
-            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
-            var s = document.getElementsByTagName('script')[0];
-            s.parentNode.insertBefore(ga, s);
-        }
-        )();
-        //]]>
-    </script>
-    <!-- END GOOGLE ANALYTICS CODE -->
-    <div class="wrapper" style="height: 100vh">
-        <noscript>
-            <div class="global-site-notice noscript">
-                <div class="notice-inner">
-                    <p>
-                        <strong>JavaScript seems to be disabled in your browser.</strong>
-                        <br />You must have JavaScript enabled in your browser to utilize the functionality of this website.
-                    </p>
-                </div>
-            </div>
-        </noscript>
-        <div class="page">
-            <div class="mtw_banner_top">
-                <div class="mtw_banner_top_content">
-                    <script type='text/javascript'>
-                                                    <!--//<![CDATA[
-                        var m3_u = (location.protocol == 'https:' ? 'https://advserver.cgv.vn/www/delivery/ajs.php' : 'http://advserver.cgv.vn/www/delivery/ajs.php');
-                        var m3_r = Math.floor(Math.random() * 99999999999);
-                        if (!document.MAX_used)
-                            document.MAX_used = ',';
-                        document.write("<scr" + "ipt type='text/javascript' src='" + m3_u);
-                        document.write("?zoneid=2");
-                        document.write('&amp;cb=' + m3_r);
-                        if (document.MAX_used != ',')
-                            document.write("&amp;exclude=" + document.MAX_used);
-                        document.write(document.charset ? '&amp;charset=' + document.charset : (document.characterSet ? '&amp;charset=' + document.characterSet : ''));
-                        document.write("&amp;loc=" + escape(window.location));
-                        if (document.referrer)
-                            document.write("&amp;referer=" + escape(document.referrer));
-                        if (document.context)
-                            document.write("&context=" + escape(document.context));
-                        if (document.mmm_fo)
-                            document.write("&amp;mmm_fo=1");
-                        document.write("'><\/scr" + "ipt>");
-                        //]]>-->
-                    </script>
-                    <noscript>
-                        <a href='http://advserver.cgv.vn/www/delivery/ck.php?n=a42fb781&amp;cb=INSERT_RANDOM_NUMBER_HERE' target='_blank'>
-                            <img src='http://advserver.cgv.vn/www/delivery/avw.php?zoneid=2&amp;cb=INSERT_RANDOM_NUMBER_HERE&amp;n=a42fb781' border='0' alt='' />
-                        </a>
-                    </noscript>
-                </div>
-                <script type='text/javascript'>
-                                            <!--//<![CDATA[
-                    $j(document).ready(function () {
-                        $j(".mtw_banner_top_content").mouseup(function () {
-                            var src_data = $j(this).find('embed').attr('flashvars');
-                            if (src_data) {
-                                var url = src_data.split('=');
-                                window.open(decodeURIComponent(url[2]), '_blank');
-                            }
-                        });
-                    });
-                    //]]>-->
-                </script>
-            </div>
-          
-           
-            <div class="main-container col1-layout">
-                
-                <div class="main">
-                    <div class="col-main">
-                        <div class="std">
-                            <div class="cms-diem-thuong">
-                                <br />
-                                <br />
-                                <div class="cms-content-diem-thuong">
-                                    <div class="col-left-content-member">
-                                        <br />
-                                    <br />
-                                        <div>
-                                            <tr>
-                                                <a href="#customer-points">
-                                                    CHƯƠNG TRINH ĐIỂM THƯỞNG
-                                                </a>                                                
-                                            </tr>
-                                            <br />
-                                            <br />
-                                            <tr>
-                                                <a href="#birthday-gift">
-                                                    QUÀ TẶNG SINH NHẬT<br>
-                                                </a>
-                                            </tr>
-                                            <br/>
-                                            <tr>
-                                                <a href="#cgv-vip">
-                                                    CẤP ĐỘ THÀNH VIEN<br>
-                                                </a>
-                                            </tr>
-                                            <br />
-                                            <tr class="membership-manager-account">
-                                                <a href="#customer-manager">
-                                                    QUẢN LÝ TÀI KHOẢN<br>
-                                                </a>
-                                            </tr>
-                                            <br />
-                                            <tr>
-                                                <a href="#cgv-support">
-                                                    BẠN CẦN HỖ TRỢ<br>
-                                                </a>
-                                            </tr>
-                                            <br />
-                                            <!-- <li><a href="#cgv-faq">F.A.Q</a></li> -->
-                                        </div>
-                                    </div>
-                                    <div class="col-right-content-member">
-                                        <div class="cgv-membership">
-                                            
-                                            <div class="lyt-history-content" id="customer-points">
-                                                <div class="outer">
-                                                    <div class="inner">
-                                                        <div class="lyt-heading">CHƯƠNG TRÌNH ĐIỂM THƯỞNG</div>
-                                                        <div class="lyt-details-content">
-                                                            <p>
-                                                                Chương trình bao gồm 4 đối tượng thành viên <strong>U22 | Member |</strong>
-                                                                , với những quyền lợi và mức ưu đãi khác nhau. Mỗi khi thực hiện giao dịch tại hệ thống rạp, bạn sẽ nhận được một số điểm thưởng tương ứng với cấp độ thành viên:
-                                                            </p>
-                                                            <table border="0" style="width: 100%;">
-                                                                <tbody>
-                                                                    <tr>
-                                                                        <th style="width: 31%;">Điểm thưởng</th>
-                                                                        <th style="width: 23%;">U22 | Member</th>
-                                                                        <th style="width: 23%;">VIP</th>
-                                                                        <th style="width: 23%;">VVIP</th>
-                                                                    </tr>
-                                                                    <tr class="odd">
-                                                                        <td>
-                                                                            <strong>Tại Quầy Vé;</strong>
-                                                                        </td>
-                                                                        <td>
-                                                                            <strong>5%</strong>
-                                                                        </td>
-                                                                        <td>
-                                                                            <strong>7%</strong>
-                                                                        </td>
-                                                                        <td>
-                                                                            <strong>10%</strong>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>VD: 100.000 VND</td>
-                                                                        <td>5 Điểm</td>
-                                                                        <td>7 Điểm</td>
-                                                                        <td>10 Điểm</td>
-                                                                    </tr>
-                                                                    <tr class="odd">
-                                                                        <td>
-                                                                            <strong>Quầy Bắp Nước</strong>
-                                                                        </td>
-                                                                        <td>
-                                                                            <strong>3%</strong>
-                                                                        </td>
-                                                                        <td>
-                                                                            <strong>4%</strong>
-                                                                        </td>
-                                                                        <td>
-                                                                            <strong>5%</strong>
-                                                                        </td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td>VD: 100.000 VND</td>
-                                                                        <td>3 Điểm</td>
-                                                                        <td>4 Điểm</td>
-                                                                        <td>5 Điểm</td>
-                                                                    </tr>
-                                                                </tbody>
-                                                            </table>
-                                                            <p>
-                                                                <strong>1 điểm = 1.000 VND</strong>
-                                                                , có giá trị như tiền mặt, được dùng để mua vé xem phim, thức uống/ combo tương ứng và đổi voucher ưu đãi trên Reward. Ví dụ: Với giao dịch mua vé giá 100.000 VND bạn có thể:
-                                                            </p>
-                                                            <p>- Thanh toán 80.000 VND + 20 điểm thưởng</p>
-                                                            <p>- Thanh toán với 10.000 VND + 90 điểm thưởng</p>
-                                                            <p>
-                                                                <strong>Cách làm tròn điểm thưởng:</strong>
-                                                            </p>
-                                                            <p>- Từ 0.1 đến 0.4: làm tròn xuống (Ví dụ: 3.2 điểm sẽ được tích vào tài khoản 3 điểm)</p>
-                                                            <p>- Từ 0.5 đến 0.9: làm tròn lên (Ví dụ: 3.6 điểm sẽ được tích vào tài khoản 4 điểm)</p>
-                                                            <p>
-                                                                <strong>Lưu &yacute;:</strong>
-                                                            </p>
-                                                            <p>1. Điểm thưởng có thời hạn sử dụng là 01 năm. Ví dụ: Điểm của bạn được nhận vào 08:00 ngày 05/01/2024 sẽ hết hạn sử dụng vào lúc 07:59:59 ngày 05/01/2025.</p>
-                                                            <p>2. Điểm thưởng có giá trị sử dụng tại tất cả các rạp trên toàn quốc.</p>
-                                                            <p>3. Sau khi dịch vụ được Cinema Hub hoàn thành, điểm thưởng sẽ được ghi nhận vào tài khoản của bạn vào 8:00 sáng ngày tiếp theo. Ví dụ: suất chiếu của bạn diễn ra vào ngày 05/01/2024, điểm thưởng sẽ được ghi nhận vào tài khoản của bạn vào 8:00 sáng ngày 06/01/2024.</p>
-                                                            <p>4. KHÔNG tích lũy chi tiêu/điểm thưởng đối với các giao dịch đã áp dụng các chương trình giảm giá/khuyến mãi và đối tác tổ chức.</p>
-                                                            <p>5. KHÔNG tích lũy chi tiêu/điểm thưởng đối với các giao dịch:</p>
-                                                            <p>- Mua/sử dụng voucher</p>
-                                                            <p>- Mua thẻ quà tặng và eGift</p>
-                                                            <p>- Mua vé/ F&B bằng thẻ membership</p>
-                                                            <p>- Giao dịch có hình thức thanh toán 100% bằng điểm thưởng.</p>
-                                                            <p>6. Thành viên được tích lũy điểm/chi tiêu cho tối đa 10 giao dịch/ngày.</p>
-                                                            <p>7. Bạn có thể dễ dàng kiểm tra điểm thưởng của mình trên Website hoặc Ứng dụng trên điện thoại (Mobile App).</p>
-                                                            <p>8. Điểm thưởng tối thiểu được sử dụng cho mỗi giao dịch là 20 điểm trở lên.</p>
-                                                            <p>9. Thành viên khi thanh toán trực tuyến trên Website/APP, trong 1 giao dịch, điểm thưởng chỉ được sử dụng thanh toán tối đa 90% giá trị đơn hàng.</p>
-                                                            <p>10. Khi thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trực tiếp tại rạp, khách hàng vui lòng xuất trình tài khoản thành viên (Thẻ cứng hoặc tài khoản online trên Ứng dụng) và Giấy tờ tùy thân hoặc giấy tờ khác có thể hiện ngày tháng năm sinh (Bản gốc hoặc ảnh chụp) cho nhân viên rạp để tiến hành xác thực chính chủ tài khoản thành viên. Nhân viên rạp có quyền từ chối yêu cầu của khách hàng nếu khách hàng không cung cấp được tài khoản thành viên và/hoặc giấy tờ quy định tại đây hoặc các thông tin Khách Hàng cung cấp không trùng khớp với nhau. Việc thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trên website và/hoặc ứng dụng trên điện thoại luôn được mặc định là được sử dụng bởi chính chủ tài khoản thành viên. Khách Hàng có nghĩa vụ bảo mật tài khoản Thành Viên của mình. Cinema Hub sẽ không giải quyết bất kỳ khiếu nại nào liên quan đến điểm thưởng nếu giao dịch sử dụng điểm thưởng đó được thực hiện trực tuyến.     
-                                                            </p>
-                                                            <p>Cinema Hub sẽ không hoàn và/hoặc giải quyết đối với điểm thưởng đã được sử dụng nếu Khách Hàng không chứng minh được Khách Hàng không phải là người sử dụng điểm thưởng và là quyết định cuối cùng.</p>
-                                                            <p>11. Khi mua vé online và thanh toán bằng các hình thức điểm, coupon, voucher, thẻ Premium card, member, thẻ quà tặng, hệ thống sẽ yêu cầu bạn nhập mật mã thanh toán
-                                                        </div>
-                                                        <!-- .lyt-details-content -->
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="lyt-reg-content" id="birthday-gift">
-                                                <div class="outer">
-                                                    <div class="inner">
-                                                        <div class="lyt-heading">
-                                                            <strong>QUÀ TẶNG SINH NHẬT</strong>
-                                                        </div>
-                                                        <div class="lyt-details-content">
-                                                            <p>Chính sách quà tặng sinh nhật cho từng hạng thành viên:</p>
-                                                            <p>- Thân Thiết & U22: 01 Birthday Combo</p>
-                                                            <p>- VIP: 01 Birthday Combo + 01 Vé Xem Phim 2D/3D</p>
-                                                            <p>- VVIP: Birthday Combo + 02 Vé Xem Phim 2D/3D</p>
-                                                            <p>Lưu ý: Vào sinh nhật lần thứ 23, thành viên U22 sẽ nhận thêm 01 vé xem phim 2D/3D bên cạnh Birthday Combo.</p>
-                                                            <p>(*) Birthday Combo = 1 Bắp Ngọt size 44oz + 2 Nước size 22oz</p>
-                                                            <p>Khi đến rạp đổi quà, khách hàng vui lòng xuất trình tài khoản thành viên (Thẻ cứng hoặc tài khoản online trên Ứng dụng) và Giấy tờ tùy thân hoặc giấy tờ khác có thể hiện ngày tháng năm sinh (Bản gốc hoặc ảnh chụp) cho nhân viên rạp để tiến hành xác thực chính chủ tài khoản thành viên. Nhân viên rạp có quyền từ chối yêu cầu đổi quà sinh nhật nếu khách hàng không cung cấp được tài khoản thành viên và/hoặc giấy tờ quy định tại đây hoặc các thông tin Khách Hàng cung cấp không trùng khớp với nhau.</p>
-                                                            <p>Điều Kiện và Điều Khoản</p>
-                                                            <p>1. Để nhận quà sinh nhật, thành viên phải có ít nhất 01 giao dịch ghi nhận tích lũy chi tiêu (1) trong vòng 12 tháng gần nhất. (*) Không bao gồm các giao dịch phát sinh trong tháng sinh nhật năm trước đó của khách hàng. (2). Nếu chưa thỏa điều kiện, khách hàng có thể thực hiện 01 giao dịch mới ngay trong tháng sinh nhật và nhận quà sau đó 02 ngày kể từ khi tích lũy chi tiêu được ghi nhận (3), với điều kiện thời điểm đó vẫn còn nằm trong tháng sinh nhật (4).</p>
-                                                            <p>Lưu ý:</p>
-                                                            <p>(1) Giao dịch ghi nhận tích lũy chi tiêu là các giao dịch mua vé/bắp nước trên Web/App hoặc tại rạp chiếu phim có xuất trình thẻ thành viên để tích điểm; KHÔNG tích lũy chi tiêu đối với các giao dịch đã áp dụng ưu đãi giảm giá từ các chương trình khuyến mãi do CGV hoặc đối tác tổ chức.</p>
-                                                            <p>KHÔNG tích lũy chi tiêu/điểm thưởng đối với các giao dịch: (a) Mua/sử dụng voucher; (b) Mua thẻ quà tặng; (c) Mua vé/ F&B bằng thẻ, thẻ membership và thẻ Premium; (d) Giao dịch có hình thức thanh toán 100% bằng điểm thưởng.</p>
-                                                            <p>(2) Ví dụ: Nếu bạn thực hiện 01 giao dịch ghi nhận tích lũy chi tiêu vào tháng 07/2024 và có sinh nhật nằm trong khoảng thời gian từ tháng 07/2024 tới tháng 06/2025, bạn sẽ nhận quà sinh nhật trong tháng sinh nhật sắp tới của mình.</p>
-                                                            <p>(3) Tích lũy chi tiêu của bạn sẽ được ghi nhận cho tài khoản trong cùng ngày diễn ra giao dịch và được hiển thị trên tài khoản thành viên tại web/app vào 6:00 sáng ngày hôm sau.</p>
-                                                            <p>(4) (Trường hợp bạn có sinh nhật trong tháng 07)</p>
-                                                            <p>Ví dụ:</p>
-                                                            <p>- Thực hiện 01 giao dịch ghi nhận tích lũy chi tiêu vào ngày 29/07. Bạn sẽ được nhận quà sinh nhật vào ngày 31/07;</p>
-                                                            <p>- Thực hiện 01 giao dịch ghi nhận tích lũy chi tiêu vào ngày 30/07. Bạn sẽ KHÔNG được nhận quà sinh nhật (Do thời điểm sau đó 02 ngày là 01/08).</p>
-                                                            <p>- Thực hiện 01 giao dịch đặt vé vào ngày 29/07 cho suất chiếu kết thúc vào ngày 30/07 Bạn sẽ KHÔNG được nhật quà sinh nhận Do sau 02 ngày kể từ thời điểm tích lũy chi tiêu được ghi nhận (30/07) là 01/08).</p>
-                                                            <p>2. Thời hạn nhận và sử dụng quà sinh nhật:</p>
-                                                            <p>- Thời hạn nhận quà: Thành viên đủ điều kiện sẽ nhận quà sinh nhật trong vòng 03 ngày đầu tiên của tháng sinh nhật. Để kiểm tra quà sinh nhật, bạn vui lòng truy cập mục “COUPON” trên app sau khi đăng nhập tài khoản online (Nếu không dùng ứng dụng, thành viên vui lòng mang theo thẻ cứng & CCCD đến rạp và yêu cầu nhân viên hỗ trợ kiểm tra và đổi quà sinh nhật.)</p>
-                                                            <p>- Thời hạn sử dụng: Coupon quà sinh nhật chỉ có giá trị sử dụng trong tháng sinh nhật (Sau khi qua tháng mới, coupon sẽ tự động mất đi). Nếu coupon sinh nhật của bạn là vé xem phim, bạn có thể sử dụng để đặt các suất chiếu diễn ra ở tháng kế tiếp, với điều kiện tại thời điểm đặt vé vẫn còn nằm trong tháng sinh nhật.</p>
-                                                            <p>3. Khi nhận quà sinh nhật, bạn vui lòng xuất trình: (1) CMND/CCCD và (2) Thẻ cứng thành viên/Ứng dụng đã đăng nhập tài khoản để đối soát. Thông tin ngày tháng năm sinh trên CMND/CCCD của khách hàng phải trùng khớp với thông tin được sử dụng để đăng ký tài khoản thành viên. Nếu 2 thông tin này không khớp nhau, nhân viên có quyền từ chối trao quà sinh nhật cho khách hàng.</p>
-                                                            <p>4. Để thay đổi thông tin ngày tháng năm sinh của tài khoản thành viên, khách hàng vui lòng mang theo CCCD và ghé rạp gần nhất để được hỗ trợ. (Lưu ý: Mỗi tài khoản chỉ được yêu cầu thay đổi ngày tháng năm sinh tối đa 3 lần.)</p>
-                                                            <p>5. Thành viên mới sẽ bắt đầu nhận quà sinh nhật sau 72 giờ kể từ ngày đăng ký thành viên & có phát sinh giao dịch ghi nhận tích lũy chi tiêu trước thời điểm nhận quà 02 ngày, với điều kiện thời gian nhận quà vẫn còn trong tháng sinh nhật.</p>
-                                                            <p>6. Quà sinh nhật không có giá trị quy đổi thành tiền mặt hoặc hoàn trả lại tiền thừa.</p>
-                                                            <p>7. Sau khi đổi quà sinh nhật tại quầy, khách hàng không được yêu cầu hoàn/hủy/nhận lại coupon quà sinh nhật.</p>
-                                                            <p>8. 01 Birthday Combo bao gồm: 01 Bắp Ngọt size 44oz và 02 Nước ngọt size 22oz, chỉ áp dụng trực tiếp tại quầy. Khi có nhu cầu đổi vị, bạn vui lòng thanh toán thêm khoản phụ thu.</p>
-                                                            <p>9. Khách hàng VVIP vui lòng sử dụng cả 02 coupon vé xem phim trong phần quà tặng sinh nhật khi thực hiện giao dịch (không áp dụng tách lẻ vé cho nhiều giao dịch).</p>
-                                                            <p>10. Mỗi vé xem phim trong combo quà sinh nhật tương đương với 01 vé 2D/3D hàng ghế thường hoặc VIP tại phòng chiếu thường, KHÔNG áp dụng cho các phòng chiếu định dạng đặc biệt (4DX, ULTRA 4DX, IMAX, GOLD GLASS, SWEETBOX, STARIUM, L’AMOUR, PREMIUM, SCREENX, CINE & FORÊT, CINE & LIVING ROOM).</p>
-                                                            <p>11. Vé xem phim trong combo quà sinh nhật được áp dụng cho tất cả các ngày trong tuần bao gồm Lễ/ Tết, KHÔNG áp dụng cho các suất chiếu sớm Sneak Show & Early Release.</p>
-                                                            <p>12. Quá trình phục vụ đổi quà sinh nhật hàng ngày cho khách hàng tại rạp có thể tạm dừng trước thời hạn và không báo trước do phụ thuộc vào số lượng quà tặng thực tế còn lại trong ngày của mỗi rạp.</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="lyt-history-content" id="cgv-vip">
-                                                <div class="outer">
-                                                    <div class="inner">
-                                                        <div class="lyt-heading">CẤP ĐỘ THÀNH VIÊN</div>
-                                                        <div class="lyt-details-content accordion">
-                                                            <h3 id="member-u22">THÀNH VIÊN U22</h3>
-                                                            <div class="member-u22">
-                                                                <p>Thành viên U22 bao gồm tất cả thành viên nhỏ hơn 23 tuổi trong năm hiện tại. Trong năm 2024, thành viên U22 là thành viên có năm sinh từ 2002 trở về sau và nhận được các ưu đãi sau:</p>
-                                                                <p>Quà tặng sinh nhật: 01 Birthday Combo (01 bắp & 02 nước) miễn phí vào tháng sinh nhật và 01 vé 2D/3D miễn phí vào sinh nhật lần thứ 23, vé miễn phí có hạn sử dụng trong tháng sinh nhật.</p>
-                                                                <p>- Chương trình tích lũy điểm thưởng để giảm giá những lần mua sau: Tích lũy điểm 5% giá trị giao dịch tại quầy vé và 3% giá trị giao dịch tại quầy bắp nước.</p>
-                                                                <p>- Cơ hội tham gia những chương trình đặc biệt khác chỉ áp dụng cho thành viên U22.</p>
-                                                                <p>
-                                                                    - Đặc biệt, từ ngày 18/01/2024, tất cả khách hàng từ 23 tuổi trở xuống (bao gồm cả thành viên U22) sẽ nhận được giá vé đặc quyền chỉ từ 50.000 VND, giá bắp nước chỉ từ 78.000 VND.                                                                    .
-                                                                </p>
-                                                                <p>Để nâng cao bảo mật tài khoản thành viên:</p>
-                                                                <p>
-                                                                    Khi thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trực tiếp tại rạp, khách hàng vui lòng xuất trình tài khoản thành viên (Thẻ cứng hoặc tài khoản online trên Ứng dụng) và Giấy tờ tùy thân hoặc giấy tờ khác có thể hiện ngày tháng năm sinh (Bản gốc hoặc ảnh chụp) cho nhân viên rạp để tiến hành xác thực chính chủ tài khoản thành viên. Nhân viên rạp có quyền từ chối yêu cầu của khách hàng nếu khách hàng không cung cấp được tài khoản thành viên và/hoặc giấy tờ quy định tại đây hoặc các thông tin Khách Hàng cung cấp không trùng khớp với nhau. Việc thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trên website và/hoặc ứng dụng trên điện thoại luôn được mặc định là được sử dụng bởi chính chủ tài khoản thành viên. Khách Hàng có nghĩa vụ bảo mật tài khoản Thành Viên của mình. Cinema Hub sẽ không giải quyết bất kỳ khiếu nại nào liên quan đến điểm thưởng nếu giao dịch sử dụng điểm thưởng đó được thực hiện trực tuyến.
-                                                                    Cinema Hub sẽ không hoàn và/hoặc giải quyết đối với điểm thưởng đã được sử dụng nếu Khách Hàng không chứng minh được Khách Hàng không phải là người sử dụng điểm thưởng và quyết định của Cinema Hub là quyết định cuối cùng.
-                                                                </p>
-                                                                <p>
-                                                                    - Khi mua vé online và thanh toán bằng các hình thức điểm, coupon, voucher, thẻ Premium card, member, thẻ quà tặng, hệ thống sẽ yêu cầu bạn nhập mật mã thanh toán.
-                                                                </p>
-                                                            </div>
-                                                            <h3 id="member">THÀNH VIÊN THÂN THIẾT (MEMBER)</h3>
-                                                            <div class="member">
-                                                                <p>Thành viên thân thiết là thành viên từ 23 tuổi trở lên và nhận được các ưu đãi sau:</p>
-                                                                <p>- 01 Birthday Combo (01 bắp & 02 nước) miễn phí vào tháng sinh nhật.</p>
-                                                                <p>- Tích lũy điểm 5% giá trị giao dịch tại quầy vé và 3% giá trị giao dịch tại quầy bắp nước.</p>
-                                                                <p>- Cơ hội tham gia những chương trình đặc biệt khác chỉ áp dụng cho thành viên.</p>
-                                                                <p>Để nâng cao bảo mật tài khoản thành viên:</p>
-                                                                <p>
-                                                                    Khi thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trực tiếp tại rạp, khách hàng vui lòng xuất trình tài khoản thành viên (Thẻ cứng hoặc tài khoản online trên Ứng dụng) và Giấy tờ tùy thân hoặc giấy tờ khác có thể hiện ngày tháng năm sinh (Bản gốc hoặc ảnh chụp) cho nhân viên rạp để tiến hành xác thực chính chủ tài khoản thành viên. Nhân viên rạp có quyền từ chối yêu cầu của khách hàng nếu khách hàng không cung cấp được tài khoản thành viên và/hoặc giấy tờ quy định tại đây hoặc các thông tin Khách Hàng cung cấp không trùng khớp với nhau. Việc thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trên website và/hoặc ứng dụng trên điện thoại luôn được mặc định là được sử dụng bởi chính chủ tài khoản thành viên. Khách Hàng có nghĩa vụ bảo mật tài khoản Thành Viên của mình. Cinema Hub sẽ không giải quyết bất kỳ khiếu nại nào liên quan đến điểm thưởng nếu giao dịch sử dụng điểm thưởng đó được thực hiện trực tuyến.
-                                                                    Cinema Hub sẽ không hoàn và/hoặc giải quyết đối với điểm thưởng đã được sử dụng nếu Khách Hàng không chứng minh được Khách Hàng không phải là người sử dụng điểm thưởng và quyết định của Cinema Hub là quyết định cuối cùng.
-                                                                </p>
-                                                                <p>
-                                                                    - Khi mua vé online và thanh toán bằng các hình thức điểm, coupon, voucher, thẻ Premium card, member, thẻ quà tặng, hệ thống sẽ yêu cầu bạn nhập mật mã thanh toán.
-                                                                </p>
-                                                            </div>
-                                                            <h3 id="member-vip-2018">THÀNH VIÊN VIP 2024</h3>
-                                                            <div class="member-vip-2018">
-                                                                <p>- Thành viên VIP 2024 là thành viên có tổng chi tiêu trong 2023 từ 4,000,000 VNĐ đến 7,999,999 VNĐ.</p>
-                                                                <p>(*) Tổng chi tiêu năm 2023 được tính từ ngày 01/01/2023 đến 31/12/2023.</p>
-                                                                <p>
-                                                                    <strong>Quyền lợi của VIP 2024:</strong>
-                                                                </p>
-                                                                <p>- 08 vé 2D/3D miễn phí. (HSD: đến hết 31/12/2024 và dùng đặt vé cho các suất chiếu đến hết 04/01/2025).</p>
-                                                                <p>- Quà sinh nhật đặc biệt (01 Birthday Combo & 01 vé 2D/3D), áp dụng trong tháng sinh nhật.</p>
-                                                                <p>- Tỷ lệ tích điểm hấp dẫn: 7% tại quầy vé & 4% tại quầy bắp nước.</p>
-                                                                <p>
-                                                                    <strong>Ghi chú:</strong>
-                                                                </p>
-                                                                <p>- Cấp độ thành viên VIP và các ưu đãi kèm theo chỉ có giá trị đến hết 31/12/2024.</p>
-                                                                <p>- Khách hàng tận hưởng ưu đãi tại các rạp trên toàn quốc.</p>
-                                                                <p>- Các ưu đãi vé xem phim 2D/3D KHÔNG áp dụng tại các rạp chiếu phim đặc biệt: 4DX, ULTRA 4DX, IMAX, GOLD CLASS, SWEETBOX, STARIUM, L’AMOUR, PREMIUM, SCREENX, CINE & FORÊT, CINE & LIVING ROOM, cũng như KHÔNG áp dụng cho Suất Chiếu Sớm và Suất Chiếu Đặc Biệt.</p>
-                                                                <p>- Các ưu đãi vé xem phim 2D/3D không được áp dụng cho các ngày Lễ, Tết, ngoại trừ vé 2D/3D trong tháng sinh nhật.</p>
-                                                                <p>- Vì cấp độ thành viên mỗi năm được xét duyệt dựa trên tổng chi tiêu nên tổng chi tiêu tích lũy trong năm 2024 của bạn sẽ trở về 0 vào ngày 01/01/2025.</p>
-                                                                <p>Để nâng cao bảo mật tài khoản thành viên:</p>
-                                                                <p>
-                                                                    Khi thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trực tiếp tại rạp, khách hàng vui lòng xuất trình tài khoản thành viên (Thẻ cứng hoặc tài khoản online trên Ứng dụng) và Giấy tờ tùy thân hoặc giấy tờ khác có thể hiện ngày tháng năm sinh (Bản gốc hoặc ảnh chụp) cho nhân viên rạp để tiến hành xác thực chính chủ tài khoản thành viên. Nhân viên rạp có quyền từ chối yêu cầu của khách hàng nếu khách hàng không cung cấp được tài khoản thành viên và/hoặc giấy tờ quy định tại đây hoặc các thông tin Khách Hàng cung cấp không trùng khớp với nhau. Việc thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trên website và/hoặc ứng dụng trên điện thoại luôn được mặc định là được sử dụng bởi chính chủ tài khoản thành viên. Khách Hàng có nghĩa vụ bảo mật tài khoản Thành Viên của mình. Cinema Hub sẽ không giải quyết bất kỳ khiếu nại nào liên quan đến điểm thưởng nếu giao dịch sử dụng điểm thưởng đó được thực hiện trực tuyến.
-                                                                    Cinema Hub sẽ không hoàn và/hoặc giải quyết đối với điểm thưởng đã được sử dụng nếu Khách Hàng không chứng minh được Khách Hàng không phải là người sử dụng điểm thưởng và quyết định của Cinema Hub là quyết định cuối cùng.
-                                                                </p>
-                                                                <p>- Trường hợp thành toán trên website hoặc ứng dụng, bạn vui lòng chọn hình thức giảm giá coupon để sử dụng vé miễn phí.</p>
-                                                                <p>
-                                                                    - Khi mua vé online và thanh toán bằng các hình thức điểm, coupon, voucher, thẻ Premium card, member, thẻ quà tặng, hệ thống sẽ yêu cầu bạn nhập mật mã thanh toán.
-                                                                </p>
-                                                            </div>
-                                                            <h3 id="member-vvip-2018">THÀNH VIÊN VVIP 2024</h3>
-                                                            <div class="member-vvip-2018">
-                                                                <p>- Thành viên VVIP 2024 là thành viên có tổng chi tiêu trong 2023 từ 8,000,000 VNĐ trở lên.</p>
-                                                                <p>(*) Tổng chi tiêu năm 2023 được tính từ ngày 01/01/2023 đến 31/12/2023</p>
-                                                                <p>
-                                                                    <strong>Quyền lợi của VVIP 2024:</strong>
-                                                                </p>
-                                                                <p>- 10 vé 2D/3D miễn phí (HSD: đến hết 31/12/2024 và dùng đặt vé cho các suất chiếu đến hết 04/01/2025).</p>
-                                                                <p>- Quà sinh nhật đặc biệt (01 Birthday Combo & 02 vé 2D/3D), áp dụng trong tháng sinh nhật.</p>
-                                                                <p>- Tỷ lệ tích điểm sốc: 10% tại quầy vé & 5% tại quầy bắp nước.</p>
-                                                                <p>- 01 phần quà VVIP đặc biệt</p>
-                                                                <p>01 Movie Pass, áp dụng cho 01 vé xem phim bất kỳ tại các phòng chiếu đặc biệt GOLD CLASS, 4DX, IMAX, SCREENX, ULTRA 4DX, STARIUM, PREMIUM CINEMA, CINE & FORÊT, CINE & SUITE. Áp dụng cho cả Lễ Tết/Sneakshow/Early Release, có thể áp dụng trực tiếp tại quầy (hạn sử dụng đến hết 31/12/2024 và dùng đặt vé cho các suất chiếu đến hết 04/01/2025).</p>
-                                                                <p>Trong năm 2024, SAU KHI đạt cột mốc chi tiêu từ 8,000,000 VND, cứ mỗi 1,000,000 VND chi tiêu tiếp theo THÀNH VIÊN VVIP sẽ được tặng 01 vé 2D/3D miễn phí không giới hạn.</p>
-                                                                <p>Ví dụ: Trong năm 2024, thành viên VVIP khi tích lũy chi tiêu đến 9,000,000 VND sẽ được tặng 01 vé 2D/3D. Và khi tích lũy chi tiêu đến 10,000,000 VND sẽ được tặng tiếp 01 vé 2D/3D,...</p>
-                                                                <p>Lưu ý: Vé miễn phí sẽ được thêm vào tài khoản trong vòng 24h sau khi chi tiêu tích lũy được ghi nhận. Vé miễn phí có hạn sử dụng trong vòng 03 tháng kể từ ngày được thêm vào tài khoản thành viên.</p>
-                                                                <p>
-                                                                    <strong>Ghi chú:</strong>
-                                                                </p>
-                                                                <p>- Cấp độ thành viên VIP và các ưu đãi kèm theo chỉ có giá trị đến hết 31/12/2024.</p>
-                                                                <p>- Khách hàng tận hưởng ưu đãi tại các rạp trên toàn quốc.</p>
-                                                                <p>- Các ưu đãi vé xem phim 2D/3D KHÔNG áp dụng tại các rạp chiếu phim đặc biệt: 4DX, ULTRA 4DX, IMAX, GOLD CLASS, SWEETBOX, STARIUM, L’AMOUR, PREMIUM, SCREENX, CINE & FORÊT, CINE & LIVING ROOM, cũng như KHÔNG áp dụng cho Suất Chiếu Sớm và Suất Chiếu Đặc Biệt.</p>
-                                                                <p>- Các ưu đãi vé xem phim 2D/3D không được áp dụng cho các ngày Lễ, Tết, ngoại trừ vé 2D/3D trong tháng sinh nhật.</p>
-                                                                <p>- Vì cấp độ thành viên mỗi năm được xét duyệt dựa trên tổng chi tiêu nên tổng chi tiêu tích lũy trong năm 2024 của bạn sẽ trở về 0 vào ngày 01/01/2025.</p>
-                                                                <p>Để nâng cao bảo mật tài khoản thành viên:</p>
-                                                                <p>
-                                                                    Khi thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trực tiếp tại rạp, khách hàng vui lòng xuất trình tài khoản thành viên (Thẻ cứng hoặc tài khoản online trên Ứng dụng) và Giấy tờ tùy thân hoặc giấy tờ khác có thể hiện ngày tháng năm sinh (Bản gốc hoặc ảnh chụp) cho nhân viên rạp để tiến hành xác thực chính chủ tài khoản thành viên. Nhân viên rạp có quyền từ chối yêu cầu của khách hàng nếu khách hàng không cung cấp được tài khoản thành viên và/hoặc giấy tờ quy định tại đây hoặc các thông tin Khách Hàng cung cấp không trùng khớp với nhau. Việc thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trên website và/hoặc ứng dụng trên điện thoại luôn được mặc định là được sử dụng bởi chính chủ tài khoản thành viên. Khách Hàng có nghĩa vụ bảo mật tài khoản Thành Viên của mình. Cinema Hub sẽ không giải quyết bất kỳ khiếu nại nào liên quan đến điểm thưởng nếu giao dịch sử dụng điểm thưởng đó được thực hiện trực tuyến.
-                                                                    Cinema Hub sẽ không hoàn và/hoặc giải quyết đối với điểm thưởng đã được sử dụng nếu Khách Hàng không chứng minh được Khách Hàng không phải là người sử dụng điểm thưởng và quyết định của Cinema Hub là quyết định cuối cùng.
-                                                                </p>
-                                                                <p>- Trường hợp thành toán trên website hoặc ứng dụng, bạn vui lòng chọn hình thức giảm giá coupon để sử dụng vé miễn phí.</p>
-                                                                <p>
-                                                                    - Khi mua vé online và thanh toán bằng các hình thức điểm, coupon, voucher, thẻ Premium card, member, thẻ quà tặng, hệ thống sẽ yêu cầu bạn nhập mật mã thanh toán.
-                                                                </p>
-                                                                <p></p>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="lyt-history-content" id="customer-manager">
-                                                <div class="outer">
-                                                    <div class="inner">
-                                                        <div class="lyt-heading">QUẢN LÝ TÀI KHOẢN</div>
-                                                        <div class="lyt-details-content">
-                                                            <p>Đăng nhập vào Tài Khoản, bạn có thể dễ dàng quản lý tài khoản thành viên của mình như:</p>
-                                                            <p>- Kiểm tra và chỉnh sửa thông tin tài khoản.</p>
-                                                            <p>- Tra cứu điểm thưởng, tổng chi tiêu và lịch sử giao dịch.</p>
-                                                            <p>- Kiểm tra thẻ quà tặng, voucher hoặc coupon hiện có trong tài khoản thành viên.</p>
-                                                            <p>Mỗi tuần, các thành viên sẽ nhận được Bản tin điện ảnh qua email, cập nhật những tin tức mới nhất về phim ảnh, sự kiện và khuyến mãi. Cập nhật ngay email, điện thoại và địa chỉ của bạn để luôn nhận được những thông báo mới nhất từ Cinema Hub!</p>
-                                                        </div>
-                                                    </div>
-                                                    <!-- .lyt-details-content -->
-                                                </div>
-                                            </div>
-                                            <div class="lyt-history-content" id="cgv-support">
-                                                <div class="outer">
-                                                    <div class="inner">
-                                                        <div class="lyt-heading">BẠN CẦN HỖ TRỢ</div>
-                                                        <div class="lyt-details-content">
-                                                            <p>Với những ưu đãi hấp dẫn từ chương trình thành viên, Cinema Hub hy vọng sẽ mang đến cho bạn những trải nghiệm vượt xa điện ảnh.</p>
-                                                            <p>Mọi thắc mắc về chương trình thành viên bạn có thể liên hệ ngay Bộ phận hỗ trợ khách hàng của chúng tôi qua email hoidap@gmail.vn hoặc hotline 1900 6017 (8:00 – 22:00, từ thứ Hai đến Chủ Nhật - bao gồm các ngày Lễ, Tết).</p>
-                                                            <p>Cảm ơn bạn đã luôn đồng hành cùng Cinema Hub!</p>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <style>
-                                <!-- .cms-cgv-membership span {
-                                    float: left;
-                                    width: 100%;
-                                }
-
-                                --></style>
-                            <script src="/js/lib/jquery/jquery-ui.js" type="text/javascript"></script>
-                            <script type="text/javascript">
-                                // <![CDATA[
-                                $j(document).ready(function () {
-                                    $j(".cgv-membership").tabs();
-                                    $j(".accordion").accordion({
-                                        heightStyle: "content"
-                                    });
-
-                                    $j('.cgv-membership > ul li').click(function (event) {
-                                        if (!$j(event.target).is('a')) {
-                                            $j(this).find("a").trigger('click');
-                                        }
-                                    });
-
-                                    var url = window.location.href;
-                                    var arr = url.split('?');
-
-                                    $j('#' + arr[1]).click();
-
-                                    $j('.cgv-membership > ul').find('a').each(function () {
-                                        if ($j(this).attr('href') == '#' + $j('#' + arr[1]).parents('.lyt-history-content').attr('id')) {
-                                            $j(this).click();
-                                        }
-                                    });
-                                });
-                                // ]]>
-                            </script>
+    <hr />
+    <div class="row px-xl-5">
+        <div class="col-lg-5 pb-5">
+            <div id="product-carousel" class="d-flex justify-content-center align-items-center" data-ride="carousel">
+                <div class="">
+                    <br />
+                    <div class="active">
+                        <div class="menu-item" onclick="showContent(0)" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+                            <p>Chương trình điểm thưởng</p>
+                        </div>
+                        <div class="menu-item" onclick="showContent(1)" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+                            <p>Quà tặng sinh nhật</p>
+                        </div>
+                        <div class="menu-item" onclick="showContent(2)" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+                            <p>Cấp độ thành viên</p>
+                        </div>
+                        <div class="menu-item" onclick="showContent(3)" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+                            <p>Quản lý tài khoản</p>
+                        </div>
+                        <div class="menu-item" onclick="showContent(4)" onmouseover="zoomIn(this)" onmouseout="zoomOut(this)">
+                            <p>Bạn cần hỗ trợ</p>
                         </div>
                     </div>
                 </div>
             </div>
-           
-            <!-- Facebook Pixel Code -->
-            <script>
-                !function (f, b, e, v, n, t, s) {
-                    if (f.fbq)
-                        return;
-                    n = f.fbq = function () {
-                        n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
-                    }
-                        ;
-                    if (!f._fbq)
-                        f._fbq = n;
-                    n.push = n;
-                    n.loaded = !0;
-                    n.version = '2.0';
-                    n.queue = [];
-                    t = b.createElement(e);
-                    t.async = !0;
-                    t.src = v;
-                    s = b.getElementsByTagName(e)[0];
-                    s.parentNode.insertBefore(t, s)
-                }(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
-                fbq('init', '1644759925761845');
-                fbq('track', 'ViewContent');
-            </script>
-            <div id="wishlist_edit_action_container"></div>
+        </div>
+        <div class="col-lg-7 pb-5">
+
+            <div id="content">
+                <div id="content-box"></div>
+            </div>
+        </div>
+    </div>
+    <div class="row px-xl-5">
+        <div class="col">
+            <div class="tab-content">
+                <div class="tab-pane fade" id="tab-pane-2">
+                    <h4 class="mb-3">Additional Information</h4>
+                    <p>Eos no lorem eirmod diam diam, eos elitr et gubergren diam sea. Consetetur vero aliquyam invidunt duo dolores et duo sit. Vero diam ea vero et dolore rebum, dolor rebum eirmod consetetur invidunt sed sed et, lorem duo et eos elitr, sadipscing kasd ipsum rebum diam. Dolore diam stet rebum sed tempor kasd eirmod. Takimata kasd ipsum accusam sadipscing, eos dolores sit no ut diam consetetur duo justo est, sit sanctus diam tempor aliquyam eirmod nonumy rebum dolor accusam, ipsum kasd eos consetetur at sit rebum, diam kasd invidunt tempor lorem, ipsum lorem elitr sanctus eirmod takimata dolor ea invidunt.</p>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item px-0">
+                                    Sit erat duo lorem duo ea consetetur, et eirmod takimata.
+                                </li>
+                                <li class="list-group-item px-0">
+                                    Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
+                                </li>
+                                <li class="list-group-item px-0">
+                                    Duo amet accusam eirmod nonumy stet et et stet eirmod.
+                                </li>
+                                <li class="list-group-item px-0">
+                                    Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item px-0">
+                                    Sit erat duo lorem duo ea consetetur, et eirmod takimata.
+                                </li>
+                                <li class="list-group-item px-0">
+                                    Amet kasd gubergren sit sanctus et lorem eos sadipscing at.
+                                </li>
+                                <li class="list-group-item px-0">
+                                    Duo amet accusam eirmod nonumy stet et et stet eirmod.
+                                </li>
+                                <li class="list-group-item px-0">
+                                    Takimata ea clita labore amet ipsum erat justo voluptua. Nonumy.
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade" id="tab-pane-3">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="mb-4">1 review for "Colorful Stylish Shirt"</h4>
+                            <div class="media mb-4">
+                                <img src="img/user.jpg" alt="Image" class="img-fluid mr-3 mt-1" style="width: 45px;">
+                                <div class="media-body">
+                                    <h6>John Doe<small> - <i>01 Jan 2045</i></small></h6>
+                                    <div class="text-primary mb-2">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <p>Diam amet duo labore stet elitr ea clita ipsum, tempor labore accusam ipsum et no at. Kasd diam tempor rebum magna dolores sed sed eirmod ipsum.</p>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h4 class="mb-4">Leave a review</h4>
+                            <small>Your email address will not be published. Required fields are marked *</small>
+                            <div class="d-flex my-3">
+                                <p class="mb-0 mr-2">Your Rating * :</p>
+                                <div class="text-primary">
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                    <i class="far fa-star"></i>
+                                </div>
+                            </div>
+                            <form>
+                                <div class="form-group">
+                                    <label for="message">Your Review *</label>
+                                    <textarea id="message" cols="30" rows="5" class="form-control"></textarea>
+                                </div>
+                                <div class="form-group">
+                                    <label for="name">Your Name *</label>
+                                    <input type="text" class="form-control" id="name">
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Your Email *</label>
+                                    <input type="email" class="form-control" id="email">
+                                </div>
+                                <div class="form-group mb-0">
+                                    <input type="submit" value="Leave Your Review" class="btn btn-primary px-3">
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+
+<style>
+    .selected {
+        transition: background-color 0.3s ease; /* Hiệu ứng chuyển đổi màu nền */
+        color: #ff0000;
+    }
+
+    .menu-item {
+        font-weight: bold;
+        cursor: pointer;
+        text-align: center;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        height: auto; /* Tự động co dãn theo chiều dọc */
+        color: #ffcc00; /* Màu chữ khi được chọn */
+        background-color: #000; /* Màu nền khi được chọn */
+        align-items: center; /* Canh giữa theo chiều dọc */
+        margin-right: 100px; /* Lệch về phía trái */
+    }
+
+    .information {
+        border: 1px solid #ccc; /* Viền cho phần thông tin */
+        padding: 10px; /* Khoảng cách giữa nội dung và viền */
+        border-radius: 5px; /* Bo tròn viền */
+    }
+
+    #content {
+        border: 1px solid #ccc; /* Màu và độ rộng của khung */
+        padding: 10px; /* Khoảng cách giữa nội dung và khung */
+        margin-top: 10px; /* Khoảng cách giữa menu và content box */
+    }
+
+
+    #active li {
+        color: #ff0000; /* Màu chữ ban đầu */
+        transition: all 0.3s ease-in-out; /* Hiệu ứng chuyển đổi màu */
+        align-items: center; /* Canh giữa theo chiều dọc */
+        margin-left: -5px; /* Lệch về phía trái một chút */
+    }
+
+        #active li:hover {
+            color: #b30000; /* Màu chữ khi hover */
+            transform: scale(1.1); /* Phình ra khi hover */
+    }
+
+        #active li:active {
+        color: #ffcc00; /* Màu chữ khi được chọn */
+        background-color: #000; /* Màu nền khi được chọn */
+</style>
+
+<script>
+    // Hàm để hiển thị nội dung và lưu trạng thái của mỗi mục được chọn
+    function showContent(index) {
+        var contentBox = document.getElementById("content-box");
+        var content = "";
+
+        if (index === 0) {
+            content = `
+            <h4>CHƯƠNG TRÌNH ĐIỂM THƯỞNG</h4>
+            <br>
+            <p>Chương trình bao gồm 4 đối tượng thành viên U22 | CinemaHub Member | CinemaHub VIP và CinemaHub VVIP, với những quyền lợi và mức ưu đãi khác nhau. Mỗi khi thực hiện giao dịch tại hệ thống rạp CinemaHub, bạn sẽ nhận được một số điểm thưởng tương ứng với cấp độ thành viên:</p>
+            <table border="0" style="width: 100%;">
+            <tbody>
+                <tr><th style="width: 31%;">Điểm thưởng</th><th style="width: 23%;">U22 | Member</th><th style="width: 23%;">VIP</th><th style="width: 23%;">VVIP</th></tr>
+                <tr class="odd">
+                    <td><strong>Tại Quầy Vé</strong></td>
+                    <td><strong>5%</strong></td>
+                    <td><strong>7%</strong></td>
+                    <td><strong>10%</strong></td>
+                </tr>
+                <tr>
+                    <td>VD: 100.000 VND</td>
+                    <td>5 Điểm</td>
+                    <td>7 Điểm</td>
+                    <td>10 Điểm</td>
+                </tr>
+                <tr class="odd">
+                    <td><strong>Quầy Bắp Nước</strong></td>
+                    <td><strong>3%</strong></td>
+                    <td><strong>4%</strong></td>
+                    <td><strong>5%</strong></td>
+                 </tr>
+                 <tr>
+                    <td>VD: 100.000 VND</td>
+                    <td>3 Điểm</td>
+                    <td>4 Điểm</td>
+                    <td>5 Điểm</td>
+                </tr>
+            </tbody>
+            </table>
+            <p>1 điểm = 1.000 VND, có giá trị như tiền mặt, được dùng để mua vé xem phim, thức uống/ combo tương ứng tại CinemaHub và đổi voucher ưu đãi trên CinemaHub Reward.</p>
+            <p><strong>Lưu ý:</strong></p>
+            <ol>
+                <li>Điểm thưởng có thời hạn sử dụng là 01 năm.</li>
+                <li>Điểm thưởng có giá trị sử dụng tại tất cả các rạp CinemaHub trên toàn quốc.</li>
+                <li>Sau khi dịch vụ được CinemaHub Việt Nam hoàn thành, điểm thưởng sẽ được ghi nhận vào tài khoản của bạn vào 8:00 sáng ngày tiếp theo. Ví dụ: suất chiếu của bạn diễn ra vào ngày 05/01/2024, điểm thưởng sẽ được ghi nhận vào tài khoản của bạn vào 8:00 sáng ngày 06/01/2024.</li>
+                <li>KHÔNG tích lũy chi tiêu/điểm thưởng đối với các giao dịch đã áp dụng các chương trình giảm giá/khuyến mãi do CinemaHub và đối tác tổ chức.</li>
+                <li>KHÔNG tích lũy chi tiêu/điểm thưởng đối với các giao dịch:
+                    - Mua/sử dụng voucher
+                    - Mua thẻ quà tặng và eGift
+                    - Mua vé/ F&B bằng thẻ CinemaHubian, thẻ membership và thẻ Premium
+                    - Giao dịch có hình thức thanh toán 100% bằng điểm thưởng.</li>
+                <li>Thành viên được tích lũy điểm/chi tiêu cho tối đa 10 giao dịch/ngày.</li>
+                <li>Bạn có thể dễ dàng kiểm tra điểm thưởng của mình trên CinemaHub Website hoặc Ứng dụng CinemaHub trên điện thoại (Mobile App).</li>
+                <li>Điểm thưởng tối thiểu được sử dụng cho mỗi giao dịch là 20 điểm trở lên</li>
+                <li>Thành viên khi thanh toán trực tuyến trên Website/APP, trong 1 giao dịch, điểm thưởng chỉ được sử dụng thanh toán tối đa 90% giá trị đơn hàng.</li>
+                <li>Khi thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trực tiếp tại rạp, khách hàng vui lòng xuất trình tài khoản thành viên (Thẻ cứng hoặc tài khoản online trên Ứng dụng CinemaHub) và Giấy tờ tùy thân hoặc giấy tờ khác có thể hiện ngày tháng năm sinh (Bản gốc hoặc ảnh chụp) cho nhân viên rạp để tiến hành xác thực chính chủ tài khoản thành viên. Nhân viên rạp có quyền từ chối yêu cầu của khách hàng nếu khách hàng không cung cấp được tài khoản thành viên và/hoặc giấy tờ quy định tại đây hoặc các thông tin Khách Hàng cung cấp không trùng khớp với nhau. Việc thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trên website của CinemaHub và/hoặc ứng dụng CinemaHub trên điện thoại luôn được mặc định là được sử dụng bởi chính chủ tài khoản thành viên. Khách Hàng có nghĩa vụ bảo mật tài khoản Thành Viên của mình. CinemaHub Việt Nam sẽ không giải quyết bất kỳ khiếu nại nào liên quan đến điểm thưởng nếu giao dịch sử dụng điểm thưởng đó được thực hiện trực tuyến.
+                    CinemaHub Việt Nam sẽ không hoàn và/hoặc giải quyết đối với điểm thưởng đã được sử dụng nếu Khách Hàng không chứng minh được Khách Hàng không phải là người sử dụng điểm thưởng và quyết định của CinemaHub Việt Nam là quyết định cuối cùng.</li>
+                <li>Khi mua vé online và thanh toán bằng các hình thức điểm, coupon, voucher, thẻ Premium card, member, thẻ quà tặng, hệ thống sẽ yêu cầu bạn nhập mật mã thanh toán</li>
+            </ol>
+            `;
+        } else if (index === 1) {
+            content = `
+                    <h4>QUÀ TẶNG SINH NHẬT</h4>
+                    <br>
+            <p><strong>Chính sách quà tặng sinh nhật cho từng hạng thành viên CinemaHub:</strong></p>
+            <p>-Thân Thiết &amp; U22: 01 CinemaHub Birthday Combo</p>
+            <p>-VIP: 01 CinemaHub Birthday Combo + 01 Vé Xem Phim 2D/3D</p>
+            <p>-VVIP: CinemaHub Birthday Combo + 02 Vé Xem Phim 2D/3D</p>
+            <p><strong>Lưu ý:</strong> Vào sinh nhật lần thứ 23, thành viên U22 sẽ nhận thêm 01 vé xem phim 2D/3D bên cạnh CinemaHub Birthday Combo.</p>
+            <p><strong>(*) CinemaHub Birthday Combo = 1 Bắp Ngọt size 44oz + 2 Nước size 22oz</strong></p>
+            <p>Khi đến rạp đổi quà, khách hàng vui lòng xuất trình tài khoản thành viên (Thẻ cứng hoặc tài khoản online trên Ứng dụng CinemaHub) và Giấy tờ tùy thân hoặc giấy tờ khác có thể hiện ngày tháng năm sinh (Bản gốc hoặc ảnh chụp) cho nhân viên rạp để tiến hành xác thực chính chủ tài khoản thành viên. Nhân viên rạp có quyền từ chối yêu cầu đổi quà sinh nhật nếu khách hàng không cung cấp được tài khoản thành viên và/hoặc giấy tờ quy định tại đây hoặc các thông tin Khách Hàng cung cấp không trùng khớp với nhau.</p>
+            <p><strong>Điều Kiện và Điều Khoản:</strong></p>
+            <p>1. Để nhận quà sinh nhật, thành viên phải có ít nhất 01 giao dịch ghi nhận tích lũy chi tiêu trong vòng 12 tháng gần nhất. (*) Không bao gồm các giao dịch phát sinh trong tháng sinh nhật năm trước đó của khách hàng. Nếu chưa thỏa điều kiện, khách hàng có thể thực hiện 01 giao dịch mới ngay trong tháng sinh nhật và nhận quà sau đó 02 ngày kể từ khi tích lũy chi tiêu được ghi nhận, với điều kiện thời điểm đó vẫn còn nằm trong tháng sinh nhật.</p>
+            <p><strong>Lưu ý:</strong></p>
+            <p>(1) Giao dịch ghi nhận tích lũy chi tiêu là các giao dịch mua vé/bắp nước trên Web/App CinemaHub hoặc tại rạp chiếu phim có xuất trình thẻ thành viên để tích điểm; KHÔNG tích lũy chi tiêu đối với các giao dịch đã áp dụng ưu đãi giảm giá từ các chương trình khuyến mãi do CinemaHub hoặc đối tác tổ chức.</p>
+            <p>KHÔNG tích lũy chi tiêu/điểm thưởng đối với các giao dịch: (a) Mua/sử dụng voucher; (b) Mua thẻ quà tặng; (c) Mua vé/ F&amp;B bằng thẻ CinemaHub, thẻ CJ membership và thẻ Premium; (d) Giao dịch có hình thức thanh toán 100% bằng điểm thưởng.</p>
+            <p>(2) Ví dụ: Nếu bạn thực hiện 01 giao dịch ghi nhận tích lũy chi tiêu vào tháng 07/2024 và có sinh nhật nằm trong khoảng thời gian từ tháng 07/2024 tới tháng 06/2025, bạn sẽ nhận quà sinh nhật từ CinemaHub trong tháng sinh nhật sắp tới của mình.</p>
+            <p>(3) Tích lũy chi tiêu của bạn sẽ được ghi nhận cho tài khoản trong cùng ngày diễn ra giao dịch và được hiển thị trên tài khoản thành viên tại web/app vào 6:00 sáng ngày hôm sau.</p>
+            <p>(4) (Trường hợp bạn có sinh nhật trong tháng 07)</p>
+            <p><strong>Ví dụ:</strong></p>
+            p>- Thực hiện 01 giao dịch ghi nhận tích lũy chi tiêu vào ngày 29/07  Bạn sẽ được nhận quà sinh nhật vào ngày 31/07;</p>
+            <p>- Thực hiện 01 giao dịch ghi nhận tích lũy chi tiêu vào ngày 30/07  Bạn sẽ KHÔNG được nhận quà sinh nhật (Do thời điểm sau đó 02 ngày là 01/08).</p>
+            <p>- Thực hiện 01 giao dịch đặt vé vào ngày 29/07 cho suất chiếu kết thúc vào ngày 30/07 Bạn sẽ KHÔNG được nhật quà sinh nhận Do sau 02 ngày kể từ thời điểm tích lũy chi tiêu được ghi nhận (30/07) là 01/08).</p>
+            <p>2. Thời hạn nhận và sử dụng quà sinh nhật:</p>
+            <p>- Thời hạn nhận quà: Thành viên đủ điều kiện sẽ nhận quà sinh nhật từ CinemaHub trong vòng 03 ngày đầu tiên của tháng sinh nhật. Để kiểm tra quà sinh nhật, bạn vui lòng truy cập mục “COUPON” trên app CinemaHub sau khi đăng nhập tài khoản online (Nếu không dùng ứng dụng, thành viên vui lòng mang theo thẻ cứng &amp; CCCD đến rạp và yêu cầu nhân viên hỗ trợ kiểm tra và đổi quà sinh nhật.)</p>
+            <p>- Thời hạn sử dụng: Coupon quà sinh nhật chỉ có giá trị sử dụng trong tháng sinh nhật (Sau khi qua tháng mới, coupon sẽ tự động mất đi). Nếu coupon sinh nhật của bạn là vé xem phim, bạn có thể sử dụng để đặt các suất chiếu diễn ra ở tháng kế tiếp, với điều kiện tại thời điểm đặt vé vẫn còn nằm trong tháng sinh nhật.</p>
+            <p>3. Khi nhận quà sinh nhật, bạn vui lòng xuất trình: (1) CMND/CCCD và (2) Thẻ cứng thành viên/Ứng dụng CinemaHub đã đăng nhập tài khoản để đối soát. Thông tin ngày tháng năm sinh trên CMND/CCCD của khách hàng phải trùng khớp với thông tin được sử dụng để đăng ký tài khoản thành viên CinemaHub. Nếu 2 thông tin này không khớp nhau, nhân viên có quyền từ chối trao quà sinh nhật cho khách hàng.</p>
+            <p>4. Để thay đổi thông tin ngày tháng năm sinh của tài khoản thành viên, khách hàng vui lòng mang theo CCCD và ghé rạp CinemaHub gần nhất để được hỗ trợ. (Lưu ý: Mỗi tài khoản chỉ được yêu cầu thay đổi ngày tháng năm sinh tối đa 3 lần.)</p>
+            <p>5. Thành viên mới sẽ bắt đầu nhận quà sinh nhật sau 72 giờ kể từ ngày đăng ký thành viên &amp; có phát sinh giao dịch ghi nhận tích lũy chi tiêu trước thời điểm nhận quà 02 ngày, với điều kiện thời gian nhận quà vẫn còn trong tháng sinh nhật.</p>
+            <p>6. Quà sinh nhật không có giá trị quy đổi thành tiền mặt hoặc hoàn trả lại tiền thừa.</p>
+            <p>7. Sau khi đổi quà sinh nhật tại quầy, khách hàng không được yêu cầu hoàn/hủy/nhận lại coupon quà sinh nhật.</p>
+            <p>8. 01 CinemaHub Birthday Combo bao gồm: 01 Bắp Ngọt size 44oz và 02 Nước ngọt size 22oz, chỉ áp dụng trực tiếp tại quầy. Khi có nhu cầu đổi vị, bạn vui lòng thanh toán thêm khoản phụ thu.</p>
+            <p>9. Khách hàng VVIP vui lòng sử dụng cả 02 coupon vé xem phim trong phần quà tặng sinh nhật khi thực hiện giao dịch (không áp dụng tách lẻ vé cho nhiều giao dịch).</p>
+            <p>10. Mỗi vé xem phim trong combo quà sinh nhật tương đương với 01 vé 2D/3D hàng ghế thường hoặc VIP tại phòng chiếu thường, KHÔNG áp dụng cho các phòng chiếu định dạng đặc biệt (4DX, ULTRA 4DX, IMAX, GOLD GLASS, SWEETBOX, STARIUM, L’AMOUR, PREMIUM, SCREENX, CINE &amp; FORÊT, CINE &amp; LIVING ROOM).</p>
+            <p>11.Vé xem phim trong combo quà sinh nhật được áp dụng cho tất cả các ngày trong tuần bao gồm Lễ/ Tết, KHÔNG áp dụng cho các suất chiếu sớm Sneak Show &amp; Early Release.</p>
+            <p>12. Quá trình phục vụ đổi quà sinh nhật hàng ngày cho khách hàng tại rạp có thể tạm dừng trước thời hạn và không báo trước do phụ thuộc vào số lượng quà tặng thực tế còn lại trong ngày của mỗi rạp.</p>
+                `;
+        } else if (index === 2) {
+            content = `
+                <h4>CẤP ĐỘ THÀNH VIÊN</h4>
+                <br>
+                <p><strong>Thành viên U22</strong></p>
+            <p>Thành viên U22 bao gồm tất cả thành viên CinemaHub nhỏ hơn 23 tuổi trong năm hiện tại. Trong năm 2024, thành viên U22 là thành viên có năm sinh từ 2002 trở về sau và nhận được các ưu đãi sau:</p>
+            <p>- Quà tặng sinh nhật: 01 CinemaHub Birthday Combo (01 bắp &amp; 02 nước) miễn phí vào tháng sinh nhật và 01 vé 2D/3D miễn phí vào sinh nhật lần thứ 23, vé miễn phí có hạn sử dụng trong tháng sinh nhật.</p>
+            <p>- Chương trình tích lũy điểm thưởng để giảm giá những lần mua sau: Tích lũy điểm 5% giá trị giao dịch tại quầy vé và 3% giá trị giao dịch tại quầy bắp nước.</p>
+            <p>- Cơ hội tham gia những chương trình đặc biệt khác chỉ áp dụng cho thành viên U22 CinemaHub.</p>
+            <p>- Đặc biệt, từ ngày 18/01/2024, tất cả khách hàng CinemaHub từ 23 tuổi trở xuống (bao gồm cả thành viên U22) sẽ nhận được giá vé đặc quyền chỉ từ 50.000 VND, giá bắp nước chỉ từ 78.000 VND.</p>
+            <p>Để nâng cao bảo mật tài khoản thành viên:</p>
+            <p>- Khi thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trực tiếp tại rạp, khách hàng vui lòng xuất trình tài khoản thành viên (Thẻ cứng hoặc tài khoản online trên Ứng dụng CinemaHub) và Giấy tờ tùy thân hoặc giấy tờ khác có thể hiện ngày tháng năm sinh (Bản gốc hoặc ảnh chụp) cho nhân viên rạp để tiến hành xác thực chính chủ tài khoản thành viên. Nhân viên rạp có quyền từ chối yêu cầu của khách hàng nếu khách hàng không cung cấp được tài khoản thành viên và/hoặc giấy tờ quy định tại đây hoặc các thông tin Khách Hàng cung cấp không trùng khớp với nhau. Việc thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trên website của CinemaHub và/hoặc ứng dụng CinemaHub trên điện thoại luôn được mặc định là được sử dụng bởi chính chủ tài khoản thành viên. Khách Hàng có nghĩa vụ bảo mật tài khoản Thành Viên của mình. CinemaHub Việt Nam sẽ không giải quyết bất kỳ khiếu nại nào liên quan đến điểm thưởng nếu giao dịch sử dụng điểm thưởng đó được thực hiện trực tuyến. <br>CinemaHub Việt Nam sẽ không hoàn và/hoặc giải quyết đối với điểm thưởng đã được sử dụng nếu Khách Hàng không chứng minh được Khách Hàng không phải là người sử dụng điểm thưởng và quyết định của CinemaHub Việt Nam là quyết định cuối cùng.</p>
+            <p>- Khi mua vé online và thanh toán bằng các hình thức điểm, coupon, voucher, thẻ Premium card, CJ member, thẻ quà tặng, hệ thống sẽ yêu cầu bạn nhập mật mã thanh toán.</p>
+            <p><strong>Thành viên thân thiết (MEMBER)</strong></p>
+            <p>Thành viên thân thiết là thành viên từ 23 tuổi trở lên và nhận được các ưu đãi sau:</p>
+            <p>- 01 CinemaHub Birthday Combo (01 bắp &amp; 02 nước) miễn phí vào tháng sinh nhật.</p>
+            <p>- Tích lũy điểm 5% giá trị giao dịch tại quầy vé và 3% giá trị giao dịch tại quầy bắp nước.</p>
+            <p>- Cơ hội tham gia những chương trình đặc biệt khác chỉ áp dụng cho thành viên CinemaHub.</p>
+            <p>Để nâng cao bảo mật tài khoản thành viên:</p>
+            <p>- Khi thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trực tiếp tại rạp, khách hàng vui lòng xuất trình tài khoản thành viên (Thẻ cứng hoặc tài khoản online trên Ứng dụng CinemaHub) và Giấy tờ tùy thân hoặc giấy tờ khác có thể hiện ngày tháng năm sinh (Bản gốc hoặc ảnh chụp) cho nhân viên rạp để tiến hành xác thực chính chủ tài khoản thành viên. Nhân viên rạp có quyền từ chối yêu cầu của khách hàng nếu khách hàng không cung cấp được tài khoản thành viên và/hoặc giấy tờ quy định tại đây hoặc các thông tin Khách Hàng cung cấp không trùng khớp với nhau. Việc thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trên website của CinemaHub và/hoặc ứng dụng CinemaHub trên điện thoại luôn được mặc định là được sử dụng bởi chính chủ tài khoản thành viên. Khách Hàng có nghĩa vụ bảo mật tài khoản Thành Viên của mình. CinemaHub Việt Nam sẽ không giải quyết bất kỳ khiếu nại nào liên quan đến điểm thưởng nếu giao dịch sử dụng điểm thưởng đó được thực hiện trực tuyến. <br> CinemaHub Việt Nam sẽ không hoàn và/hoặc giải quyết đối với điểm thưởng đã được sử dụng nếu Khách Hàng không chứng minh được Khách Hàng không phải là người sử dụng điểm thưởng và quyết định cùa CinemaHub Việt Nam là quyết định cuối cùng.</p>
+            <p>- Khi mua vé online và thanh toán bằng các hình thức điểm, coupon, voucher, thẻ Premium card, CJ member, thẻ quà tặng, hệ thống sẽ yêu cầu bạn nhập mật mã thanh toán</p>
+            <p><strong>Thành viên VIP 2024</strong></p>
+            <p>- Thành viên VIP 2024 là thành viên CinemaHub có tổng chi tiêu trong 2023 từ 4,000,000 VNĐ đến 7,999,999 VNĐ.</p>
+            <p>(*) Tổng chi tiêu năm 2023 được tính từ ngày 01/01/2023 đến 31/12/2023.</p>
+            <p><strong>Quyền lợi của VIP 2024:</strong></p>
+            <p>- 08 vé 2D/3D miễn phí. (HSD: đến hết 31/12/2024 và dùng đặt vé cho các suất chiếu đến hết 04/01/2025).</p>
+            <p>- Quà sinh nhật đặc biệt (01 CinemaHub Birthday Combo &amp; 01 vé 2D/3D), áp dụng trong tháng sinh nhật.</p>
+            <p>- Tỷ lệ tích điểm hấp dẫn: 7% tại quầy vé &amp; 4% tại quầy bắp nước.</p>
+            <p><strong>Ghi chú:</strong></p>
+            <p>- Cấp độ thành viên VIP và các ưu đãi kèm theo chỉ có giá trị đến hết 31/12/2024.</p>
+            <p>- Khách hàng tận hưởng ưu đãi tại các rạp CinemaHub trên toàn quốc.</p>
+            <p>- Các ưu đãi vé xem phim 2D/3D KHÔNG áp dụng tại các rạp chiếu phim đặc biệt: 4DX, ULTRA 4DX, IMAX, GOLD CLASS, SWEETBOX, STARIUM, L’AMOUR, PREMIUM, SCREENX, CINE &amp; FORÊT, CINE &amp; LIVING ROOM, cũng như KHÔNG áp dụng cho Suất Chiếu Sớm và Suất Chiếu Đặc Biệt.</p>
+            <p>- Các ưu đãi vé xem phim 2D/3D không được áp dụng cho các ngày Lễ, Tết, ngoại trừ vé 2D/3D trong tháng sinh nhật.</p>
+            <p>- Vì cấp độ thành viên mỗi năm được xét duyệt dựa trên tổng chi tiêu nên tổng chi tiêu tích lũy trong năm 2024 của bạn sẽ trở về 0 vào ngày 01/01/2025.</p>
+            <p>Để nâng cao bảo mật tài khoản thành viên:</p>
+            <p>- Khi thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trực tiếp tại rạp, khách hàng vui lòng xuất trình tài khoản thành viên (Thẻ cứng hoặc tài khoản online trên Ứng dụng CinemaHub) và Giấy tờ tùy thân hoặc giấy tờ khác có thể hiện ngày tháng năm sinh (Bản gốc hoặc ảnh chụp) cho nhân viên rạp để tiến hành xác thực chính chủ tài khoản thành viên. Nhân viên rạp có quyền từ chối yêu cầu của khách hàng nếu khách hàng không cung cấp được tài khoản thành viên và/hoặc giấy tờ quy định tại đây hoặc các thông tin Khách Hàng cung cấp không trùng khớp với nhau. Việc thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trên website của CinemaHub và/hoặc ứng dụng CinemaHub trên điện thoại luôn được mặc định là được sử dụng bởi chính chủ tài khoản thành viên. Khách Hàng có nghĩa vụ bảo mật tài khoản Thành Viên của mình. CinemaHub Việt Nam sẽ không giải quyết bất kỳ khiếu nại nào liên quan đến điểm thưởng nếu giao dịch sử dụng điểm thưởng đó được thực hiện trực tuyến. <br> CinemaHub Việt Nam sẽ không hoàn và/hoặc giải quyết đối với điểm thưởng đã được sử dụng nếu Khách Hàng không chứng minh được Khách Hàng không phải là người sử dụng điểm thưởng và quyết định cùa CinemaHub Việt Nam là quyết định cuối cùng.</p>
+            <p>- Trường hợp thành toán trên website hoặc ứng dụng CinemaHub, bạn vui lòng chọn hình thức giảm giá coupon để sử dụng vé miễn phí.</p>
+            <p>- Khi mua vé online và thanh toán bằng các hình thức điểm, coupon, voucher, thẻ Premium card, CJ member, thẻ quà tặng, hệ thống sẽ yêu cầu bạn nhập mật mã thanh toán.</p>
+            <p><strong>Thành viên VVIP 2024</strong></p>
+            <p>- Thành viên VVIP 2024 là thành viên CinemaHub có tổng chi tiêu trong 2023 từ 8,000,000 VNĐ trở lên.</p>
+            <p>(*) Tổng chi tiêu năm 2023 được tính từ ngày 01/01/2023 đến 31/12/2023</p>
+            <p><strong>Quyền lợi của VVIP 2024:</strong></p>
+            <p>- 10 vé 2D/3D miễn phí (HSD: đến hết 31/12/2024 và dùng đặt vé cho các suất chiếu đến hết 04/01/2025).</p>
+            <p>- Quà sinh nhật đặc biệt (01 CinemaHub Birthday Combo &amp; 02 vé 2D/3D), áp dụng trong tháng sinh nhật.</p>
+            <p>- Tỷ lệ tích điểm sốc: 10% tại quầy vé &amp; 5% tại quầy bắp nước.</p>
+            <p>- 01 phần quà VVIP đặc biệt từ CinemaHub</p>
+            <p>- 01 Movie Pass, áp dụng cho 01 vé xem phim bất kỳ tại các phòng chiếu đặc biệt GOLD CLASS, 4DX, IMAX, SCREENX, ULTRA 4DX, STARIUM, PREMIUM CINEMA, CINE &amp; FORÊT, CINE &amp; SUITE. Áp dụng cho cả Lễ Tết/Sneakshow/Early Release, có thể áp dụng trực tiếp tại quầy (hạn sử dụng đến hết 31/12/2024 và dùng đặt vé cho các suất chiếu đến hết 04/01/2025).</p>
+            <p>Trong năm 2024, SAU KHI đạt cột mốc chi tiêu từ 8,000,000 VND, cứ mỗi 1,000,000 VND chi tiêu tiếp theo THÀNH VIÊN VVIP sẽ được tặng 01 vé 2D/3D miễn phí không giới hạn.</p>
+            <p>Ví dụ: Trong năm 2024, thành viên VVIP khi tích lũy chi tiêu đến 9,000,000 VND sẽ được tặng 01 vé 2D/3D. Và khi tích lũy chi tiêu đến 10,000,000 VND sẽ được tặng tiếp 01 vé 2D/3D,...</p>
+            <p><strong>Lưu ý:</strong> Vé miễn phí sẽ được thêm vào tài khoản trong vòng 24h sau khi chi tiêu tích lũy được ghi nhận. Vé miễn phí có hạn sử dụng trong vòng 03 tháng kể từ ngày được thêm vào tài khoản thành viên.</p>
+            <p><strong>Ghi chú:</strong></p>
+            <p>- Cấp độ thành viên VVIP và các ưu đãi kèm theo chỉ có giá trị đến hết 31/12/2024.</p>
+            <p>Các ưu đãi vé xem phim 2D/3D KHÔNG áp dụng tại các rạp chiếu phim đặc biệt: 4DX, ULTRA 4DX, IMAX, GOLD CLASS, SWEETBOX, STARIUM, L’AMOUR, PREMIUM, SCREENX, CINE &amp; FORÊT, CINE &amp; LIVING ROOM, cũng như KHÔNG áp dụng cho Suất Chiếu Sớm và Suất Chiếu Đặc Biệt.</p>
+            <p>- Các ưu đãi vé xem phim 2D/3D không được áp dụng cho các ngày lễ, Tết, ngoại trừ vé 2D/3D trong tháng sinh nhật</p>
+            <p>Để nâng cao bảo mật tài khoản thành viên:</p>
+            <p>- Khi thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trực tiếp tại rạp, khách hàng vui lòng xuất trình tài khoản thành viên (Thẻ cứng hoặc tài khoản online trên Ứng dụng CinemaHub) và Giấy tờ tùy thân hoặc giấy tờ khác có thể hiện ngày tháng năm sinh (Bản gốc hoặc ảnh chụp) cho nhân viên rạp để tiến hành xác thực chính chủ tài khoản thành viên. Nhân viên rạp có quyền từ chối yêu cầu của khách hàng nếu khách hàng không cung cấp được tài khoản thành viên và/hoặc giấy tờ quy định tại đây hoặc các thông tin Khách Hàng cung cấp không trùng khớp với nhau. Việc thực hiện các giao dịch sử dụng điểm thưởng hoặc vé miễn phí trên website của CinemaHub và/hoặc ứng dụng CinemaHub trên điện thoại luôn được mặc định là được sử dụng bởi chính chủ tài khoản thành viên. Khách Hàng có nghĩa vụ bảo mật tài khoản Thành Viên của mình. CinemaHub Việt Nam sẽ không giải quyết bất kỳ khiếu nại nào liên quan đến điểm thưởng nếu giao dịch sử dụng điểm thưởng đó được thực hiện trực tuyến. <br>CinemaHub Việt Nam sẽ không hoàn và/hoặc giải quyết đối với điểm thưởng đã được sử dụng nếu Khách Hàng không chứng minh được Khách Hàng không phải là người sử dụng điểm thưởng và quyết định cùa CinemaHub Việt Nam là quyết định cuối cùng.</p>
+            <p>- Khi mua vé online và thanh toán bằng các hình thức điểm, coupon, voucher, thẻ Premium card, CJ member, thẻ quà tặng, hệ thống sẽ yêu cầu bạn nhập mật mã thanh toán.</p>
+                `;
+        } else if (index === 3) {
+            content = `
+                        <h4>QUẢN LÝ TÀI KHOẢN</h4>
+                        <br>
+            <p>Đăng nhập vào Tài Khoản CinemaHub, bạn có thể dễ dàng quản lý tài khoản thành viên của mình như:</p>
+            <p>- Kiểm tra và chỉnh sửa thông tin tài khoản.</p>
+            <p>- Tra cứu điểm thưởng, tổng chi tiêu và lịch sử giao dịch.</p>
+            <p>- Kiểm tra thẻ quà tặng, voucher hoặc coupon hiện có trong tài khoản thành viên.</p>
+            <p>Mỗi tuần, các thành viên sẽ nhận được Bản tin điện ảnh CinemaHub qua email, cập nhật những tin tức mới nhất về phim ảnh, sự kiện và khuyến mãi. Cập nhật ngay email, điện thoại và địa chỉ của bạn để luôn nhận được những thông báo mới nhất từ CinemaHub!</p>
+                    `;
+        } else if (index === 4) {
+            content = `
+                        <h4>BẠN CẦN HỖ TRỢ</h4>
+                        <br>
+            <p>Với những ưu đãi hấp dẫn từ chương trình thành viên, CinemaHub hy vọng sẽ mang đến cho bạn những trải nghiệm vượt xa điện ảnh.</p>
+            <p>Mọi thắc mắc về chương trình thành viên bạn có thể liên hệ ngay Bộ phận hỗ trợ khách hàng của chúng tôi qua email hoidap@cinemahub.vn hoặc hotline 1900 6017 (8:00 – 22:00, từ thứ Hai đến Chủ Nhật - bao gồm các ngày Lễ, Tết).</p>
+            <p>Cảm ơn bạn đã luôn đồng hành cùng CinemaHub!</p>
+                    `;
+        }
+        contentBox.innerHTML = content;
+    }
+    function zoomIn(element) {
+        element.style.transform = 'scale(1.1)';
+    }
+
+    function zoomOut(element) {
+        element.style.transform = 'scale(1)';
+    }
+</script>
