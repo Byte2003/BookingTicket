@@ -9,12 +9,12 @@ function loadDataTable() {
             "url": "/CinemaManager/Room/GetAllRooms"
         },
         "columns": [
-            { "data": "roomID", "width": "20%" },
-            { "data": "roomName", "width": "15%" },
-            { "data": "status", "width": "15%" },
+            //{ "data": "roomID", "width": "20%" },
+            { "data": "roomName", "width": "10%" },
+            { "data": "status", "width": "10%" },
             { "data": "cinema.cinemaName", "width": "25%" },
             { "data": "note", "width": "20%" },
-            { "data": "numOfSeats", "width": "10%" },
+            { "data": "numOfSeats", "width": "5%" },
 
             {
                 "data": "roomID",
@@ -22,14 +22,14 @@ function loadDataTable() {
                     return `
                        
                             <a href="/CinemaManager/Room/Update?room_id=${data}"
-                            class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
+                            class="btn btn-dark mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
                             <a onClick=Delete('/CinemaManager/Room/Delete?room_id=${data}')
                             class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
 					        <a href="/CinemaManager/Seat/RoomSeats?room_id=${data}"
-                            class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Manage Seats</a>
+                            class="btn btn-secondary mt-2 mx-4"> <i class="bi bi-pencil-square"></i> Manage Seats</a>
                         `
                 },
-                "width": "25%"
+                "width": "15%"
             }
         ]
     });

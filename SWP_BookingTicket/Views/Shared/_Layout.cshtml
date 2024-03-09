@@ -68,28 +68,28 @@
                         <div class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" data-bs-toggle="dropdown">Manage</a>
 
-                            <ul class="dropdown-menu m-0" aria-labelledby="navbarDropdown" style="background-color:#33186B">
-                                <li>
-                                    <a asp-area="CinemaManager" asp-action="Index" asp-controller="Cinema" class="dropdown-item text-white">Cinema</a>
-                                </li>
-                                <li>
-                                    <a asp-area="CinemaManager" asp-action="Index" asp-controller="Movie" class="dropdown-item text-white">Movie</a>
-                                </li>
-                                <li>
-                                    <a asp-area="Admin" asp-action="Index" asp-controller="UserAccount" class="dropdown-item text-white">Account</a>
-                                </li>
-                                <li>
-                                    <a asp-area="CinemaManager" asp-action="Index" asp-controller="Room" class="dropdown-item text-white">Room</a>
-                                </li>
-                                <li>
-                                    <a asp-area="CinemaManager" asp-action="Index" asp-controller="Showtime" class="dropdown-item text-white">Showtime</a>
-                                </li>
-                                <li>
-                                    <a asp-area="CinemaManager" asp-action="Index" asp-controller="Seat" class="dropdown-item text-white">Seat</a>
-                                </li>
-                                <li>
-                                    <a asp-area="CinemaManager" asp-action="Index" asp-controller="Promotion" class="dropdown-item text-white">Promotion</a>
-                                </li>
+                        <ul class="dropdown-menu m-0" aria-labelledby="navbarDropdown" style="background-color:#333333">
+                            <li>
+                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Cinema" class="dropdown-item text-white">Cinema</a>
+                            </li>
+                            <li>
+                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Movie" class="dropdown-item text-white">Movie</a>
+                            </li>
+                            <li>
+                                <a asp-area="Admin" asp-action="Index" asp-controller="UserAccount" class="dropdown-item text-white">Account</a>
+                            </li>
+                            <li>
+                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Room" class="dropdown-item text-white">Room</a>
+                            </li>
+                            <li>
+                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Showtime" class="dropdown-item text-white">Showtime</a>
+                            </li>
+                            <li>
+                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Seat" class="dropdown-item text-white">Seat</a>
+                            </li>
+                            <li>
+                                <a asp-area="CinemaManager" asp-action="Index" asp-controller="Promotion" class="dropdown-item text-white">Promotion</a>
+                            </li>
 
                                 <li>
                                     <a asp-area="CinemaManager" asp-action="Index" asp-controller="Voucher" class="dropdown-item text-white">Voucher</a>
@@ -119,7 +119,7 @@
     </div>
 
     <!-- Footer Start -->
-    <footer class="container-fluid footer py-5">
+    <footer class="container-fluid footer py-5" style="background-color:#000">
         <div class="container py-5">
             <div class="row g-5">
                 <div class="col-md-6 col-lg-6 col-xl-3">
@@ -131,10 +131,10 @@
                         <a href="" class="mb-3"><i class="fas fa-print me-2"></i> +012 345 67890</a>
                         <div class="d-flex align-items-center">
                             <i class="fas fa-share fa-2x text-white me-2"></i>
-                            <a class="btn-square btn btn-primary rounded-circle mx-1" href=""><i class="fab fa-facebook-f"></i></a>
-                            <a class="btn-square btn btn-primary rounded-circle mx-1" href=""><i class="fab fa-twitter"></i></a>
-                            <a class="btn-square btn btn-primary rounded-circle mx-1" href=""><i class="fab fa-instagram"></i></a>
-                            <a class="btn-square btn btn-primary rounded-circle mx-1" href=""><i class="fab fa-linkedin-in"></i></a>
+                            <a class="btn-square btn btn-dark rounded-circle mx-1" href=""><i class="fab fa-facebook-f"></i></a>
+                            <a class="btn-square btn btn-dark rounded-circle mx-1" href=""><i class="fab fa-twitter"></i></a>
+                            <a class="btn-square btn btn-dark rounded-circle mx-1" href=""><i class="fab fa-instagram"></i></a>
+                            <a class="btn-square btn btn-dark rounded-circle mx-1" href=""><i class="fab fa-linkedin-in"></i></a>
                         </div>
                     </div>
                 </div>
@@ -162,34 +162,7 @@
                 </div>
                 <div class="col-md-6 col-lg-6 col-xl-3">
                     <div class="footer-item">
-                        <div class="row gy-3 gx-2 mb-4">
-                            <div class="col-xl-6">
-                                <form>
-                                    <div class="form-floating">
-                                        <select class="form-select bg-dark border" id="select1">
-                                            <option value="1">Arabic</option>
-                                            <option value="2">German</option>
-                                            <option value="3">Greek</option>
-                                            <option value="3">New York</option>
-                                        </select>
-                                        <label for="select1">English</label>
-                                    </div>
-                                </form>
-                            </div>
-                            <div class="col-xl-6">
-                                <form>
-                                    <div class="form-floating">
-                                        <select class="form-select bg-dark border" id="select1">
-                                            <option value="1">USD</option>
-                                            <option value="2">EUR</option>
-                                            <option value="3">INR</option>
-                                            <option value="3">GBP</option>
-                                        </select>
-                                        <label for="select1">$</label>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
+                        
                         <h4 class="text-white mb-3">Payments</h4>
                         <div class="footer-bank-card">
                             <a href="#" class="text-white me-2"><i class="fab fa-cc-amex fa-2x"></i></a>
@@ -206,7 +179,7 @@
     </footer>
     <!-- Footer End -->
     <!-- Back to Top -->
-    <a href="#" class="btn btn-primary btn-primary-outline-0 btn-md-square back-to-top"><i class="fa fa-arrow-up"></i></a>
+    <a href="#" class="btn btn-warning btn-dark-outline-0 btn-md-square back-to-top"><i class="fa fa-arrow-up"></i></a>
     <!-- JavaScript Libraries -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
@@ -243,7 +216,7 @@
             $.ajax({
                 url: url,
                 method: 'GET',
-                success: function (response) {
+                 : function (response) {
                     console.log(response.data);
                     var resultContainer = $('.search-result .list-group');
                     resultContainer.empty(); // Clear previous search results
