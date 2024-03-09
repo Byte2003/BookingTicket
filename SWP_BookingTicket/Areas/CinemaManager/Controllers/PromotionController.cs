@@ -77,20 +77,19 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 		public async Task<IActionResult> Update(Promotion promotion, IFormFile? fileImage)
         {
 			var _promotion = await _unitOfWork.Promotion.GetFirstOrDefaultAsync(u => u.PromotionID == promotion.PromotionID);
-			var oldImg = _promotion.ImageUrl;
+            _promotion.Topic = promotion.Topic;
+            _promotion.Content = promotion.Content;
+            _promotion.StartDate = promotion.StartDate;
+            _promotion.EndDate = promotion.EndDate;
 			if (ModelState.IsValid)
 			{
 				if (fileImage is not null)
 				{
-					promotion.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\promotion", oldImg);
+					_promotion.ImageUrl = _uploadImageService.UploadImage(fileImage, @"images\promotion");
 
 				}
-				else
-				{
-					promotion.ImageUrl = oldImg;
-				}
-				
-				_unitOfWork.Promotion.Update(promotion);
+					
+				_unitOfWork.Promotion.Update(_promotion);
 				_unitOfWork.Save();
 			}
 			return RedirectToAction("Index");

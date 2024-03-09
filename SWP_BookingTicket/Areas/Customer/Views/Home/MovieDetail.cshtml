@@ -1,10 +1,12 @@
 ﻿@model Movie
 <style>
     /* Custom styles for the comment section */
-
+    .main{
+        background-color:aqua;
+    }
     .comment {
         margin-bottom: 20px;
-        border-left: 5px solid #007bff;
+        border-left: 5px solid #000;
         padding-left: 10px;
     }
 
@@ -37,7 +39,6 @@
         .add-comment button {
             margin-top: 10px;
             padding: 10px 20px;
-            background-color: #007bff;
             color: #fff;
             border: none;
             border-radius: 5px;
@@ -55,7 +56,7 @@
 
 </style>
 
-<div class="container py-5">
+<div class="container py-5" >
     <div class="text-primary">
     </div>
     <hr />
@@ -87,9 +88,11 @@
                 <a asp-controller="Ticket" asp-action="Index" asp-route-movie_id="@Model.MovieID" class="btn w-50 mx-2 my-4 text-white" style="height: 36px; background-color: #c61118">
                     <span>Book Now</span>
                 </a>
-                <a asp-controller="Home" asp-action="Index"  class="btn btn-primary w-50 mx-2 my-4 text-white" style="height: 36px;">
+                <a asp-controller="Home" asp-action="Index" class="btn btn-warning w-50 mx-2 my-4 text-white bi bi-house" style="height: 36px;">
                     <span>Home</span>
                 </a>
+
+
             </div>
 
         </div>
@@ -125,7 +128,7 @@
             <div class="form-group">
                 <textarea id="commentInput" class="form-control" rows="3" placeholder="Write your comment here..."></textarea>
             </div>
-            <button id="postCommentBtn" class="btn btn-primary">Submit</button>
+            <button id="postCommentBtn" class="btn btn-dark">Submit</button>
 
         </div>
     </div>

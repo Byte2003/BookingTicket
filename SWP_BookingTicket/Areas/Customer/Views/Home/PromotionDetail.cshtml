@@ -10,7 +10,7 @@
 			font-family: Arial, sans-serif;
 			margin: 0;
 			padding: 0;
-			background-color: #f8f9fa; /* Màu nền */
+			background-color: #333; /* Màu nền */
 		}
 
 		.container {
@@ -45,68 +45,70 @@
 			width: 50%;
 			font-size: 16px;
 			line-height: 1.5;
-			text-align: left; 
+			text-align: left;
 		}
 
-		.promotion .time{
+		.promotion .time {
 			border-radius: 5px;
-			margin-top:20px;
+			margin-top: 20px;
 			border: 2px inset #b1154a;
 			background-color: #dbdbd9;
 			line-height: 1.5;
 			font-size: 16px;
 		}
 
-		.room{
+		.room {
 			padding: 10px;
 			border: 2px dotted #b1154a;
 			margin-top: 10%;
 		}
+
 		.dx {
-			color: #ff6600; 
-			font-size: 18px; 
-			font-weight: bold; 
-			text-decoration: none; 
-			transition: color 0.3s; 
+			color: #ff6600;
+			font-size: 18px;
+			font-weight: bold;
+			text-decoration: none;
+			transition: color 0.3s;
 		}
 
-		
+
 		.imax {
-			color: #9900cc; 
+			color: #9900cc;
 			font-size: 20px;
-			font-style: italic; 
-			text-shadow: 2px 2px 4px #cccccc; 
+			font-style: italic;
+			text-shadow: 2px 2px 4px #cccccc;
 			background-image: linear-gradient(45deg, #9900cc, #cc00ff);
 			background-clip: text;
 			-webkit-background-clip: text;
-			color: transparent; 
+			color: transparent;
 		}
 
 		.starium {
-			color: #009933; 
-			font-size: 16px; 
-			font-weight: bold; 
+			color: #009933;
+			font-size: 16px;
+			font-weight: bold;
 			text-transform: uppercase;
 		}
+
 		.gold-class {
-			color: #cc9900; 
+			color: #cc9900;
 			font-size: 22px;
-			font-weight: bold; 
-			text-transform: uppercase; 
+			font-weight: bold;
+			text-transform: uppercase;
 		}
 
 		.lamour {
-			color: #ff3366; 
+			color: #ff3366;
 			font-size: 20px;
-			font-weight: bold; 
-			text-decoration: underline; 
+			font-weight: bold;
+			text-decoration: underline;
 		}
 
 		.sweet {
-			color: #993399; 
-			font-size: 18px; 
-			font-style: italic; 
-			text-shadow: 1px 1px 2px #cccccc; 
+			color: #993399;
+			font-size: 18px;
+			font-style: italic;
+			text-shadow: 1px 1px 2px #cccccc;
 		}
 
 		.premium-cinema {
@@ -120,11 +122,11 @@
 			padding-top: 40px;
 		}
 
-		
+
 		.screenx {
 			font-family: cursive;
-			color: #ff0000; 
-			font-size: 20px; 
+			color: #ff0000;
+			font-size: 20px;
 			font-weight: bold;
 		}
 
@@ -155,43 +157,39 @@
 		.cine-suite {
 			font-family: fantasy;
 			color: #663300;
-			font-size: 18px; 
-			font-style: italic; 
+			font-size: 18px;
+			font-style: italic;
 		}
 
 		.room ul {
 			list-style-type: none;
-			padding: 0; 
-			margin: 0; 
+			padding: 0;
+			margin: 0;
 		}
 
 		.room li {
-			display: inline-block; 
-			margin-right: 10px; 
+			display: inline-block;
+			margin-right: 10px;
 		}
 
 		.room a {
-			text-decoration: none; 
+			text-decoration: none;
 			padding: 5px 10px;
-			
-			border-radius: 5px; 
-
-
+			border-radius: 5px;
 		}
 
 			.room a:hover {
-				background-color: #ddd; 
+				background-color: #ddd;
 			}
-
 
 	</style>
 </head>
 <body>
-	<div class="container">
+	<div class="container" style="background-color: #e8e8e3">
 		<div style="margin-bottom: 20px; font-size: 26px; color: #b1154a;">
 			@Model.Topic
 		</div>
-		
+
 
 		<div class="promotion">
 			<div class="promotion-image">
