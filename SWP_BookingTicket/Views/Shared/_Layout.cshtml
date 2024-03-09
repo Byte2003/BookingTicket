@@ -56,7 +56,10 @@
 
                     <a asp-area="Customer" asp-controller="Home" asp-action="Index" class="nav-item nav-link"><i class="bi bi-house-fill"></i> Home</a>
                     <a asp-area="Customer" asp-controller="Home" asp-action="PromotionViewAll" class="nav-item nav-link"><i class="bi bi-bell-fill"></i> News</a>
-                    <a asp-area="Admin" asp-action="Dashboard" asp-controller="Dashboard" class="nav-item nav-link">Dashboard</a>
+                    @if (SignInManager.IsSignedIn(User) && User.IsInRole("admin"))
+                    {                      
+                        <a asp-area="Admin" asp-action="Dashboard" asp-controller="Dashboard" class="nav-item nav-link">Dashboard</a>
+                    }
 
                     @*<a href="#" class="nav-item nav-link">About</a>
                     <a href="#" class="nav-item nav-link">Services</a>
@@ -75,9 +78,6 @@
                             </li>
                             <li>
                                 <a asp-area="CinemaManager" asp-action="Index" asp-controller="Movie" class="dropdown-item text-white">Movie</a>
-                            </li>
-                            <li>
-                                <a asp-area="Admin" asp-action="Index" asp-controller="UserAccount" class="dropdown-item text-white">Account</a>
                             </li>
                             <li>
                                 <a asp-area="CinemaManager" asp-action="Index" asp-controller="Room" class="dropdown-item text-white">Room</a>
