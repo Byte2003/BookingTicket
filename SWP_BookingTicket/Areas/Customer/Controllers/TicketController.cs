@@ -651,9 +651,29 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetShowtimeDatesForMovie(Guid movie_id)
+        {
+            var showtimes = await _unitOfWork.Showtime.GetAllAsync(u => u.MovieID == movie_id);
+            HashSet<string> showtimeDatesInFuture = new HashSet<string>();
+            foreach(var showtime in showtimes)
+            {
+                int year = showtime.Date.Year;
+                int month = showtime.Date.Month;
+                int day = showtime.Date.Day;
+                DateTime showtimeDate = new DateTime(year, month, day);
+                if (showtimeDate >= DateTime.Now.Date)
+                {
+                    showtimeDatesInFuture.Add(showtimeDate.ToString("dd/MM/yyyy")) ;
+                }
+                
+            }
+            return Json(new { dates = showtimeDatesInFuture });
+
+        }
+        [HttpGet]
         public async Task<IActionResult> GetShowtimeForAMovieWithinADay(Guid movie_id, string? date, string? address)
         {
-            string[] dateComponents = date.Split('-');
+            string[] dateComponents = date.Split('/');
             if (dateComponents.Length != 3)
             {
                 throw new FormatException("Invalid date format");
@@ -678,10 +698,15 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             cinemasAddressForThisShowtime = cinemasAddressForThisShowtime.Distinct();
             if (address != null)
             {
+                DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+                DateTime currentDateTime = DateTime.Now;
                 var showtimesForAllCondition = from room in roomsForShowtime
                                                join cinema in cinemas on room.CinemaID equals cinema.CinemaID
                                                join showtime in showtimesWithinDay on room.RoomID equals showtime.RoomID
-                                               where cinema.Address == address
+                                               where cinema.Address == address &&
+                                               (showtime.Date > currentDate || // Showtime Date is bigger than current date
+                                               (showtime.Date == currentDate && showtime.Time > currentDateTime.Hour) || // Current date == Showtime Date
+                                               (showtime.Date == currentDate && showtime.Time == currentDateTime.Hour && showtime.Minute > currentDateTime.Minute))
                                                select new { name = cinema.CinemaName, time = showtime.Time, minute = showtime.Minute, showtimeID = showtime.ShowtimeID };
                 return Json(new { showtimes = showtimesWithinDay, addresses = cinemasAddressForThisShowtime, showtimesForAllCondition = showtimesForAllCondition });
             }
