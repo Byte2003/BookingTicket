@@ -161,21 +161,30 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         [HttpGet]
         public async Task<IActionResult> ChooseSeat(Guid showtime_id)
         {
-            var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id, includeProperties: "Room,Movie");
-            if (showtime is not null)
+            try
             {
-                var room = showtime.Room;
-                var seats = await _unitOfWork.Seat.GetAllAsync(u => u.RoomID == room.RoomID);
-                ViewData["ShowtimeID"] = showtime_id.ToString();
-                ViewData["Seats"] = seats;
+
+                var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(u => u.ShowtimeID == showtime_id, includeProperties: "Room,Movie");
+                if (showtime is not null)
+                {
+                    var room = showtime.Room;
+                    var seats = await _unitOfWork.Seat.GetAllAsync(u => u.RoomID == room.RoomID);
+                    ViewData["ShowtimeID"] = showtime_id.ToString();
+                    ViewData["Seats"] = seats;
+                    return View();
+                }
+                else
+                {
+                    return RedirectToAction("Error", "Home");
+
+                }
             }
-            return View();
+            catch (Exception ex)
+            {
+                return RedirectToAction("Error", "Home");
+            }
         }
-        [HttpGet]
-        public IActionResult BookingProcess()
-        {
-            return View();
-        }
+
         public async Task<IActionResult> BookingProcess(string seatIDs, Guid showtime_id, string? payment_method, string? status = null, string? voucherCode = null)
         {
             try
@@ -376,7 +385,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             catch (Exception ex)
             {
                 TempData["error"] = "An unexpected error occurs. Please try again.";
-                return RedirectToAction("ChooseSeat", new { showtime_id = showtime_id });
+                return RedirectToAction("Error", "Home");
             }
         }
 
@@ -527,7 +536,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
 
                 if (status == "success")
                 {
-                    timeSpan =  CalculateDifferentTime(showtime_id);
+                    timeSpan = CalculateDifferentTime(showtime_id);
                 }
 
 
@@ -655,7 +664,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         {
             var showtimes = await _unitOfWork.Showtime.GetAllAsync(u => u.MovieID == movie_id);
             HashSet<string> showtimeDatesInFuture = new HashSet<string>();
-            foreach(var showtime in showtimes)
+            foreach (var showtime in showtimes)
             {
                 int year = showtime.Date.Year;
                 int month = showtime.Date.Month;
@@ -663,9 +672,9 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 DateTime showtimeDate = new DateTime(year, month, day);
                 if (showtimeDate >= DateTime.Now.Date)
                 {
-                    showtimeDatesInFuture.Add(showtimeDate.ToString("dd/MM/yyyy")) ;
+                    showtimeDatesInFuture.Add(showtimeDate.ToString("dd/MM/yyyy"));
                 }
-                
+
             }
             return Json(new { dates = showtimeDatesInFuture });
 

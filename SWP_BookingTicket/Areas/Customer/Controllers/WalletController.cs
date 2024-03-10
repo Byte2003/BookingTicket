@@ -26,7 +26,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             var user = await _userManager.FindByIdAsync(claim.Value);
             if (claim == null || user == null)
             {
-                return NotFound();
+                return RedirectToAction("Error", "Home");
             }
             else
             {
