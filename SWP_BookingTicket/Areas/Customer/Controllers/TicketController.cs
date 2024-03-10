@@ -622,7 +622,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 DateTime showtimeDate = new DateTime(year, month, day);
                 if (showtimeDate >= DateTime.Now.Date)
                 {
-                    showtimeDatesInFuture.Add(showtimeDate.ToShortDateString()) ;
+                    showtimeDatesInFuture.Add(showtimeDate.ToString("dd/MM/yyyy")) ;
                 }
                 
             }
@@ -657,10 +657,15 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             cinemasAddressForThisShowtime = cinemasAddressForThisShowtime.Distinct();
             if (address != null)
             {
+                DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+                DateTime currentDateTime = DateTime.Now;
                 var showtimesForAllCondition = from room in roomsForShowtime
                                                join cinema in cinemas on room.CinemaID equals cinema.CinemaID
                                                join showtime in showtimesWithinDay on room.RoomID equals showtime.RoomID
-                                               where cinema.Address == address
+                                               where cinema.Address == address &&
+                                               (showtime.Date > currentDate || // Showtime Date is bigger than current date
+                                               (showtime.Date == currentDate && showtime.Time > currentDateTime.Hour) || // Current date == Showtime Date
+                                               (showtime.Date == currentDate && showtime.Time == currentDateTime.Hour && showtime.Minute > currentDateTime.Minute))
                                                select new { name = cinema.CinemaName, time = showtime.Time, minute = showtime.Minute, showtimeID = showtime.ShowtimeID };
                 return Json(new { showtimes = showtimesWithinDay, addresses = cinemasAddressForThisShowtime, showtimesForAllCondition = showtimesForAllCondition });
             }
