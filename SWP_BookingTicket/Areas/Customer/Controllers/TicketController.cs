@@ -610,9 +610,29 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         }
 
         [HttpGet]
+        public async Task<IActionResult> GetShowtimeDatesForMovie(Guid movie_id)
+        {
+            var showtimes = await _unitOfWork.Showtime.GetAllAsync(u => u.MovieID == movie_id);
+            HashSet<string> showtimeDatesInFuture = new HashSet<string>();
+            foreach(var showtime in showtimes)
+            {
+                int year = showtime.Date.Year;
+                int month = showtime.Date.Month;
+                int day = showtime.Date.Day;
+                DateTime showtimeDate = new DateTime(year, month, day);
+                if (showtimeDate >= DateTime.Now.Date)
+                {
+                    showtimeDatesInFuture.Add(showtimeDate.ToShortDateString()) ;
+                }
+                
+            }
+            return Json(new { dates = showtimeDatesInFuture });
+
+        }
+        [HttpGet]
         public async Task<IActionResult> GetShowtimeForAMovieWithinADay(Guid movie_id, string? date, string? address)
         {
-            string[] dateComponents = date.Split('-');
+            string[] dateComponents = date.Split('/');
             if (dateComponents.Length != 3)
             {
                 throw new FormatException("Invalid date format");
