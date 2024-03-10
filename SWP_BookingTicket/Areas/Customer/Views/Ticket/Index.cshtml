@@ -64,8 +64,8 @@
 
         //Default border for this
         var defaultMovieSelected = $('[data-movieID="' + movieID + '"]');
-        $(".movie").removeClass("border border-4 border-info");
-        defaultMovieSelected.addClass("border border-4 border-info");
+        $(".movie").removeClass("border border-4 border-secondary");
+        defaultMovieSelected.addClass("border border-4 border-secondary");
 
         function getDate(daysToAdd) {
             var date = new Date();
@@ -119,8 +119,8 @@
                 $(".notify-select").addClass("d-none");
                 movieID = $(this).attr("data-movieID");
                 generateDayCards(movieID);
-                $(".movie").removeClass("border border-4 border-info");
-                $(this).addClass("border border-4 border-info");
+                $(".movie").removeClass("border border-4 border-secondary");
+                $(this).addClass("border border-4 border-secondary");
                 $(".showtime-list").text("");
                 $(".address-list").text("");
             });
