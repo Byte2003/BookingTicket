@@ -12,7 +12,7 @@ using SWP_BookingTicket.Models.ViewModels;
 namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 {
     [Area("CinemaManager")]
-    [Authorize(Roles = "cinemaManager")]
+    [Authorize(Roles = "cinemaManager,admin")]
 
     public class ShowtimeController : Controller
     {

@@ -8,7 +8,7 @@ using System.Linq;
 namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 {
     [Area("CinemaManager")]
-    [Authorize(Roles = "cinemaManager")]
+    [Authorize(Roles = "cinemaManager,admin")]
     public class SeatController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;
