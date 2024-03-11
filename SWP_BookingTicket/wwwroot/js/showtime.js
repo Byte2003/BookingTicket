@@ -37,7 +37,7 @@ function loadDataTable() {
                     return `
                        
                             <a href="/CinemaManager/Showtime/Update?showtime_id=${data}"
-                            class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
+                            class="btn btn-dark mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
                             <a onClick=Delete('/CinemaManager/Showtime/Delete?showtime_id=${data}')
                             class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
 					   

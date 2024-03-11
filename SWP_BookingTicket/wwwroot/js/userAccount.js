@@ -6,7 +6,7 @@ $(document).ready(function () {
 function loadDataTable() {
     dataTable = $('#userAccountTable').DataTable({
         "ajax": {
-            "url": "/Admin/UserAccount/GetAllUsers"
+            "url": "/Admin/Dashboard/GetCustomerUsers"
         },
         "columns": [
             { "data": "id", "width": "5%" },
@@ -31,10 +31,10 @@ function loadDataTable() {
                 "render": function (data) {
                     
                     return `                     
-                            <a asp-area="Admin" onClick=LockAccount("/Admin/UserAccount/LockAccount?user_id=${data}")
+                            <a asp-area="Admin" onClick=LockAccount("/Admin/Dashboard/LockAccount?user_id=${data}")
                             class="btn btn-danger mx-2"><i class="bi bi-lock"></i>Lock</a>
-                            <a asp-area="Admin" onClick=UnlockAccount("/Admin/UserAccount/UnlockAccount?user_id=${data}")
-                            class="btn btn-primary mx-2"><i class="bi bi-lock"></i>Unlock</a>
+                            <a asp-area="Admin" onClick=UnlockAccount("/Admin/Dashboard/UnlockAccount?user_id=${data}")
+                            class="btn btn-primary mx-2"><i class="bi bi-unlock-fill"></i>Unlock</a>
 					                          `
                 },
                 "width": "20%"

@@ -1,0 +1,218 @@
+﻿@{
+    var time = ViewData["Time"] as string;
+    var movie = ViewData["Movie"] as string;
+    var duration = ViewData["Duration"] as string;
+    var room = ViewData["Room"] as string;
+    var seats = ViewData["Seats"] as List<string>;
+    var cinema = ViewData["Cinema"] as string;
+    var price = ViewData["Price"] as string;
+    var total = ViewData["Total"] as string;
+    var point = ViewData["user_points"] as string;
+}
+<style>
+    .ticket-container {
+        border: 1px solid #ccc;
+        padding: 10px;
+        margin-bottom: 20px;
+        background-color: #f9f9f9;
+    }
+
+        .ticket-container p {
+            margin: 5px 0;
+        }
+
+    .tickets-containers {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-evenly;
+    }
+
+    .btn.btn-primary.point:hover {
+        box-shadow: inset 300px 0 0 0 var(--bs-light) !important;
+        color: goldenrod !important;
+    }
+
+    .btn-primary.point {
+        border-color:goldenrod;
+    }
+</style>
+
+<div class="container mt-5" style="min-height: 650px">
+    <h3 class="text-dark">Your Order</h3>
+    <hr />
+    <div class="row">
+        <!-- Left column for ticket list -->
+        <div class="col-md-6">
+            <h5>Ticket preview</h5>
+            <div class="tickets-containers">
+                @foreach (var item in seats)
+                {
+                    <div class="ticket-container">
+                        <div>
+                            <p>Movie: @movie</p>
+                        </div>
+                        <div>
+                            <p>@time</p>
+                        </div>
+                        <div>
+                            <p>Cinema: @cinema</p>
+                        </div>
+                        <div>
+                            <p>Room: @room</p>
+                        </div>
+                        <div>
+                            <p>Seat: @item</p>
+                        </div>
+                        <div>
+                            <p>Price: @price</p>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+        <!-- Right column for payment method, voucher, etc. -->
+        <div class="col-md-6">
+            <div class="row">
+                <h5 class="col-6">Summary</h5>
+                <div class="col-6" id="personal_point"><strong>Your Points: @ViewData["user_points"]</strong></div>
+                <hr />
+            </div>
+            <div class="">
+                <p id="totalAmount">Total Amount: $@total</p>
+            </div>
+            <div class="form-group mt-2">
+                <label for="voucherCode">Voucher Code:</label>
+                <div class="input-group">
+                    <input type="text" class="form-control" style="margin-right:30%" id="voucherCode">
+                    <div class="input-group-append">
+                        <button id="applyVoucherBtn" class="btn btn-primary" style="margin-left:-120%">Apply Voucher</button>
+                    </div>
+                </div>
+            </div>
+
+            <button style="background-color:#013088" id="pay_paypal" class="btn btn-primary mt-3"><i class="bi bi-paypal"></i> Pay with PayPal</button>
+            <button style="background-color:goldenrod" id="pay_point" class="btn btn-primary point mt-3">Pay by Point</button>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            $('#pay_paypal').click(function () {
+                // Redirect to the PayPal payment process
+                    createForm("paypal");
+                // window.location.href = '@Url.Action("BookingProcess", "Ticket", new { seatIDs = ViewData["seatIDs"], showtime_id = ViewData["showtime_id"] })';
+            });
+
+            $('#pay_point').click(function () {
+                var point = parseFloat(@ViewData["user_points"]);
+                var total = getCurrentTotal();
+                // Check if user's point is sufficient for payment
+                if (point / 1000 >= total) {
+                    toastr.options = {
+                        "closeButton": true
+                    }
+                    toastr.error('User has sufficient points. Proceed with point payment.');
+
+                    createForm("point");
+                } else {
+                    toastr.options = {
+                        "closeButton": true
+                    }
+                    toastr.error('Your points are insufficient. Please choose another payment method.');
+                }
+            });
+
+            function getCurrentTotal() {
+                // Extract the total amount value from the displayed text
+                var totalText = $('#totalAmount').text();
+                var total = parseFloat(totalText.replace('Total Amount: $', ''));
+                return total;
+            }
+
+            $('#applyVoucherBtn').click(function () {
+                var voucherCode = $('#voucherCode').val();
+                // Make an AJAX request to get the value of the voucher
+                $.ajax({
+                    url: '/Customer/Ticket/GetVoucherValue',
+                    method: 'GET',
+                    data: { voucherCode: voucherCode },
+                    success: function (response) {
+                        // Check if the voucher is valid and retrieve its value from the response
+                        var voucherValue = response.data;
+
+                        if (voucherValue === "") {
+                            toastr.options = {
+                                "closeButton": true
+                            }
+                            toastr.error('Invalid voucher code. Please enter a valid voucher code.');
+                            //alert('Invalid voucher code. Please enter a valid voucher code.');
+                            $('#voucherCode').val('');
+                            return;
+                        }
+
+                        var discountPercentage = parseFloat(voucherValue);
+                        var originalTotal = parseFloat('@total'); 
+                        var discountedTotal = originalTotal - (originalTotal * discountPercentage / 100);
+
+                        // Update the total amount display with the discounted total
+                        $('#totalAmount').text('Total Amount: $' + discountedTotal.toFixed(2)); // Update the total amount display
+
+                        toastr.options = {
+                            "closeButton": true
+                        }
+                        toastr.success('Apply voucher successfully.');
+
+                        //alert('Apply voucher successfully.');
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error if the AJAX request fails
+                        console.error('Error:', error);
+                    }
+                });
+            });
+
+        });
+
+        function createForm(payment_method) {
+            // Create a form element
+            var form = document.createElement('form');
+            form.setAttribute('method', 'POST');
+            form.setAttribute('action', '/Customer/Ticket/BookingProcess');
+
+            // Create hidden input fields for seatIDList and showtime_id
+            var seatIDListInput = document.createElement('input');
+            seatIDListInput.setAttribute('type', 'hidden');
+            seatIDListInput.setAttribute('name', 'seatIDs');
+            seatIDListInput.setAttribute('value', '@ViewData["seatIDs"]');
+            form.appendChild(seatIDListInput);
+
+            var showtimeIDInput = document.createElement('input');
+            showtimeIDInput.setAttribute('type', 'hidden');
+            showtimeIDInput.setAttribute('name', 'showtime_id');
+            showtimeIDInput.setAttribute('value', '@ViewData["showtime_id"]');
+            form.appendChild(showtimeIDInput);
+
+            var paymentMethodInput = document.createElement('input');
+            paymentMethodInput.setAttribute('type', 'hidden');
+            paymentMethodInput.setAttribute('name', 'payment_method');
+            paymentMethodInput.setAttribute('value', payment_method);
+            form.appendChild(paymentMethodInput);
+
+            var voucherCodeInput = document.createElement('input');
+            voucherCodeInput.setAttribute('type', 'hidden');
+            voucherCodeInput.setAttribute('name', 'voucherCode');
+            voucherCodeInput.setAttribute('value', $('#voucherCode').val());
+            form.appendChild(voucherCodeInput);
+
+            // Append the form to the body and submit it
+            document.body.appendChild(form);
+            form.submit();
+        };
+    </script>
+}

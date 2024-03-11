@@ -1,5 +1,69 @@
 ﻿@model SWP_BookingTicket.Utils.PaginatedList<Movie>
-<div>
+<style>
+
+	.image-zoom img {
+		display: block;
+		transition: all .3s ease;
+	}
+
+		.image-zoom img:hover {
+			transform: scale(1.1);
+		}
+
+	.image-zoom div {
+		display: block;
+		overflow: hidden;
+	}
+
+	.carousel-control-prev,
+	.carousel-control-next {
+		width: 50px;
+		height: 50px;
+		font-size: 1.5rem;
+		top: 50%;
+		transform: translateY(-50%);
+		background-color: rgba(0, 0, 0, 0.5);
+	}
+
+	.carousel-control-prev {
+		left: 0;
+	}
+
+	.carousel-control-next {
+		right: 0;
+	}
+
+	.promotion_title {
+		position: relative;
+	}
+
+	.red-line {
+		position: absolute;
+		bottom: 0;
+		left: 50%;
+		transform: translateX(-50%);
+		width: 20%;
+		border-bottom: 2px solid red;
+	}
+
+	.home-title {
+		text-align: center;
+	}
+
+		.home-title .title-new-offer-vn {
+			font-family: 'Montserrat', sans-serif;
+			border-radius: 5px;
+			color: aliceblue;
+			background-color: #000000;
+			border: 6px dotted #b1154a;
+			animation: blink 1s infinite;
+			text-shadow: 2px 2px 2px #000;
+		}
+
+	}
+</style>
+
+<div style="background-color: #333333">
 	<!-- Carousel Start -->
 	<div>
 		<div class="carousel-header">
@@ -8,129 +72,51 @@
 					<li data-bs-target="#carouselId" data-bs-slide-to="0" class="active"></li>
 					<li data-bs-target="#carouselId" data-bs-slide-to="1"></li>
 					<li data-bs-target="#carouselId" data-bs-slide-to="2"></li>
+					<li data-bs-target="#carouselId" data-bs-slide-to="3"></li>
+
 				</ol>
 				<div class="carousel-inner" role="listbox">
 					<div class="carousel-item active">
-						<img src="img/carousel-2.jpg" class="img-fluid" alt="Image">
-						<div class="carousel-caption">
-							<div class="p-3" style="max-width: 900px;">
-								<h4 class="text-white text-uppercase fw-bold mb-4" style="letter-spacing: 3px;">Explore The World</h4>
-								<h1 class="display-2 text-capitalize text-white mb-4">Let's The World Together!</h1>
-								<p class="mb-5 fs-5">
-									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-								</p>
-								<div class="d-flex align-items-center justify-content-center">
-									<a class="btn-hover-bg btn btn-primary rounded-pill text-white py-3 px-5" href="#">Discover Now</a>
-								</div>
-							</div>
-						</div>
+						<img src="img/GapLaiChiBauMovie.jpg" class="img-fluid" alt="Image">
+
 					</div>
 					<div class="carousel-item">
-						<img src="img/carousel-1.jpg" class="img-fluid" alt="Image">
-						<div class="carousel-caption">
-							<div class="p-3" style="max-width: 900px;">
-								<h4 class="text-white text-uppercase fw-bold mb-4" style="letter-spacing: 3px;">Explore The World</h4>
-								<h1 class="display-2 text-capitalize text-white mb-4">Find Your Perfect Tour At Travel</h1>
-								<p class="mb-5 fs-5">
-									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-								</p>
-								<div class="d-flex align-items-center justify-content-center">
-									<a class="btn-hover-bg btn btn-primary rounded-pill text-white py-3 px-5" href="#">Discover Now</a>
-								</div>
-							</div>
-						</div>
+						<img src="img/HoiChungTuoiThanhXuanMovie_LE_auto_x1.jpg" class="img-fluid" alt="Image">
+
+
 					</div>
 					<div class="carousel-item">
-						<img src="img/carousel-3.jpg" class="img-fluid" alt="Image">
-						<div class="carousel-caption">
-							<div class="p-3" style="max-width: 900px;">
-								<h4 class="text-white text-uppercase fw-bold mb-4" style="letter-spacing: 3px;">Explore The World</h4>
-								<h1 class="display-2 text-capitalize text-white mb-4">You Like To Go?</h1>
-								<p class="mb-5 fs-5">
-									Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s,
-								</p>
-								<div class="d-flex align-items-center justify-content-center">
-									<a class="btn-hover-bg btn btn-primary rounded-pill text-white py-3 px-5" href="#">Discover Now</a>
-								</div>
-							</div>
-						</div>
+						<img src="img/QuyThayDauMovie.jpg" class="img-fluid" alt="Image">
+
+					</div>
+					<div class="carousel-item">
+						<img src="img/DuneMovie.jpg" class="img-fluid" alt="Image">
+
 					</div>
 				</div>
 				<button class="carousel-control-prev" type="button" data-bs-target="#carouselId" data-bs-slide="prev">
-					<span class="carousel-control-prev-icon btn bg-primary" aria-hidden="false"></span>
+					<span class="carousel-control-prev-icon btn bg-black" aria-hidden="false"></span>
 					<span class="visually-hidden">Previous</span>
 				</button>
 				<button class="carousel-control-next" type="button" data-bs-target="#carouselId" data-bs-slide="next">
-					<span class="carousel-control-next-icon btn bg-primary" aria-hidden="false"></span>
+					<span class="carousel-control-next-icon btn bg-dark" aria-hidden="false"></span>
 					<span class="visually-hidden">Next</span>
 				</button>
 			</div>
 		</div>
 		<!-- Carousel End -->
 		<!--Promotion Start -->
-
-		<style>
-			.image-zoom img {
-				display: block;
-				transition: all .3s ease;
-			}
-
-				.image-zoom img:hover {
-					transform: scale(1.1);
-				}
-
-			.image-zoom div {
-				display: block;
-				overflow: hidden;
-			}
-
-			.carousel-control-prev,
-			.carousel-control-next {
-				width: 50px;
-				height: 50px;
-				font-size: 1.5rem;
-				top: 50%;
-				transform: translateY(-50%);
-				background-color: rgba(0, 0, 0, 0.5);
-			}
-
-			.carousel-control-prev {
-				left: 0;
-			}
-
-			.carousel-control-next {
-				right: 0;
-			}
-
-			.promotion_title {
-				position: relative;
-			}
-
-			.red-line {
-				position: absolute;
-				bottom: 0;
-				left: 50%;
-				transform: translateX(-50%);
-				width: 20%;
-				border-bottom: 2px solid red;
-			}
-
-		</style>
-		
 	</div>
 	@{
 		var promotions = ViewData["promotionData"] as IEnumerable<Promotion>;
 		var totalCount = promotions.Count();
-		
+
 	}
 
-	<div class="container-fluid blog py-5">
+	<div class="container blog py-5">
 
-		<div class="promotion_title mx-auto text-center mb-5">
-
-			<h1>News - Promotion</h1>
-			<div class="red-line"></div>
-
+		<div class="home-title">
+			<h2 class="title-new-offer-vn">NEWS - PROMOTION</h2>
 		</div>
 		<div id="carouselExampleInterval" class="carousel slide" data-bs-ride="carousel">
 			<div class="carousel-inner">
@@ -177,14 +163,10 @@
 
 	<!--Promotion End-->
 	<!-- Blog Start -->
-	<div class="container-fluid blog py-5">
+	<div id="#movie" class="container-fluid blog py-5">
 		<div class="container py-5">
-			<div class="mx-auto text-center mb-5" style="max-width: 900px;">
-				<h5 class="section-title px-3">Movies</h5>
-				<h1 class="mb-4">Trending Movies </h1>
-				<p class="mb-0">
-					Lorem ipsum dolor sit amet consectetur adipisicing elit. Deleniti deserunt tenetur sapiente atque. Magni non explicabo beatae sit, vel reiciendis consectetur numquam id similique sunt error obcaecati ducimus officia maiores.
-				</p>
+			<div class="home-title">
+				<h2 class="title-new-offer-vn">TRENDING MOVIES</h2>
 			</div>
 			<div class="row d-flex justify-content-between">
 				@foreach (var movie in Model)
@@ -199,10 +181,10 @@
 											<h5 class="text-white">@movie.MovieName</h5>
 										</div>
 										<div class="d-flex justify-content-between">
-											<a a class="btn w-50 mx-2 my-4 text-white" style="height: 36px; background-color: #c61118">
+											<a asp-area="Customer" asp-controller="Ticket" asp-action="Index" asp-route-movie_id="@movie.MovieID" class="btn w-50 mx-2 my-4 text-white" style="height: 36px; background-color: #c61118">
 												<span>Book</span>
 											</a>
-											<a asp-area="Customer" asp-action="MovieDetail" asp-route-movie_id="@movie.MovieID" class="btn w-50 mx-2 my-4 text-white" style="height: 36px; background-color: #c61118">
+											<a asp-area="Customer" asp-controller="Home" asp-action="MovieDetail" asp-route-movie_id="@movie.MovieID" class="btn w-50 mx-2 my-4 text-white" style="height: 36px; background-color: #c61118">
 												<span>View</span>
 											</a>
 										</div>
@@ -221,12 +203,12 @@
 			<div class="d-flex justify-content-center align-items-center mt-5">
 				<a asp-action="Index"
 				   asp-route-pageNumber="@(Model.PageIndex - 1)"
-				   class="btn btn-primary @prevDisabled mx-2 text-white ">
+				   class="btn btn-warning @prevDisabled mx-2 text-white " style="background: #000	">
 					Prev
 				</a>
 				<a asp-action="Index"
 				   asp-route-pageNumber="@(Model.PageIndex + 1)"
-				   class="btn btn-primary @nextDisabled mx-2 text-white">
+				   class="btn btn-warning @nextDisabled mx-2 text-white" style="background: #000">
 					Next
 				</a>
 			</div>
@@ -246,6 +228,24 @@
 			var id = $(this).attr("data-movie-id");
 			$(`.btn-list-${id}`).removeClass("d-flex").addClass("d-none");
 		})
+		function blinkTitle() {
+			var titles = document.querySelectorAll('.title-new-offer-vn');
+
+			setInterval(function () {
+				titles.forEach(function (title) {
+					if (title.style.backgroundColor === 'rgb(0, 0, 0)') {
+						title.style.backgroundColor = '#ffa500';
+					} else {
+						title.style.backgroundColor = '#000000';
+					}
+				});
+			}, 1000); // Thời gian mỗi chu kỳ (ms)
+		}
+
+		// Gọi hàm blinkTitle để bắt đầu hiệu ứng
+		blinkTitle();
+
+
 
 	</script>
 }

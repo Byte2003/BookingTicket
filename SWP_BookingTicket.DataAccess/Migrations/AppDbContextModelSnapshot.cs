@@ -406,8 +406,9 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("SeatStatus")
-                        .HasColumnType("bit");
+                    b.Property<string>("SeatStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SeatID");
 
@@ -456,11 +457,17 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime?>("BookedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("SeatID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ShowtimeID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TicketStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Total")
                         .HasColumnType("float");

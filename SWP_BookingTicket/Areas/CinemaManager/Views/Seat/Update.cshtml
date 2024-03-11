@@ -1,7 +1,7 @@
 ﻿@model Seat
 
 <div class="container my-5">
-    <h3 class="text-primary">Update Seat</h3>
+    <h3 class="text-dark">Update Seat</h3>
     <hr />
     <form method="post" asp-action="Update" asp-controller="Seat">
         <input asp-for="SeatID" class="form-text" value="@Model.SeatID" hidden readonly />
@@ -27,8 +27,8 @@
                     <td>
                         <select asp-for="SeatStatus" class="form-control w-25">
                             @* <option disabled selected value="disable_select">---Set Status---</option> *@
-                            <option value="false" style="color: green;">Available</option>
-                            <option value="true" style="color: red;">Locked</option>
+                            <option value="AVAILABLE" style="color: green;">Available</option>
+                            <option value="LOCKED" style="color: red;">Locked</option>
                         </select>
                         <span asp-validation-for="SeatStatus" class="text-danger"></span>
                     </td>

@@ -2,10 +2,10 @@
 
 <div class="container my-5">
 
-	<h3 class="text-primary">Manage Promotion</h3>
+	<h3 class="text-dark">Manage Promotion</h3>
 	<hr />
 	<div class="d-flex w-100 my-5 justify-content-end">
-		<a class="btn btn-success mx-2" asp-controller="Promotion" asp-action="Create">
+		<a class="btn btn-dark mx-2" asp-controller="Promotion" asp-action="Create">
 			<i class="bi bi-plus-circle"></i>
 			Add new Promotion
 		</a>
@@ -24,8 +24,8 @@
 		</thead>
 	</table>
 	<div class="d-flex w-100 my-5 justify-content-start error-actions">
-		<a class="btn btn-outline-success mx-2" asp-area="Customer" asp-controller="Home" asp-action="Index">
-			<i class="bi bi-plus-circle-dotted"></i> Back to Home
+		<a class="btn btn-warning mx-2" asp-area="Customer" asp-controller="Home" asp-action="Index">
+			<i class="bi bi-house"></i> Back to Home
 		</a>
 	</div>
 </div>
@@ -76,7 +76,7 @@
 					{
 						"data": "promotionID",
 						"render": function (data) {
-							return '<a href="/CinemaManager/Promotion/Update?promotion_id=' + data + '" class="btn btn-primary mx-2"><i class="bi bi-pencil-square"></i> Edit</a><a onClick=Delete(\'/CinemaManager/Promotion/Delete?promotion_id=' + data + '\') class="btn btn-danger mx-2"><i class="bi bi-trash-fill"></i> Delete</a>';
+							return '<a href="/CinemaManager/Promotion/Update?promotion_id=' + data + '" class="btn btn-dark mx-2"><i class="bi bi-pencil-square"></i> Edit</a><a onClick=Delete(\'/CinemaManager/Promotion/Delete?promotion_id=' + data + '\') class="btn btn-danger mx-2 mt-2"><i class="bi bi-trash-fill"></i> Delete</a>';
 						},
 						"width": "15%"
 					}

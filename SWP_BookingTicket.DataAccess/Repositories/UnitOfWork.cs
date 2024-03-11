@@ -23,7 +23,8 @@ namespace SWP_BookingTicket.DataAccess.Repositories
 			Room = new RoomRepository(_db);
 			Comment = new CommentRepository(_db);
 			Showtime = new ShowtimeRepository(_db);
-			Promotion = new PromotionRepository(_db);	
+			Promotion = new PromotionRepository(_db);
+			Voucher = new VoucherRepository(_db);
 		}
         public IRepository<Cinema> Cinema { get; private set; }
 		public IRepository<Movie> Movie { get; private set; }
@@ -33,10 +34,10 @@ namespace SWP_BookingTicket.DataAccess.Repositories
 		public IRepository<Comment> Comment { get; private set; }
 		public IRepository<Showtime> Showtime { get; private set; }
 		public IRepository<Promotion> Promotion { get; private set; }
+		public IRepository<Voucher> Voucher { get; private set; }
+		public void Save() { 
 
-		public void Save()
-		{
-			_db.SaveChanges();
+			 _db.SaveChanges();
 		}
 	}
 }

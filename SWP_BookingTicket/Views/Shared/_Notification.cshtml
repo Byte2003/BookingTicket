@@ -1,0 +1,33 @@
+﻿@if (TempData["msg"] != null)
+{
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <!-- Now you can use Toastr -->
+    <script type="text/javascript">
+
+        toastr.options = {
+            "closeButton": true
+        }
+        toastr.success('@TempData["msg"]');
+
+    </script>
+}
+
+@if (TempData["error"] != null)
+{
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+
+    <!-- Now you can use Toastr -->
+    <script type="text/javascript">
+
+        toastr.options = {
+            "closeButton": true
+        }
+        toastr.error('@TempData["error"]');
+
+    </script>
+}

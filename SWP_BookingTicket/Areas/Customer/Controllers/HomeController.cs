@@ -51,6 +51,12 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             
         }
 
+        public async Task<IActionResult> PromotionViewAll()
+        {
+            var promotions = await _unitOfWork.Promotion.GetAllAsync();
+            return View(promotions);
+        }
+
 
 
 

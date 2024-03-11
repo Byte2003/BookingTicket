@@ -7,7 +7,19 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="wwwroot\js\onlineuser.js" />
+	  
+  </ItemGroup>
+	<ItemGroup>
+		<Content Remove="wwwroot\img\registerImage.jpg" />
+	</ItemGroup>
+  <ItemGroup>
+    <_ContentIncludedByDefault Remove="wwwroot\js\onlineuser.js" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EfCore.SchemaCompare" Version="8.0.0" />
+    <PackageReference Include="Hangfire" Version="1.8.11" />
     <PackageReference Include="MailKit" Version="4.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Components.QuickGrid.EntityFrameworkAdapter" Version="8.0.1" />
@@ -25,6 +37,10 @@
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="8.0.0" />
     <PackageReference Include="MimeKit" Version="4.3.0" />
+    <PackageReference Include="PayPal" Version="1.9.1" />
+    <PackageReference Include="QRCoder" Version="1.4.3" />
+    <PackageReference Include="Quartz" Version="3.8.1" />
+    <PackageReference Include="Quartz.Extensions.Hosting" Version="3.8.1" />
     <PackageReference Include="SendGrid" Version="9.28.1" />
     <PackageReference Include="Serilog" Version="3.1.1" />
     <PackageReference Include="Serilog.AspNetCore" Version="8.0.0" />
@@ -37,10 +53,18 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Areas\Customer\Views\Payment\" />
     <Folder Include="Logs\" />
+    <Folder Include="Ultils\" />
     <Folder Include="wwwroot\images\avatar\" />
     <Folder Include="wwwroot\images\movie\" />
     <Folder Include="wwwroot\images\promotion\" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Include="wwwroot\js\onlineuser.js" />
+  </ItemGroup>
+	<ItemGroup>
+		<None Include="wwwroot\img\registerImage.jpg" />
+	</ItemGroup>
 </Project>

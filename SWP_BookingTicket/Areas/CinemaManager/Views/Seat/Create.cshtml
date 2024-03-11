@@ -1,7 +1,7 @@
 ﻿@model Seat
 
 <div class="container my-5">
-    <h3 class="text-primary">New Seat</h3>
+    <h3 class="text-dark">New Seat</h3>
     <hr />
     <form method="post" asp-action="Create" asp-controller="Seat">
         <div class="form-check">
@@ -39,8 +39,8 @@
                         <th scope="row"><label asp-for="SeatStatus" class="form-label"></label></th>
                         <td>
                             <select asp-for="SeatStatus" class="form-control w-25">
-                                <option value="false" style="color: green;">Available</option>
-                                <option value="true" style="color: red;">Locked</option>
+                                <option value="AVAILABLE" style="color: green;">Available</option>
+                                <option value="LOCKED" style="color: red;">Locked</option>
                             </select>
                             <span asp-validation-for="SeatStatus" class="text-danger"></span>
                         </td>
@@ -59,9 +59,6 @@
                 <input type="number" class="form-control" id="numberOfSeats" name="numberOfSeats" min="1" value="1">
             </div>
         </div>
-        <div id="customErrorMessage" class="text-danger">
-        </div>
-
 
         <div class="form-group">
             <button type="submit" class="btn btn-primary">Create</button>
@@ -91,13 +88,6 @@
             else if (this.value === 'multiple') {
                 $('#singleSeat').hide();
                 $('#multipleSeats').show();
-            }
-        });
-
-        $(document).ready(function () {
-            var errorMessage = '@ViewData["errorMsg"]';
-            if (errorMessage) {
-                $('#customErrorMessage').text(errorMessage);
             }
         });
     </script>
