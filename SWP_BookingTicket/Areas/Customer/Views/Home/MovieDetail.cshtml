@@ -100,40 +100,47 @@
     <div class="row px-xl-5">
         <div class="row">
             <div class="nav nav-tabs justify-content-center border-secondary mb-4">
-                <a class="nav-item nav-link active" data-toggle="tab" href="#tab-pane-1">Description</a>
+                <a class="nav-item nav-link active mx-2 text-dark" data-toggle="tab" href="#tab-pane-1">Description</a>
+                <a class="nav-item nav-link text-dark" data-toggle="tab" href="#tab-pane-2">Comment</a>
+
             </div>
             <div class="tab-content">
-                <h4>Description</h4>
                 <div class="tab-pane fade show active" id="tab-pane-1">
+                <h4>Description</h4>
                     @Html.Raw(Model.Description)
                 </div>
 
             </div>
-            <hr />
-        </div>
-        <h4>Comments</h4>
-        <div id="commentsSection" class="comment-section">
-            <!-- Comments will be added dynamically here -->
-            <div class="comment">
-                <div class="comment-body">
-                    <p class="comment-text">This movie was amazing!</p>
-                    <p class="comment-author">John Doe</p>
+            <div class="tab-content">
+                <div class="tab-pane fade" id="tab-pane-2">
+                <h4>Comments</h4>
+
+
+                    <div id="commentsSection" class="comment-section">
+                        <!-- Comments will be added dynamically here -->
+                        <div class="comment">
+                            <div class="comment-body">
+                                
+                            </div>
+                        </div>
+                    </div>
+                    @if (SignInManager.IsSignedIn(User))
+                    {
+                        <!-- Add Comment Form -->
+                        <div class="add-comment">
+                            <h4>Add a Comment</h4>
+
+                            <div class="form-group">
+                                <textarea id="commentInput" class="form-control" rows="3" placeholder="Write your comment here..."></textarea>
+                            </div>
+                            <button id="postCommentBtn" class="btn btn-dark">Submit</button>
+
+                        </div>
+                    }
                 </div>
             </div>
         </div>
-        @if (SignInManager.IsSignedIn(User))
-        {
-            <!-- Add Comment Form -->
-            <div class="add-comment">
-                <h4>Add a Comment</h4>
 
-                <div class="form-group">
-                    <textarea id="commentInput" class="form-control" rows="3" placeholder="Write your comment here..."></textarea>
-                </div>
-                <button id="postCommentBtn" class="btn btn-dark">Submit</button>
-
-            </div>
-        }
     </div>
 </div>
 
@@ -176,7 +183,23 @@
 @section Scripts {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-
+    <script>
+        $(document).ready(function () {
+            // Handle click event of tab links
+            $('.nav-link').click(function () {
+                // Remove active class from all tab links
+                $('.nav-link').removeClass('active');
+                // Add active class to the clicked tab link
+                $(this).addClass('active');
+                // Get the target tab pane
+                var target = $(this).attr('href');
+                // Hide all tab panes
+                $('.tab-pane').removeClass('show active');
+                // Show the target tab pane
+                $(target).addClass('show active');
+            });
+        });
+    </script>
     <script>
         function loadComments(movieId) {
             $.ajax({
@@ -198,12 +221,12 @@
                         }
 
                         var commentHtml = `
-                         <div class="comment">
-                            <div class="comment-body">
-                                <p class="comment-author">${comment.appUser.lastName} ${comment.appUser.firstName}</p>
-                                <p class="comment-text">${comment.content} <span class="text-success">${editIconHtml}</span> <span class="text-danger">${deleteIconHtml}</span></p>
-                            </div>
-                        </div>`;
+                                         <div class="comment">
+                                            <div class="comment-body">
+                                                <p class="comment-author">${comment.appUser.lastName} ${comment.appUser.firstName}</p>
+                                                <p class="comment-text">${comment.content} <span class="text-success">${editIconHtml}</span> <span class="text-danger">${deleteIconHtml}</span></p>
+                                            </div>
+                                        </div>`;
 
                         $('#commentsSection').append(commentHtml);
                     });
