@@ -12,8 +12,20 @@
         align-items: center;
     }
 
+    .seat-block-guid {
+        width: 45px;
+        height: 45px;
+        border: 1px solid #ccc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
     .seat-block.available:hover {
         cursor: pointer;
+        background-color: #ffc107;
+        color:black;
+        transition-delay: 0.2s;
     }
 
     .available {
@@ -32,7 +44,11 @@
     }
 </style>
 <div class="container mt-5" style="min-height:840px">
+
+    
+
     <h3 class="text-dark"> Please choose your favorite seats</h3><hr />
+
     <div class="table-responsive">
         <!-- Display Room Layout-->
         <table class="table table-bordered w-100 text-center">
@@ -103,7 +119,26 @@
     <div class="d-flex justify-content-end">
 
         <button class="btn btn-outline-success btn-process">Process</button>
+
     </div>
+    <table class="table table-bordered text-center  mt-5" style="width:15%">
+        <tr>
+            <td class="w-25">
+                <div class="seat-block-guid available">
+                </div>
+            </td>
+            <td class="text-lg-start">
+                Available seat
+            </td>
+            <td>
+                <div class="seat-block-guid unavailable">
+                </div>
+            </td>
+            <td class="text-lg-start ">
+                Unavailable seat
+            </td>
+        </tr>
+    </table>
 </div>
 @section Scripts {
     <script src="~/lib/jquery/dist/jquery.min.js"></script>

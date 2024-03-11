@@ -33,11 +33,34 @@
     }
 
     .btn-primary.point {
-        border-color:goldenrod;
+        border-color: goldenrod;
     }
 </style>
 
-<div class="container mt-5" style="min-height: 650px">
+<style>
+    .countdown-container {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .countdown-clock {
+        font-size: 48px;
+        font-weight: bold;
+        color: goldenrod;
+    }
+</style>
+
+<div class="container mt-2" style="min-height: 650px">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="countdown-container">
+                <span>These seats have been temporary lock for your ordering in</span> 
+                <div class="countdown-clock" id="countdown">03:00</div>
+                <span>Please complete your payment.</span>
+            </div>
+       
+        </div>
+    </div>
     <h3 class="text-dark">Your Order</h3>
     <hr />
     <div class="row">
@@ -78,7 +101,7 @@
                 <hr />
             </div>
             <div class="">
-                <p id="totalAmount">Total Amount: $@total</p>
+                <p id="totalAmount">Total Amount: $@total or @(double.Parse(total) * 1000) Points</p>
             </div>
             <div class="form-group mt-2">
                 <label for="voucherCode">Voucher Code:</label>
@@ -100,12 +123,42 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
+
+    <script>
+        // Set the target time to 3 minutes from now
+        var targetTime = new Date();
+        targetTime.setMinutes(targetTime.getMinutes() + 3);
+
+        // Update the countdown every second
+        var countdown = setInterval(function () {
+            var now = new Date().getTime();
+            var distance = targetTime - now;
+
+            // Calculate minutes and seconds
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+            // Add leading zero if minutes or seconds is less than 10
+            minutes = minutes < 10 ? "0" + minutes : minutes;
+            seconds = seconds < 10 ? "0" + seconds : seconds;
+
+            // Display the countdown clock
+            document.getElementById("countdown").innerHTML = minutes + ":" + seconds;
+
+            // If the countdown is over, display "00:00" and clear the interval
+            if (distance < 0) {
+                clearInterval(countdown);
+                document.getElementById("countdown").innerHTML = "00:00";
+            }
+        }, 1000);
+    </script>
+
     <script>
 
         $(document).ready(function () {
             $('#pay_paypal').click(function () {
                 // Redirect to the PayPal payment process
-                    createForm("paypal");
+                createForm("paypal");
                 // window.location.href = '@Url.Action("BookingProcess", "Ticket", new { seatIDs = ViewData["seatIDs"], showtime_id = ViewData["showtime_id"] })';
             });
 
@@ -117,7 +170,7 @@
                     toastr.options = {
                         "closeButton": true
                     }
-                    toastr.error('User has sufficient points. Proceed with point payment.');
+                    toastr.success('Payment Processing...');
 
                     createForm("point");
                 } else {
@@ -157,11 +210,11 @@
                         }
 
                         var discountPercentage = parseFloat(voucherValue);
-                        var originalTotal = parseFloat('@total'); 
+                        var originalTotal = parseFloat('@total');
                         var discountedTotal = originalTotal - (originalTotal * discountPercentage / 100);
 
                         // Update the total amount display with the discounted total
-                        $('#totalAmount').text('Total Amount: $' + discountedTotal.toFixed(2)); // Update the total amount display
+                        $('#totalAmount').text('Total Amount: $' + discountedTotal.toFixed(2) + " or " + discountedTotal.toFixed(2) * 1000 + " Points"); // Update the total amount display
 
                         toastr.options = {
                             "closeButton": true
@@ -179,8 +232,15 @@
 
         });
 
+        $(document).ready(function () {
+            var timer = setTimeout(redirectToHomePage, 3 * 60 * 1000);
+
+            function redirectToHomePage() {
+                window.location.href = '/Customer';
+            }
+        });
+
         function createForm(payment_method) {
-            // Create a form element
             var form = document.createElement('form');
             form.setAttribute('method', 'POST');
             form.setAttribute('action', '/Customer/Ticket/BookingProcess');

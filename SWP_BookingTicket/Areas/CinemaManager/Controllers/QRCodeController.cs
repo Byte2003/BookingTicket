@@ -7,7 +7,7 @@ using SWP_BookingTicket.Models;
 namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 {
     [Area("CinemaManager")]
-    [Authorize(Roles = "cinemaManager")]
+    [Authorize(Roles = "cinemaManager,admin")]
     public class QRCodeController : Controller
     {
 

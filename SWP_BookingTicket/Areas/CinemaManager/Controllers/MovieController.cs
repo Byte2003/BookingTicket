@@ -10,7 +10,7 @@ using static Org.BouncyCastle.Crypto.Engines.SM2Engine;
 namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 {
     [Area("CinemaManager")]
-    [Authorize(Roles = "cinemaManager")]
+    [Authorize(Roles = "cinemaManager,admin")]
     public class MovieController : Controller
     {
         private readonly IUnitOfWork _unitOfWork;

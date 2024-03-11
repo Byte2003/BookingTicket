@@ -117,6 +117,8 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 app.UseHangfireDashboard();
+app.UseStatusCodePagesWithReExecute("/Customer/Home/Error", "?statusCode={0}");
+
 SeedData();
 app.MapControllerRoute(
 	name: "default",
