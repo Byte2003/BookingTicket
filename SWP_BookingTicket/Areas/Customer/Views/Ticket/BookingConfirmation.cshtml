@@ -54,11 +54,11 @@
     <div class="row">
         <div class="col-md-6 offset-md-3">
             <div class="countdown-container">
-                <span>These seats have been temporary lock for your ordering in</span> 
+                <span>These seats have been temporary lock for your ordering in</span>
                 <div class="countdown-clock" id="countdown">03:00</div>
                 <span>Please complete your payment.</span>
             </div>
-       
+
         </div>
     </div>
     <h3 class="text-dark">Tickets Preview</h3>
@@ -112,8 +112,30 @@
                 </div>
             </div>
 
-            <button style="background-color:#013088" id="pay_paypal" class="btn btn-primary mt-3"><i class="bi bi-paypal"></i> Pay with PayPal</button>
-            <button style="background-color:goldenrod" id="pay_point" class="btn btn-primary point mt-3">Pay by Point</button>
+            <button style="background-color:#013088" id="pay_paypal" onclick="cancelCancellation()" class="btn btn-primary mt-3"><i class="bi bi-paypal"></i> Pay with PayPal</button>
+            <button style="background-color:goldenrod" id="pay_point" onclick="cancelCancellation()" class="btn btn-primary point mt-3">Pay by Point</button>
+            <a id="cancel" asp-controller="Ticket" asp-action="Cancel"
+               asp-route-seatIDs="@ViewData["seatIDs"]"
+               asp-route-showtime_id="@ViewData["showtime_id"]"
+               class="btn btn-outline-danger point mt-3">Cancel</a>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade" id="confirmDialog" tabindex="-1" aria-labelledby="confirmDialogLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="confirmDialogLabel">Confirmation</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                Are you sure you want to leave this page?
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" id="leaveButton">Leave</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+            </div>
         </div>
     </div>
 </div>
@@ -122,29 +144,52 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="//cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
 
+    <script>
+
+        var preventCancellation = false;
+
+        window.addEventListener('beforeunload', function (event) {
+            if (!preventCancellation) {
+                $.ajax({
+                    url: '/Customer/Ticket/UnlockSeats',
+                    method: 'POST',
+                    data: {
+                        seatIDs: '@ViewData["seatIDs"]',
+                        showtime_id: '@ViewData["showtime_id"]'
+                    },
+                    success: function (response) {
+                    },
+                    error: function (xhr, status, error) {
+                    }
+                });
+                var confirmationMessage = 'Are you sure you want to leave this page? Your order will be cancelled.';
+                (event || window.event).returnValue = confirmationMessage;
+                return confirmationMessage;
+            }
+        });
+
+
+        function cancelCancellation() {
+            preventCancellation = true;
+        }
+    </script>
 
     <script>
-        // Set the target time to 3 minutes from now
         var targetTime = new Date();
         targetTime.setMinutes(targetTime.getMinutes() + 3);
 
-        // Update the countdown every second
         var countdown = setInterval(function () {
             var now = new Date().getTime();
             var distance = targetTime - now;
 
-            // Calculate minutes and seconds
             var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
             var seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-            // Add leading zero if minutes or seconds is less than 10
             minutes = minutes < 10 ? "0" + minutes : minutes;
             seconds = seconds < 10 ? "0" + seconds : seconds;
 
-            // Display the countdown clock
             document.getElementById("countdown").innerHTML = minutes + ":" + seconds;
 
-            // If the countdown is over, display "00:00" and clear the interval
             if (distance < 0) {
                 clearInterval(countdown);
                 document.getElementById("countdown").innerHTML = "00:00";
@@ -156,15 +201,12 @@
 
         $(document).ready(function () {
             $('#pay_paypal').click(function () {
-                // Redirect to the PayPal payment process
                 createForm("paypal");
-                // window.location.href = '@Url.Action("BookingProcess", "Ticket", new { seatIDs = ViewData["seatIDs"], showtime_id = ViewData["showtime_id"] })';
             });
 
             $('#pay_point').click(function () {
                 var point = parseFloat(@ViewData["user_points"]);
                 var total = getCurrentTotal();
-                // Check if user's point is sufficient for payment
                 if (point / 1000 >= total) {
                     toastr.options = {
                         "closeButton": true
@@ -181,7 +223,6 @@
             });
 
             function getCurrentTotal() {
-                // Extract the total amount value from the displayed text
                 var totalText = $('#totalAmount').text();
                 var total = parseFloat(totalText.replace('Total Amount: $', ''));
                 return total;
@@ -189,13 +230,11 @@
 
             $('#applyVoucherBtn').click(function () {
                 var voucherCode = $('#voucherCode').val();
-                // Make an AJAX request to get the value of the voucher
                 $.ajax({
                     url: '/Customer/Ticket/GetVoucherValue',
                     method: 'GET',
                     data: { voucherCode: voucherCode },
                     success: function (response) {
-                        // Check if the voucher is valid and retrieve its value from the response
                         var voucherValue = response.data;
 
                         if (voucherValue === "") {
@@ -203,7 +242,7 @@
                                 "closeButton": true
                             }
                             toastr.error('Invalid voucher code. Please enter a valid voucher code.');
-                            //alert('Invalid voucher code. Please enter a valid voucher code.');
+
                             $('#voucherCode').val('');
                             return;
                         }
@@ -212,7 +251,6 @@
                         var originalTotal = parseFloat('@total');
                         var discountedTotal = originalTotal - (originalTotal * discountPercentage / 100);
 
-                        // Update the total amount display with the discounted total
                         $('#totalAmount').text('Total Amount: $' + discountedTotal.toFixed(2) + " or " + discountedTotal.toFixed(2) * 1000 + " Points"); // Update the total amount display
 
                         toastr.options = {
@@ -220,7 +258,6 @@
                         }
                         toastr.success('Apply voucher successfully.');
 
-                        //alert('Apply voucher successfully.');
                     },
                     error: function (xhr, status, error) {
                         // Handle error if the AJAX request fails
@@ -232,9 +269,45 @@
         });
 
         $(document).ready(function () {
+            function makeAjaxCall() {
+                $.ajax({
+                    url: '/Customer/Ticket/LockSeats',
+                    method: 'POST',
+                    data: {
+                        seatIDs: '@ViewData["seatIDs"]',
+                        showtime_id: '@ViewData["showtime_id"]'
+                    },
+                    success: function (response) {
+                        // Handle success
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                    }
+                });
+            }
+
+            setInterval(function () {
+                makeAjaxCall();
+            }, 5000);
+
             var timer = setTimeout(redirectToHomePage, 3 * 60 * 1000);
 
             function redirectToHomePage() {
+                cancelCancellation();
+                $.ajax({
+                    url: '/Customer/Ticket/UnlockSeats',
+                    method: 'POST',
+                    data: {
+                        seatIDs: '@ViewData["seatIDs"]',
+                        showtime_id: '@ViewData["showtime_id"]'
+                    },
+                    success: function (response) {
+                        // Handle success
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error
+                    }
+                });
                 window.location.href = '/Customer';
             }
         });

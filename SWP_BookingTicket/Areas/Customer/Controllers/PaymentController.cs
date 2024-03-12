@@ -171,7 +171,14 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                     var executedPayment = ExecutePayment(apiContext, payerId, paymentId);
                     if (executedPayment.state.ToLower() != "approved")
                     {
-                        return View("FailedPayment");
+                        return RedirectToAction("BookingProcess", "Ticket", new
+                        {
+                            seatIDs = HttpContext.Session.GetString("seatIDs"),
+                            showtime_id = HttpContext.Session.GetString("showtime_id"),
+                            payment_method = "paypal",
+                            status = "fail",
+                            voucherCode = HttpContext.Session.GetString("voucher_code"),
+                        });
                     }
                 }
             }

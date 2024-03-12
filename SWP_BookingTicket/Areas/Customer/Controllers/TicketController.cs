@@ -211,7 +211,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 if (payment_method == null)
                 {
                     TempData["error"] = "Payment Fails.";
-                    return RedirectToAction("BookingConfirmation", new
+                    return RedirectToAction("Cancel", new
                     {
                         seatIDs = seatIDs,
                         showtime_id = showtime_id,
@@ -349,7 +349,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                         case "cancel":
                             {
                                 TempData["error"] = "Payment Cancelled.";
-                                return RedirectToAction("BookingConfirmation", new
+                                return RedirectToAction("Cancel", new
                                 {
                                     seatIDs = seatIDs,
                                     showtime_id = showtime_id,
@@ -358,7 +358,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                         case "fail":
                             {
                                 TempData["error"] = "Payment Fails.";
-                                return RedirectToAction("BookingConfirmation", new
+                                return RedirectToAction("Cancel", new
                                 {
                                     seatIDs = seatIDs,
                                     showtime_id = showtime_id,
@@ -367,7 +367,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                         default:
                             {
                                 TempData["error"] = "Payment Fails.";
-                                return RedirectToAction("BookingConfirmation", new
+                                return RedirectToAction("Cancel", new
                                 {
                                     seatIDs = seatIDs,
                                     showtime_id = showtime_id,
@@ -388,6 +388,74 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 return RedirectToAction("Error", "Home");
             }
         }
+        public async Task<IActionResult> Cancel(string seatIDs, Guid showtime_id)
+        {
+            string[] seatIDListString = seatIDs.Split(',');
+            List<Guid> seatIDList = new List<Guid>();
+            foreach (var s in seatIDListString)
+            {
+                Guid sID = Guid.Parse(s);
+                seatIDList.Add(sID);
+            }
+
+            bool isReload = false;
+            foreach (var seatId in seatIDList)
+            {
+                var seat = await _unitOfWork.Seat.GetFirstOrDefaultAsync(u => u.SeatID == seatId);
+                if (seat.SeatStatus.ToLower().Contains(showtime_id + "_status=pending"))
+                {
+                    isReload = true;
+                    _backgroundJobClient.Enqueue(() => _unlockASeatService.UnlockASeat(seatId, showtime_id, "pending"));
+                }
+            }
+
+            TempData["success"] = "Booking Confirmation cancelled.";
+            return RedirectToAction("ChooseSeat", new { showtime_id = showtime_id });
+
+        }
+        
+        [HttpPost]
+        public async Task<IActionResult> LockSeats(string seatIDs, Guid showtime_id)
+        {
+            string[] seatIDListString = seatIDs.Split(',');
+            List<Guid> seatIDList = new List<Guid>();
+            foreach (var s in seatIDListString)
+            {
+                Guid sID = Guid.Parse(s);
+                seatIDList.Add(sID);
+            }
+
+            bool isReload = false;
+            foreach (var seatId in seatIDList)
+            {
+                var seat = await _unitOfWork.Seat.GetFirstOrDefaultAsync(u => u.SeatID == seatId);
+                LockASeat(seat, showtime_id, "pending");
+            }
+            return Ok();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UnlockSeats(string seatIDs, Guid showtime_id)
+        {
+            string[] seatIDListString = seatIDs.Split(',');
+            List<Guid> seatIDList = new List<Guid>();
+            foreach (var s in seatIDListString)
+            {
+                Guid sID = Guid.Parse(s);
+                seatIDList.Add(sID);
+            }
+
+            bool isReload = false;
+            foreach (var seatId in seatIDList)
+            {
+                var seat = await _unitOfWork.Seat.GetFirstOrDefaultAsync(u => u.SeatID == seatId);
+                if (seat.SeatStatus.ToLower().Contains(showtime_id + "_status=pending"))
+                {
+                    _backgroundJobClient.Enqueue(() => _unlockASeatService.UnlockASeat(seatId, showtime_id, "pending"));
+                }
+            }
+            return Ok();
+        }
 
         public async Task<IActionResult> BookingConfirmation(string seatIDs, Guid showtime_id)
         {
@@ -401,25 +469,6 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                     Guid sID = Guid.Parse(s);
                     seatIDList.Add(sID);
                 }
-
-                bool isReload = false;
-                foreach (var seatId in seatIDList)
-                {
-                    var seat = await _unitOfWork.Seat.GetFirstOrDefaultAsync(u => u.SeatID == seatId);
-                    if (seat.SeatStatus.ToLower().Contains(showtime_id + "_status=pending"))
-                    {
-                        isReload = true;
-                        _backgroundJobClient.Enqueue(() => _unlockASeatService.UnlockASeat(seatId, showtime_id, "pending"));
-                    }
-                }
-
-                if (isReload)
-                {
-                    TempData["error"] = "Booking process has been terminated.";
-                    return RedirectToAction("ChooseSeat", new { showtime_id = showtime_id });
-                }
-
-                HandleLockAndUnlock(seatIDList, showtime_id, "pending");
 
                 var showtime = await _unitOfWork.Showtime.GetFirstOrDefaultAsync(x => x.ShowtimeID == showtime_id, includeProperties: "Room");
                 var room = showtime.Room;
@@ -442,6 +491,11 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                     total += movie.Price;
                 }
 
+                foreach (var seat in seatList)
+                {
+                    LockASeat(seat, showtime_id, "pending");
+                }
+
                 var Time = $"Date: {showtime.Date.ToString()} Time: {showtime.Time}h{showtime.Minute}";
                 ViewData["Time"] = Time;
                 ViewData["Movie"] = movie.MovieName;
@@ -460,6 +514,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             }
             catch (Exception ex)
             {
+                TempData["error"] = "An unexpected error occurs. Please try again.";
                 return RedirectToAction("Index", "Home");
             }
         }
@@ -567,7 +622,10 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             }
 
             if (status == "pending")
-                seat.SeatStatus += showtime_id.ToString() + "_status=pending";
+                if (!seat.SeatStatus.ToLower().Contains((showtime_id.ToString() + "_status=pending").ToLower()))
+                {
+                    seat.SeatStatus += showtime_id.ToString() + "_status=pending";
+                }
 
             if (status == "success")
             {
