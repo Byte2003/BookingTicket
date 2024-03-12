@@ -786,6 +786,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
             var category = movie.Category??"No Category Available";
             var categories = category.ToLower().Split(',');
             var recommendedMovies = await _unitOfWork.Movie.GetAllAsync(u => categories.Any(c => u.Category.ToLower().Contains(c.Trim())) || u.Category.ToLower() == category.ToLower());
+            recommendedMovies = recommendedMovies.Where(m => m.MovieID != movie_id);
             List<Showtime> showtimesForThisMovie = new List<Showtime>() ;
             foreach (var m in recommendedMovies)
             {

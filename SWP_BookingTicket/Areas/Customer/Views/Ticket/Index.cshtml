@@ -88,12 +88,12 @@
         // Function to create a card HTML for a given day
         function createCard(day) {
             return `
-                                                                            <div class="col-md-2">
-                                                                                <div class="btn border border-primary my-2 mx-2 px-2 py-2 days ">
-                                                                                    ${day}
-                                                                                </div>
-                                                                            </div>
-                                                                        `;
+                                                                                    <div class="col-md-2">
+                                                                                        <div class="btn border border-primary my-2 mx-2 px-2 py-2 days ">
+                                                                                            ${day}
+                                                                                        </div>
+                                                                                    </div>
+                                                                                `;
         }
 
         // Function to generate cards for the showtimes date
@@ -135,7 +135,7 @@
                 $.ajax({
                     url: `/Customer/Ticket/GetRecommendFilms?movie_id=${movieID}`,
                     method: 'GET',
-                    dataType:"json",
+                    dataType: "json",
                     success: function (response) {
                         renderRecommendFilms(response.data);
                     }
@@ -195,52 +195,57 @@
             var showtimeListDiv = document.querySelector('.showtime-list');
             if (showtimeListDiv) {
                 var showtimesHTML = '<div class="mx-2 my-2"><h6>Showtimes:</h6></div>';;
-                showtime.forEach(function (showtime) {
-                    var showtimeHTML = `
-                                                                                    <div class="btn my-2 mx-1 showtime active" data-showtimeID="${showtime.showtimeID}">
-                                                                                        <p>${showtime.name}</p>
-                                                                                                ${showtime.time < 10 ? '0' + showtime.time : showtime.time}h${showtime.minute < 10 ? '0' + showtime.minute : showtime.minute}
-                                                                                    </div>`;
-                    showtimesHTML += showtimeHTML;
-                });
+                if (showtime.length === 0) {
+                    showtimesHTML += '<p>Out of showtimes for today. Please choose another date</p>';
+                } else {
+                    showtime.forEach(function (show) {
+                        var showtimeHTML = `
+                                    <div class="btn my-2 mx-1 showtime active" data-showtimeID="${show.showtimeID}">
+                                        <p>${show.name}</p>
+                                        ${show.time < 10 ? '0' + show.time : show.time}h${show.minute < 10 ? '0' + show.minute : show.minute}
+                                    </div>`;
+                        showtimesHTML += showtimeHTML;
+                    });
+                }
+
                 showtimeListDiv.innerHTML = showtimesHTML;
             }
         }
         // Recommend Films
         function renderRecommendFilms(data) {
             $(".recommend-movies").empty();
-            if (data.length > 0){
+            if (data.length > 0) {
                 for (var i = 0; i < data.length; i++) {
                     var movie = data[i];
                     var movieCardHtml = `
-                            <div class="col-md-3">
-                                <div class="blog-item d-flex justify-content-start align-item-center" data-movie-id="${movie.movieID}">
-                                    <div class="blog-img">
-                                        <div class="blog-img-inner position-relative">
-                                            <img class="img-fluid" src="${movie.imageUrl}" alt="Image" style="height:355px; width:240px;">
-                                            <div class="position-absolute bottom-0 start-50 translate-middle-x d-none flex-column justify-content-between w-100 btn-list-${movie.movieID}" style="background-color: rgba(0,0,0,0.6)">
-                                                <div class="movie-name mx-2 my-2 d-flex justify-content-center">
-                                                    <h5 class="text-white">${movie.movieName}</h5>
-                                                </div>
-                                                <div class="d-flex justify-content-between">
-                                                    <a href="/Customer/Ticket/Index?movie_id=${movie.movieID}" class="btn w-50 mx-2 my-4" style="height: 36px; background-color: black; color:#ffc107;">
-                                                        <span>Book</span>
-                                                    </a>
-                                                    <a href="/Customer/Home/MovieDetail?movie_id=${movie.movieID}" class="btn w-50 mx-2 my-4" style="height: 36px;background-color: black; color:#ffc107;">
-                                                        <span>View</span>
-                                                    </a>
+                                    <div class="col-md-3">
+                                        <div class="blog-item d-flex justify-content-start align-item-center" data-movie-id="${movie.movieID}">
+                                            <div class="blog-img">
+                                                <div class="blog-img-inner position-relative">
+                                                    <img class="img-fluid" src="${movie.imageUrl}" alt="Image" style="height:355px; width:240px;">
+                                                    <div class="position-absolute bottom-0 start-50 translate-middle-x d-none flex-column justify-content-between w-100 btn-list-${movie.movieID}" style="background-color: rgba(0,0,0,0.6)">
+                                                        <div class="movie-name mx-2 my-2 d-flex justify-content-center">
+                                                            <h5 class="text-white">${movie.movieName}</h5>
+                                                        </div>
+                                                        <div class="d-flex justify-content-between">
+                                                            <a href="/Customer/Ticket/Index?movie_id=${movie.movieID}" class="btn w-50 mx-2 my-4" style="height: 36px; background-color: black; color:#ffc107;">
+                                                                <span>Book</span>
+                                                            </a>
+                                                            <a href="/Customer/Home/MovieDetail?movie_id=${movie.movieID}" class="btn w-50 mx-2 my-4" style="height: 36px;background-color: black; color:#ffc107;">
+                                                                <span>View</span>
+                                                            </a>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                        `;
+                                `;
                     $(".recommend-movies").append(movieCardHtml);
                 }
             } else {
                 // If data is empty or does not contain movie objects, display a message
-                
+
             }
         }
         $(document).on({
