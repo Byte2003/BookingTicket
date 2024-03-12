@@ -51,6 +51,8 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 
                 _unitOfWork.Promotion.Add(promotion);
                 _unitOfWork.Save();
+                TempData["msg"] = "Promotion created succesfully";
+
             }
             return RedirectToAction("Index");
         }
@@ -87,8 +89,10 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 					
 				_unitOfWork.Promotion.Update(_promotion);
 				_unitOfWork.Save();
-			}
-			return RedirectToAction("Index");
+                TempData["msg"] = "Promotion updated succesfully";
+
+            }
+            return RedirectToAction("Index");
         }
 
         #region API Calls

@@ -71,7 +71,8 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
 			if (result.Succeeded)
 			{
 				await _userManager.AddToRoleAsync(cinemaManager, "cinemaManager");
-			}
+                TempData["msg"] = "Create Manager Account successfully";
+            }			
             return RedirectToAction("ManagerAccount");
 		}
         [HttpGet]
@@ -124,7 +125,7 @@ namespace SWP_BookingTicket.Areas.Admin.Controllers
                 var result = await _userManager.UpdateAsync(_user);
                 if (result.Succeeded)
                 {
-
+                    TempData["msg"] = "Update Manager Account successfully";
                 }
             }						
             return RedirectToAction("ManagerAccount");
