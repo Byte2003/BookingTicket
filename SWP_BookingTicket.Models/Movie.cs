@@ -23,7 +23,7 @@ namespace SWP_BookingTicket.Models
         public string? Country { get; set; } = string.Empty;
 		public string? Studio { get; set; } = string.Empty;
 		public string? Version { get; set; } = string.Empty;
-		public bool Status { get; set; }
+        public string? Category { get; set; } = string.Empty;
       
     }
 }

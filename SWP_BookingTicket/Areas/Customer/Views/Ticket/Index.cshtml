@@ -4,13 +4,15 @@
         max-height: 600px; /* Adjust the max-height as needed */
         overflow-y: auto;
     }
+
     .active {
-        background-color:black;
+        background-color: black;
         color: #ffc107;
     }
+
     .showtime {
         min-width: 86px;
-        height:auto;
+        height: auto;
     }
 </style>
 <div class="container mt-5" style="min-height:840px">
@@ -19,7 +21,7 @@
     <div class="row">
         <div class="col-md-8 border border-dark left-panel">
             <div id="daysList" class="row" style="min-height:64px">
-                <h5 class="text-dark d-flex notify-select mx-5 my-3">Please select a movie</h5>               
+                <h5 class="text-dark d-flex notify-select mx-5 my-3">Please select a movie</h5>
             </div>
             <hr />
             <div class="address-list" style="min-height:64px">
@@ -48,6 +50,13 @@
             }
         </div>
     </div>
+    <div class="row mt-5">
+        <h4 class="text-dark"><i class="bi bi-film mx-4"></i>Recommend for you</h4>
+        <hr />
+        <div class="row d-flex justify-content-start my-5 recommend-movies">
+        </div>
+    </div>
+
 </div>
 
 @section Scripts {
@@ -79,12 +88,12 @@
         // Function to create a card HTML for a given day
         function createCard(day) {
             return `
-                                                            <div class="col-md-2">
-                                                                <div class="btn border border-primary my-2 mx-2 px-2 py-2 days ">
-                                                                    ${day}
-                                                                </div>
-                                                            </div>
-                                                        `;
+                                                                            <div class="col-md-2">
+                                                                                <div class="btn border border-primary my-2 mx-2 px-2 py-2 days ">
+                                                                                    ${day}
+                                                                                </div>
+                                                                            </div>
+                                                                        `;
         }
 
         // Function to generate cards for the showtimes date
@@ -101,13 +110,13 @@
                         });
                         daysListDiv.innerHTML = cardsHTML;
                     } else {
-                        daysListDiv.innerHTML = `<p class="mx-3 my-3"> Sorry! This movie doesn't have any showtime.</p>`
+                        daysListDiv.innerHTML = `<p class="mx-3 my-3 fs-6"> Sorry! This movie doesn't have any showtime. Please choose another one or select similarities in your recommendation below.</p>`
                     }
-                }, "json");               
+                }, "json");
             }
         }
 
-        // Call the function to generate day cards on page load
+        // Handle onclick function
         window.onload = function () {
             if (movieID !== null) {
                 generateDayCards();
@@ -123,9 +132,17 @@
                 $(this).addClass("border border-4 border-secondary");
                 $(".showtime-list").text("");
                 $(".address-list").text("");
+                $.ajax({
+                    url: `/Customer/Ticket/GetRecommendFilms?movie_id=${movieID}`,
+                    method: 'GET',
+                    dataType:"json",
+                    success: function (response) {
+                        renderRecommendFilms(response.data);
+                    }
+                });
             });
 
-            $(document).on("click",".days",function () {
+            $(document).on("click", ".days", function () {
                 $(".showtime-list").text("");
                 $(".address-list").text("");
                 days = $(this).text();
@@ -157,6 +174,7 @@
 
         };
 
+        // Render Address
         function renderAddresses(addresses) {
             var addressListDiv = document.querySelector('.address-list');
             if (addressListDiv) {
@@ -179,14 +197,62 @@
                 var showtimesHTML = '<div class="mx-2 my-2"><h6>Showtimes:</h6></div>';;
                 showtime.forEach(function (showtime) {
                     var showtimeHTML = `
-                                                                    <div class="btn my-2 mx-1 showtime active" data-showtimeID="${showtime.showtimeID}">
-                                                                        <p>${showtime.name}</p>
-                                                                                ${showtime.time < 10 ? '0' + showtime.time : showtime.time}h${showtime.minute < 10 ? '0' + showtime.minute : showtime.minute}
-                                                                    </div>`;
+                                                                                    <div class="btn my-2 mx-1 showtime active" data-showtimeID="${showtime.showtimeID}">
+                                                                                        <p>${showtime.name}</p>
+                                                                                                ${showtime.time < 10 ? '0' + showtime.time : showtime.time}h${showtime.minute < 10 ? '0' + showtime.minute : showtime.minute}
+                                                                                    </div>`;
                     showtimesHTML += showtimeHTML;
                 });
                 showtimeListDiv.innerHTML = showtimesHTML;
             }
         }
+        // Recommend Films
+        function renderRecommendFilms(data) {
+            $(".recommend-movies").empty();
+            if (data.length > 0){
+                for (var i = 0; i < data.length; i++) {
+                    var movie = data[i];
+                    var movieCardHtml = `
+                            <div class="col-md-3">
+                                <div class="blog-item d-flex justify-content-start align-item-center" data-movie-id="${movie.movieID}">
+                                    <div class="blog-img">
+                                        <div class="blog-img-inner position-relative">
+                                            <img class="img-fluid" src="${movie.imageUrl}" alt="Image" style="height:355px; width:240px;">
+                                            <div class="position-absolute bottom-0 start-50 translate-middle-x d-none flex-column justify-content-between w-100 btn-list-${movie.movieID}" style="background-color: rgba(0,0,0,0.6)">
+                                                <div class="movie-name mx-2 my-2 d-flex justify-content-center">
+                                                    <h5 class="text-white">${movie.movieName}</h5>
+                                                </div>
+                                                <div class="d-flex justify-content-between">
+                                                    <a href="/Customer/Ticket/Index?movie_id=${movie.movieID}" class="btn w-50 mx-2 my-4" style="height: 36px; background-color: black; color:#ffc107;">
+                                                        <span>Book</span>
+                                                    </a>
+                                                    <a href="/Customer/Home/MovieDetail?movie_id=${movie.movieID}" class="btn w-50 mx-2 my-4" style="height: 36px;background-color: black; color:#ffc107;">
+                                                        <span>View</span>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        `;
+                    $(".recommend-movies").append(movieCardHtml);
+                }
+            } else {
+                // If data is empty or does not contain movie objects, display a message
+                
+            }
+        }
+        $(document).on({
+            mouseenter: function () {
+                var id = $(this).attr("data-movie-id");
+                console.log(id);
+                $(`.btn-list-${id}`).removeClass("d-none").addClass("d-flex");
+            },
+            mouseleave: function () {
+                var id = $(this).attr("data-movie-id");
+                $(`.btn-list-${id}`).removeClass("d-flex").addClass("d-none");
+            }
+        }, ".blog-item");
     </script>
 }

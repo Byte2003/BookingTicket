@@ -88,7 +88,7 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 
                 _unitOfWork.Movie.Add(movie);
                 _unitOfWork.Save();
-                TempData["success"] = "Procduct created succesfully";
+                TempData["msg"] = "Movie created succesfully";
             }
             return RedirectToAction("Index");
         }
@@ -123,12 +123,11 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
             _movie.Actor = movie.Actor;
             _movie.Duration = movie.Duration;
             _movie.Country = movie.Country;
-            _movie.Status = movie.Status;
             _movie.Studio = movie.Studio;
             _movie.ReleaseDate = movie.ReleaseDate;
             _movie.EndDate = movie.EndDate;
             _movie.Version = movie.Version;
-
+            _movie.Category = movie.Category;
             if (ModelState.IsValid)
             {
                 if (fileImage is not null)
@@ -164,6 +163,7 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
                 }
                 _unitOfWork.Movie.Update(_movie);
                 _unitOfWork.Save();
+                TempData["msg"] = "Movie updated succesfully";
                 return RedirectToAction("Index");
             }
 

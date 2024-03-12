@@ -47,9 +47,12 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         }
         public async Task<IActionResult> Index(Guid? movie_id = null)
         {
-            // Get all movies
+            // Get all movies and order by showtimes for each of them
             IEnumerable<Movie> movieList = await _unitOfWork.Movie.GetAllAsync();
-
+            var showtimes = await _unitOfWork.Showtime.GetAllAsync();
+            var movieShowtimeCounts = showtimes.GroupBy(s => s.MovieID)
+                                               .ToDictionary(g => g.Key, g => g.Count());
+            movieList = movieList.OrderByDescending(m => movieShowtimeCounts.ContainsKey(m.MovieID) ? movieShowtimeCounts[m.MovieID] : 0);
             if (movie_id != null)
             {
                 var movieToMove = movieList.FirstOrDefault(m => m.MovieID == movie_id);
@@ -58,13 +61,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                     movieList = movieList.Where(m => m.MovieID != movie_id); // Remove the movie from the list
                     movieList = new[] { movieToMove }.Concat(movieList); // Add the movie to the beginning of the list
                 }
-                // ViewData["movie_id"] = movie_id;
             }
-            else
-            {
-                // ViewData["movie_id"] = "";
-            }
-
             ViewData["MovieList"] = movieList;
             return View();
         }
@@ -778,6 +775,32 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 return Json(new { showtimes = showtimesWithinDay, addresses = cinemasAddressForThisShowtime, showtimesForAllCondition = showtimesForAllCondition });
             }
             return Json(new { showtimes = showtimesWithinDay, addresses = cinemasAddressForThisShowtime });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetRecommendFilms(Guid movie_id)
+        {
+            DateOnly currentDate = DateOnly.FromDateTime(DateTime.Now);
+            DateTime currentDateTime = DateTime.Now;
+            var movie = await _unitOfWork.Movie.GetFirstOrDefaultAsync(u => u.MovieID == movie_id);
+            var category = movie.Category??"No Category Available";
+            var categories = category.ToLower().Split(',');
+            var recommendedMovies = await _unitOfWork.Movie.GetAllAsync(u => categories.Any(c => u.Category.ToLower().Contains(c.Trim())) || u.Category.ToLower() == category.ToLower());
+            List<Showtime> showtimesForThisMovie = new List<Showtime>() ;
+            foreach (var m in recommendedMovies)
+            {
+                var showtime = await _unitOfWork.Showtime.GetAllAsync(u => u.MovieID == m.MovieID);
+                showtimesForThisMovie.AddRange(showtime);
+            };           
+            var availableRecommendMovies = from showtime in showtimesForThisMovie
+                                           join m in recommendedMovies on showtime.MovieID equals m.MovieID
+                                           where (showtime.Date > currentDate || // Showtime Date is bigger than current date
+                                               (showtime.Date == currentDate && showtime.Time > currentDateTime.Hour) || // Current date == Showtime Date
+                                               (showtime.Date == currentDate && showtime.Time == currentDateTime.Hour && showtime.Minute > currentDateTime.Minute))
+                                            select m;
+            // Maximum is 4
+            availableRecommendMovies = availableRecommendMovies.Take(4);
+            return Json(new {data = availableRecommendMovies});
         }
         #endregion
     }
