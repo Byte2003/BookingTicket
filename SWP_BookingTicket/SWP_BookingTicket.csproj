@@ -8,9 +8,13 @@
 
   <ItemGroup>
     <Compile Remove="Areas\Customer\Views\Payment\**" />
+    <Compile Remove="Ultils\**" />
     <Content Remove="Areas\Customer\Views\Payment\**" />
+    <Content Remove="Ultils\**" />
     <EmbeddedResource Remove="Areas\Customer\Views\Payment\**" />
+    <EmbeddedResource Remove="Ultils\**" />
     <None Remove="Areas\Customer\Views\Payment\**" />
+    <None Remove="Ultils\**" />
   </ItemGroup>
 
   <ItemGroup>
@@ -61,7 +65,6 @@
 
   <ItemGroup>
     <Folder Include="Logs\" />
-    <Folder Include="Ultils\" />
     <Folder Include="wwwroot\images\avatar\" />
     <Folder Include="wwwroot\images\movie\" />
     <Folder Include="wwwroot\images\promotion\" />
