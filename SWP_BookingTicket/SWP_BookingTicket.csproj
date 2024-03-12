@@ -7,6 +7,13 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Areas\Customer\Views\Payment\**" />
+    <Content Remove="Areas\Customer\Views\Payment\**" />
+    <EmbeddedResource Remove="Areas\Customer\Views\Payment\**" />
+    <None Remove="Areas\Customer\Views\Payment\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Remove="wwwroot\js\onlineuser.js" />
 	  
   </ItemGroup>
@@ -53,7 +60,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Areas\Customer\Views\Payment\" />
     <Folder Include="Logs\" />
     <Folder Include="Ultils\" />
     <Folder Include="wwwroot\images\avatar\" />
