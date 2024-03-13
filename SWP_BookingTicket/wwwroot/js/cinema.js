@@ -18,7 +18,7 @@ function loadDataTable() {
                     return `
                        
                             <a href="/CinemaManager/Cinema/Update?cinema_id=${data}"
-                            class="btn btn-primary mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
+                            class="btn btn-dark mx-2"> <i class="bi bi-pencil-square"></i> Edit</a>
                             <a onClick=Delete('/CinemaManager/Cinema/Delete?cinema_id=${data}')
                             class="btn btn-danger mx-2"> <i class="bi bi-trash-fill"></i> Delete</a>
 					   

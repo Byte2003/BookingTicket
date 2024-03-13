@@ -6,7 +6,7 @@ using SWP_BookingTicket.Models;
 namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 {
 	[Area("CinemaManager")]
-	[Authorize(Roles = "cinemaManager")]
+	[Authorize(Roles = "cinemaManager,admin")]
 	public class CinemaController : Controller
 	{
 		private readonly IUnitOfWork _unitOfWork;
@@ -16,10 +16,8 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 			_unitOfWork = unitOfWork;
 		}
 		[HttpGet]
-		public async Task<IActionResult> Index()
-		{
-			//IEnumerable<Cinema> cinemas = await _unitOfWork.Cinema.GetAllAsync();
-			//return View(cinemas);
+		public IActionResult Index()
+		{			
 			return View();
 		}
 
@@ -36,8 +34,10 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 			{
 				_unitOfWork.Cinema.Add(cinema);
 				_unitOfWork.Save();
-			}			
-			return RedirectToAction("Index");
+                TempData["msg"] = "Create Cinema successfully.";
+
+            }
+            return RedirectToAction("Index");
 		}
 		[HttpGet]
 		public async Task<IActionResult> Update(Guid cinema_id)
@@ -60,8 +60,10 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 			{
 				_unitOfWork.Cinema.Update(cinema);
 				_unitOfWork.Save();
-			}
-			return RedirectToAction("Index");
+                TempData["msg"] = "Update Cinema successfully.";
+
+            }
+            return RedirectToAction("Index");
 		}
 		#region API Calls
 		[HttpGet]
@@ -70,7 +72,12 @@ namespace SWP_BookingTicket.Areas.CinemaManager.Controllers
 			var cinemas = await _unitOfWork.Cinema.GetAllAsync();
 			return Json(new { data = cinemas });
 		}
-		[HttpDelete]
+        public async Task<IActionResult> GetCinemaById(Guid cinema_id)
+        {
+            var cinema = await _unitOfWork.Cinema.GetFirstOrDefaultAsync(u => u.CinemaID == cinema_id);
+            return Json(new { data = cinema });
+        }
+        [HttpDelete]
 		public async Task<IActionResult> Delete(Guid cinema_id)
 		{
 			var cinema = await _unitOfWork.Cinema.GetFirstOrDefaultAsync( u=> u.CinemaID ==cinema_id);

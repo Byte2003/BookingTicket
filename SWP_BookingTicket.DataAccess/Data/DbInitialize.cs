@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 
 namespace SWP_BookingTicket.DataAccess.Data
 {
@@ -18,6 +19,20 @@ namespace SWP_BookingTicket.DataAccess.Data
             _db = db;
 			_userManager = userManager;
         }
+		public void AutoMigrate()
+		{
+            try
+            {
+                if (_db.Database.GetPendingMigrations().Count() > 0)
+                {
+                    _db.Database.Migrate();
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
+        }
 		public async Task SeedCinemaManagerAsync()
 		{
 			var user = new AppUser
@@ -25,7 +40,7 @@ namespace SWP_BookingTicket.DataAccess.Data
 				UserName = "truongdinhphuc23@gmail.com",
 				NormalizedUserName = "truongdinhphuc23@gmail.com".ToUpper(),
 				Email = "truongdinhphuc23@gmail.com",
-				NormalizedEmail = "byte050403@gmail.com".ToUpper(),
+				NormalizedEmail = "truongdinhphuc23@gmail.com".ToUpper(),
 				EmailConfirmed = true,
 				LockoutEnabled = false,
 				SecurityStamp = Guid.NewGuid().ToString(),
@@ -52,6 +67,7 @@ namespace SWP_BookingTicket.DataAccess.Data
 				await _userManager.AddToRoleAsync(user, "cinemaManager");
 			}
 		}
+
         public async Task SeedAdminAccountsAsync()
         {
 			var user = new AppUser

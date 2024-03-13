@@ -17,7 +17,7 @@ namespace SWP_BookingTicket.DataAccess.Migrations
         {
 #pragma warning disable 612, 618
             modelBuilder
-                .HasAnnotation("ProductVersion", "8.0.0")
+                .HasAnnotation("ProductVersion", "8.0.1")
                 .HasAnnotation("Relational:MaxIdentifierLength", 128);
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
@@ -217,6 +217,9 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<decimal>("Spending")
+                        .HasColumnType("decimal(18,2)");
+
                     b.Property<bool>("TwoFactorEnabled")
                         .HasColumnType("bit");
 
@@ -291,6 +294,9 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                     b.Property<string>("Actor")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Category")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Country")
                         .HasColumnType("nvarchar(max)");
 
@@ -303,8 +309,8 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                     b.Property<int>("Duration")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("EndDate")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("EndDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
@@ -315,11 +321,8 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
-                    b.Property<DateTime>("ReleaseDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
+                    b.Property<DateOnly>("ReleaseDate")
+                        .HasColumnType("date");
 
                     b.Property<string>("Studio")
                         .HasColumnType("nvarchar(max)");
@@ -403,8 +406,9 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<bool>("SeatStatus")
-                        .HasColumnType("bit");
+                    b.Property<string>("SeatStatus")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("SeatID");
 
@@ -419,8 +423,8 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("Date")
-                        .HasColumnType("datetime2");
+                    b.Property<DateOnly>("Date")
+                        .HasColumnType("date");
 
                     b.Property<int>("Minute")
                         .HasColumnType("int");
@@ -453,11 +457,17 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
+                    b.Property<DateTime?>("BookedDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<Guid>("SeatID")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<Guid>("ShowtimeID")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("TicketStatus")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<double>("Total")
                         .HasColumnType("float");
@@ -469,8 +479,7 @@ namespace SWP_BookingTicket.DataAccess.Migrations
 
                     b.HasIndex("AppUserID");
 
-                    b.HasIndex("SeatID")
-                        .IsUnique();
+                    b.HasIndex("SeatID");
 
                     b.HasIndex("ShowtimeID");
 
@@ -619,8 +628,8 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                         .IsRequired();
 
                     b.HasOne("SWP_BookingTicket.Models.Seat", "Seat")
-                        .WithOne("Ticket")
-                        .HasForeignKey("SWP_BookingTicket.Models.Ticket", "SeatID")
+                        .WithMany()
+                        .HasForeignKey("SeatID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
@@ -641,12 +650,6 @@ namespace SWP_BookingTicket.DataAccess.Migrations
                     b.Navigation("Showtime");
 
                     b.Navigation("Voucher");
-                });
-
-            modelBuilder.Entity("SWP_BookingTicket.Models.Seat", b =>
-                {
-                    b.Navigation("Ticket")
-                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

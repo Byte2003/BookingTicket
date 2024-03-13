@@ -17,13 +17,13 @@ namespace SWP_BookingTicket.Models
 		public string? VideoUrl { get; set; } = string.Empty;
 		public int Duration { get; set; }
         [ValidateNever]
-        public DateTime ReleaseDate { get; set; }
+        public DateOnly ReleaseDate { get; set; }
         [ValidateNever]
-        public DateTime EndDate { get; set; }
+        public DateOnly EndDate { get; set; }
         public string? Country { get; set; } = string.Empty;
 		public string? Studio { get; set; } = string.Empty;
 		public string? Version { get; set; } = string.Empty;
-		public bool Status { get; set; }
+        public string? Category { get; set; } = string.Empty;
       
     }
 }

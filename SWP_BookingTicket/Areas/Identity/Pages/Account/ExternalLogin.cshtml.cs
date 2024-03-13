@@ -218,10 +218,12 @@ namespace SWP_BookingTicket.Areas.Identity.Pages.Account
 					await _userStore.SetUserNameAsync(newUser, Input.Email, CancellationToken.None);
 					await _emailStore.SetEmailAsync(newUser, Input.Email, CancellationToken.None);
                     newUser.FirstName = info.Principal.FindFirstValue(ClaimTypes.Name);
+                    newUser.PhoneNumber = info.Principal.FindFirstValue(ClaimTypes.HomePhone);
 					var resultNewUser = await _userManager.CreateAsync(newUser);
 					if (resultNewUser.Succeeded)
 					{
 						var res = await _userManager.AddLoginAsync(newUser, info);
+                        await _userManager.AddToRoleAsync(newUser, "customer");
 						if (res.Succeeded)
 						{
 							_logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
