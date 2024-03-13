@@ -133,7 +133,9 @@ async void SeedData()
 	using (var scope = app.Services.CreateScope())
 	{
 		var dbInit = scope.ServiceProvider.GetRequiredService<DbInitialize>();
-		await dbInit.SeedAdminAccountsAsync();
+        dbInit.AutoMigrate();
+        await dbInit.SeedAdminAccountsAsync();
 		await dbInit.SeedCinemaManagerAsync();
+		
 	}
 }
