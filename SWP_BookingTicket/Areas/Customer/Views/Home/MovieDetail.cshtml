@@ -213,13 +213,14 @@
                 success: function (response) {
                     var comments = response.data;
                     var currentUserId = response.user;
+                    var role = response.role;
 
                     $('#commentsSection').empty();
                     comments.forEach(function (comment) {
                         var editIconHtml = '';
                         var deleteIconHtml = '';
 
-                        if (comment.appUser.id === currentUserId) {
+                        if (comment.appUser.id === currentUserId || role === "cinemaManager" || role === "admin") {
                             editIconHtml = `<i class="fas fa-edit edit-comment-icon" data-comment-id="${comment.commentID}"></i>`;
                             deleteIconHtml = `<i class="fas fa-trash delete-comment-icon" data-comment-id="${comment.commentID}"></i>`;
                         }

@@ -23,11 +23,13 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
             var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
+            var user = await _userManager.FindByIdAsync(claim.Value);
+            var user_role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
             var comments = await _unitOfWork.Comment.GetAllAsync(u => u.MovieID == movieId, includeProperties: "AppUser");
             if (claim != null)
             {
 
-                return Json(new { data = comments, user = claim.Value });
+                return Json(new { data = comments, user = claim.Value, role = user_role });
             }
             else
             {
