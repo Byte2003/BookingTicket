@@ -32,14 +32,7 @@ function loadDataTable(room_id) {
             { "data": "room.roomName", "width": "10%" },
             { "data": "seatID", "width": "40%" },
             { "data": "seatName", "width": "25%" },
-            {
-                "data": "seatStatus",
-                "render": function (data) {
-                    var statusText = data ? "Available" : "Locked";
-                    return statusText;
-                },
-                "width": "25%"
-            },
+            { "data": "seatStatus", "width": "25%" },
             //{
             //    "data": "seatID",
             //    "render": function (data) {
