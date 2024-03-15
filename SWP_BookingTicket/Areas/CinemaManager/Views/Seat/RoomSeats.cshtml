@@ -80,7 +80,7 @@
                             <td>
                                 @if (seat != null)
                                 {
-                                    <div class="seat-block w-100  @(seat.SeatStatus == "AVAILABLE" ? "available" : "unavailable")" id="@(seatId)">
+                                    <div class="seat-block w-100  @(seat.SeatStatus == "LOCKED" ? "unavailable" : "available")" id="@(seatId)">
                                         <span>@(rowLetter + col)</span>
                                     </div>
                                 }
@@ -120,7 +120,17 @@
                     "data": @Html.Raw(Json.Serialize(Model)),
                     "columns": [
                         { "data": "seatName" },
-                        { "data": "seatStatus" },
+                        {
+                            "data": "seatStatus",
+                            "render": function (data) {
+                                var seatStatus = data;
+                                if (seatStatus === "LOCKED") {
+                                    return "LOCKED"
+                                } else {
+                                    return "AVAILABLE";
+                                }
+                            },
+                        },
                         {
                             "data": "seatID",
                             "render": function (data) {

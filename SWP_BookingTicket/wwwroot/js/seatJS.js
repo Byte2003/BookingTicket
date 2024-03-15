@@ -35,8 +35,12 @@ function loadDataTable(room_id) {
             {
                 "data": "seatStatus",
                 "render": function (data) {
-                    var statusText = data ? "Available" : "Locked";
-                    return statusText;
+                    var seatStatus = data;
+                    if (seatStatus === "LOCKED") {
+                        return "LOCKED"
+                    } else {
+                        return "AVAILABLE";
+                    }
                 },
                 "width": "25%"
             },
