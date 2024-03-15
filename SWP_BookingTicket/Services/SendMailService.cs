@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using System.Net.Mail;
+using System.Net;
 
 namespace SWP_BookingTicket.Services
 {
@@ -30,42 +32,67 @@ namespace SWP_BookingTicket.Services
 			logger.LogInformation("Create SendMailService");
 		}
 
-		public async Task SendEmailAsync(string email, string subject, string htmlMessage)
+		public async Task SendEmailAsync(string email, string _subject, string htmlMessage)
 		{
-			var message = new MimeMessage();
-			message.Sender = new MailboxAddress(mailSettings.DisplayName, mailSettings.Mail);
-			message.From.Add(new MailboxAddress(mailSettings.DisplayName, mailSettings.Mail));
-			message.To.Add(MailboxAddress.Parse(email));
-			message.Subject = subject;
+            var fromAddress = new MailAddress(mailSettings.Mail, mailSettings.DisplayName);
+            var toAddress = new MailAddress(email);
+            string fromPassword = mailSettings.Password;
+            string subject = _subject;
+            string body = htmlMessage;
 
-			var builder = new BodyBuilder();
-			builder.HtmlBody = htmlMessage;
-			message.Body = builder.ToMessageBody();
+            var smtp = new SmtpClient
+            {
+                Host = mailSettings.Host,
+                Port = mailSettings.Port, //Recommended port is 587
+                EnableSsl = true,
+                DeliveryMethod = SmtpDeliveryMethod.Network,
+                UseDefaultCredentials = false,
+                Credentials = new NetworkCredential(fromAddress.Address, fromPassword),
+            };
+            using (var message = new MailMessage(fromAddress, toAddress)
+            {
+                Subject = subject,
+                Body = body,
+                IsBodyHtml = true
+            })
+            {
+                smtp.Send(message);
+            }
+            //var message = new MimeMessage();
+            //message.Sender = new MailboxAddress(mailSettings.DisplayName, mailSettings.Mail);
+            //message.From.Add(new MailboxAddress(mailSettings.DisplayName, mailSettings.Mail));
+            //message.To.Add(MailboxAddress.Parse(email));
+            //message.Subject = subject;
 
-			//Using SMTPClient of MailKit
-			using var smtp = new MailKit.Net.Smtp.SmtpClient();
+            //var builder = new BodyBuilder();
+            //builder.HtmlBody = htmlMessage;
+            //message.Body = builder.ToMessageBody();
 
-			try
-			{
-				smtp.Connect(mailSettings.Host, mailSettings.Port, SecureSocketOptions.StartTls);
-				smtp.Authenticate(mailSettings.Mail, mailSettings.Password);
-				await smtp.SendAsync(message);
-			}
-			catch (Exception ex)
-			{
-				// Save to mailsave if not working
-				System.IO.Directory.CreateDirectory("mailssave");
-				var emailsavefile = string.Format(@"mailssave/{0}.eml", Guid.NewGuid());
-				await message.WriteToAsync(emailsavefile);
+            ////Using SMTPClient of MailKit
+            //using var smtp = new MailKit.Net.Smtp.SmtpClient();
 
-				logger.LogInformation("Lỗi gửi mail, lưu tại - " + emailsavefile);
-				logger.LogError(ex.Message);
-			}
+            //try
+            //{
+            //	smtp.Connect(mailSettings.Host, mailSettings.Port, SecureSocketOptions.StartTls);
+            //	smtp.Authenticate(mailSettings.Mail, mailSettings.Password);
+            //	await smtp.SendAsync(message);
+            //}
+            //catch (Exception ex)
+            //{
+            //	// Save to mailsave if not working
+            //	System.IO.Directory.CreateDirectory("mailssave");
+            //	var emailsavefile = string.Format(@"mailssave/{0}.eml", Guid.NewGuid());
+            //	await message.WriteToAsync(emailsavefile);
 
-			smtp.Disconnect(true);
+            //	logger.LogInformation("Lỗi gửi mail, lưu tại - " + emailsavefile);
+            //	logger.LogError(ex.Message);
+            //}
 
-			logger.LogInformation("send mail to: " + email);
+            //smtp.Disconnect(true);
 
-		}
+            //logger.LogInformation("send mail to: " + email);
+
+
+        }
 	}
 }
