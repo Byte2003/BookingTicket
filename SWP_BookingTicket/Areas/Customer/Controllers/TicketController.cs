@@ -138,7 +138,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                     ticket.Total = ticket.Total * (1 - voucher.Value / 100);
                 }
             }
-
+            double totalSpent = 0;
             foreach (var ticket in allTickets)
             {
                 var showtime = ticket.Showtime;
@@ -150,8 +150,9 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                 showtime.Movie = movie;
                 showtime.Room = room;
                 ticket.Showtime = showtime;
+                totalSpent += ticket.Total;
             }
-
+            ViewData["TotalSpent"] = totalSpent;
             return View(allTickets.OrderByDescending(u => u.BookedDate).ToList());
         }
 
