@@ -801,7 +801,7 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
                                                (showtime.Date == currentDate && showtime.Time == currentDateTime.Hour && showtime.Minute > currentDateTime.Minute))
                                             select m;
             // Maximum is 4
-            availableRecommendMovies = availableRecommendMovies.Take(4);
+            availableRecommendMovies = availableRecommendMovies.Distinct().Take(4);
             return Json(new {data = availableRecommendMovies});
         }
         #endregion
