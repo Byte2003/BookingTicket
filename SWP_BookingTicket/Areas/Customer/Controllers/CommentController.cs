@@ -22,14 +22,13 @@ namespace SWP_BookingTicket.Areas.Customer.Controllers
         public async Task<IActionResult> GetComments(Guid? movieId)
         {
             var claimsIdentity = (ClaimsIdentity)User.Identity;
-            var claim = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);
-            var user = await _userManager.FindByIdAsync(claim.Value);
-            var user_role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+            var claims = claimsIdentity.FindFirst(ClaimTypes.NameIdentifier);           
             var comments = await _unitOfWork.Comment.GetAllAsync(u => u.MovieID == movieId, includeProperties: "AppUser");
-            if (claim != null)
+            if (claims != null)
             {
-
-                return Json(new { data = comments, user = claim.Value, role = user_role });
+                var user = await _userManager.FindByIdAsync(claims.Value);
+                var user_role = _userManager.GetRolesAsync(user).Result.FirstOrDefault();
+                return Json(new { data = comments, user = claims.Value, role = user_role });
             }
             else
             {
